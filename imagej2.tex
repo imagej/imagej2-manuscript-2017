@@ -538,7 +538,668 @@ tracking systems when something goes wrong.
 %% how they were addressed.
 
 \section*{Implementation}
-Text for this section.
+Broadly speaking, ImageJ2 components are classified into one of four domains:
+
+\begin{itemize}
+  \item \textbf{SciJava.} The most fundamental layers of ImageJ2 are
+    independent from image processing, but rather provide needed functionality
+    common to many applications. On a technical level, the SciJava core
+    components are a set of standard Java libraries for managing extensible
+    applications. Socially, the SciJava initiative is a pledge among
+    cooperating organizations to work together, reuse code, and synergize
+    wherever possible \cite{imagej_scijava}.
+  \item \textbf{ImgLib2.} To ensure generality of image analysis, ImageJ2 is
+    built on the flexible ImgLib2 container model \cite{imglib2}. Decoupling the
+    elements of image representation, ImgLib2 components enable general image
+    processing algorithms to be reused, regardless of image type, source, or
+    organization.
+  \item \textbf{\acrfull{scifio}.} \acrshort{scifio} components define
+    standards for reading, writing, and translating between image formats
+    \cite{scifio}. These libraries ensure a broad spectrum of image data can be
+    interpreted in a consistent manner across all SciJava applications.
+  \item \textbf{ImageJ.} Low-level components establish image metadata and algorithm
+    patterns, built on the SciJava and ImgLib2 layers. High-level
+    components focus on ``end user'' tools for working with image data,
+    and include user interfaces, user-facing commands, and the top-level
+    ImageJ application \cite{imagej_web_site}.
+\end{itemize}
+
+These layers, taken as a whole, form the \textbf{ImageJ software stack}
+\cite{imagej_architecture}, the core set of components upon which ImageJ-based
+applications are built.
+
+Each domain is itself divided into many individual libraries, each of which
+targets a particular function. This separation of concerns provides a logical
+organization which allows targeted reuse and extension of any given
+functionality of interest.
+
+The following sections describe, in order from lowest to highest level, the
+essential backbone libraries of ImageJ2. Note that this is not an exhaustive
+list of components, as many components across these domains provide secondary
+functions---e.g.: script languages, build management, \acrshort{ui} elements,
+or targeted implementations of specific features.
+
+\subsection*{SciJava Common}
+The ground floor of the ImageJ software stack is the SciJava Common library
+\cite{imagej_sjc}, providing the core framework for creating extensible
+applications. The heart of SciJava Common is its \textbf{application
+container}, the \texttt{Context} class. Each \texttt{Context} encapsulates
+runtime application state: available extensions, open images and documents,
+user settings, etc. The application container paradigm allows multiple
+independently configured instances of SciJava applications to run concurrently
+within the same \acrfull{jvm}.
+
+\subsubsection*{Service framework}
+The application container consists of a collection of \textbf{services}, which
+are initialized dynamically at runtime. These services provide methods which
+operate on the system in various ways, such as opening data, manipulating
+images, or displaying user interface elements on screen. Taken as a whole,
+these service methods constitute the bulk of the \acrfull{api} of ImageJ.
+Software developers are free to extend the system with new needed services
+and/or override any aspect of behavior provided by existing services. This
+approach is in contrast to the most common naive design of many software
+projects, which use global ``static'' state and functions, whose behavior is
+difficult or impossible to override or enhance in downstream code.
+
+The SciJava Common library itself provides the most fundamental of these
+services, such as:
+
+\begin{itemize}
+  \item A \textbf{plugin service}, which dynamically discovers available
+    plugins using an index generated at compile time by a Java annotation
+    processor. This plugin index is used to bootstrap the application context,
+    since services are themselves a type of plugin.
+  \item An \textbf{event service}, which provides a hierarchical
+    publish/subscribe model for event handling.
+  \item A \textbf{log service}, for environment-agnostic data logging.
+  \item An \textbf{object service}, which keeps a central typed index of
+    available objects.
+  \item A \textbf{thread service}, which manages a thread pool and dispatch
+    thread(s) for code execution.
+  \item An \textbf{I/O service}, for reading and writing of data.
+  \item A \textbf{preference service}, for saving and restoring user-specific
+    preferences.
+\end{itemize}
+
+In principle, SciJava Common is similar to frameworks such as Spring
+\cite{spring}, offering standard software engineering patterns such as
+\acrfull{di} \cite{dependency_injection} and \acrfull{ioc} \cite{ioc}, but
+tailored to the needs of collaborative scientific projects like ImageJ. For
+example, SciJava Common provides a generalized I/O mechanism for opening data
+from any source, but the library itself has no specific knowledge of how to
+open \acrshort{xml} documents, microscopy image formats, or spreadsheets of
+numerical results---such functionality is provided by downstream components as
+SciJava plugins (see next section).
+
+\subsubsection*{Plugin framework}
+SciJava Common provides a unified mechanism for defining \textbf{plugins}:
+extensions which add new features or behavior to the software, and/or modify
+existing behavior. Plugins are discovered by the system at runtime, and ordered
+according to assigned priorities and types, forming type hierarchies:
+structural trees that define how each individual plugin fits into the system.
+The typical pattern for a desired sort of functionality is to define a
+dedicated plugin type, then implement plugins that fulfill that operation in
+various ways. SciJava Common is designed to make virtually any aspect of an
+application extensible. Some of the most critical plugin categories and types
+include:
+
+\paragraph*{Core extensibility}
+\begin{itemize}
+  \item \textbf{\texttt{Service}} -- A collection of related functionality,
+    expressed as an \acrfull{api}. SciJava services are singletons with respect
+    to each application context. For example, each instance of ImageJ2 has
+    exactly one \texttt{AnimationService} responsible for managing animations,
+    with methods to start and stop animations, select the dimension over which
+    to animate, adjust frame rate, and other options. Note that while the
+    behavior of services can certainly be modified by extensions, doing so is
+    primarily the domain of advanced developers looking to radically alter
+    behavior of the system.
+  \item \textbf{\texttt{IOPlugin}} -- A plugin that reads data from and/or
+    writes data to a location, such as a file on disk. For example, the SciJava
+    layer provides I/O plugins for common text formats such as Markdown
+    \cite{markdown}, while the \acrshort{scifio} layer provides an I/O plugin
+    for image formats.
+\end{itemize}
+
+\paragraph*{Modules}
+\begin{itemize}
+  \item \textbf{\texttt{Command}} -- An operation, more generally known as a
+    SciJava \textbf{\textit{module}}, with typed inputs and outputs. These
+    modules typically appear in the menu system of the application's user
+    interface, but can be exposed via interoperability mechanisms in many other
+    ways, such as nodes in \acrshort{knime} or modules in CellProfiler
+    \cite{cellprofiler}. When ImageJ users talk about ``writing a plugin'' they
+    usually mean a \texttt{Command}. See ``Module framework'' below for more on
+    SciJava modules.
+  \item \textbf{\texttt{ScriptLanguage}} -- A programming language for SciJava
+    scripts. Each script language plugin provides the logic necessary to
+    execute scripts written in that language (e.g., Javascript or Python) as
+    SciJava modules with typed inputs and outputs, in a similar way to
+    commands. It also makes it possible to express operations as code snippets
+    that can be reused in scripts to repeat those operations.
+  \item \textbf{\texttt{Converter}} -- A plugin which transforms data from one
+    type of object to a different type of object. Converters greatly extend the
+    concept of type conversion from what Java provides out of the box to
+    provide automatic conversion in a wide and extensible set of circumstances.
+    For example, it becomes possible for an algorithm to accept a string in
+    place of a floating point numerical value, as long as that string can be
+    parsed to such a value---or to transparently convert between
+    normally-incompatible image data structures from different image processing
+    ecosystems.
+  \item \textbf{\texttt{ModulePreprocessor}} -- A ``meta-module'' which
+    prepares modules to run. For example, the \texttt{LoadInputsPreprocessor}
+    populates a module's inputs with the last-used values as defaults, which
+    can save the user a lot of time. Preprocessor plugins are executed in
+    priority order as part of the module ``preprocessing chain'' before the
+    module is actually executed.
+  \item \textbf{\texttt{ModulePostprocessor}} -- A ``meta-module'' which does
+    something with a module after it has run. For example, the
+    \texttt{DisplayPostprocessor} takes care of displaying the outputs of a
+    module after it has completed execution. Postprocessor plugins are executed
+    in priority order as part of the module ``postprocessing chain'' after the
+    module is actually executed.
+\end{itemize}
+
+\paragraph*{User interface}
+\begin{itemize}
+  \item \textbf{\texttt{UserInterface}} -- A plugin providing an application
+    \acrshort{ui}. These plugins include functionality for creating and showing
+    windows and dialogs. ImageJ2 includes a user interface written in Java's
+    Swing toolkit which is modeled closely after the ImageJ 1.x design, as well
+    as a \texttt{UserInterface} plugin that wraps ImageJ 1.x itself. But other
+    \acrshortpl{ui} are equally possible; since a \acrshort{ui} is simply a
+    type of plugin, anyone can develop their own SciJava \acrshort{ui} without
+    any code changes to the core system. The system is even flexible enough to
+    display multiple \acrshortpl{ui} simultaneously.
+  \item \textbf{\texttt{Platform}} -- A plugin which enables customization of
+    behavior based on machine-specific criteria, such as specific flavor of
+    operating system or Java language, including type, architecture, or
+    version. For example, on \acrshort{macos}, the menu bar appears at the top
+    of the screen, with the About, Preferences, and Quit commands relocated to
+    the Application menu.
+  \item \textbf{\texttt{InputWidget}} -- A user interface element for
+    harvesting typed inputs. Typically, these widgets are presented as part of
+    a form in a dialog box which prompts the user to fill in input values of a
+    module. In principle, the widgets can be used for anything requiring typed
+    input from the user. For example, a \texttt{FileWidget} allows the user to
+    select a file (\texttt{java.io.File}) on disk, while a ToggleWidget
+    provides a boolean toggle (typically rendered as a checkbox). The SciJava
+    layer provides \acrshort{ui}-agnostic interfaces to the common widget
+    types, along with widget implementations corresponding to each supported
+    \texttt{UserInterface} plugin. However, an extension to the system can not
+    only implement its own data structure classes which it uses as inputs to
+    its modules; it can also provide corresponding widgets for those
+    structures, allowing the user to populate them from the user interface in
+    innovative ways.
+  \item \textbf{\texttt{Display}} -- A plugin for visualizing data. For
+    example, an ImageJ2 \texttt{ImageDisplay} can show two-dimensional planes
+    of N-dimensional image data in a window with sliders for controlling which
+    plane is visible. However, the framework imposes no limits on the sorts of
+    objects that can be visualized; other examples include the
+    \texttt{TextDisplay}, which shows strings, and the \texttt{TableDisplay},
+    which shows tabular data as a spreadsheet. These plugins are typically used
+    to display a module's typed outputs (i.e., its results).
+  \item \textbf{\texttt{Tool}} -- A collection of rules binding user input
+    (e.g., keyboard and mouse events) to display and data manipulation actions.
+    For example, ImageJ2's \texttt{PanTool} pans a display when the mouse is
+    dragged or arrow key is pressed; the \texttt{PencilTool} draws hard lines
+    on the data within an image display. Many user interfaces render them as
+    icons in the application toolbar.
+  \item \textbf{\texttt{ConsoleArgument}} -- A plugin that handles arguments
+    passed to the application as command line parameters. This plugin type
+    makes the application's command line parameter handling extensible---a
+    feature especially important for headless operation sans user interface.
+\end{itemize}
+
+This encapsulation of functionality, coupled with a plugin prioritization
+mechanic, allows SciJava-based software to be fully customized or extended at
+any point. An application such as ImageJ is then simply a collection of plugins
+and services built on top of the SciJava Common framework. For instance, the
+ImageJ Common \cite{imagej_common} component introduces new services
+specifically for opening and displaying images, specializing the functions
+defined in the lower-level components. Assigning these specialized functions a
+higher plugin priority creates a natural, flexible ordering of operations.
+Given that everything from user interfaces to file formats uses the SciJava
+plugin mechanism, the path for overriding any behavior is clear and consistent.
+
+Finally, to keep the plugin development process as simple as possible, great
+care is taken throughout the codebase to adhere to interface-driven design with
+default method implementations whenever possible. This strategy minimizes the
+amount of code developers are responsible for writing, lowering the barrier to
+entry for creating and modifying plugins.
+
+\subsubsection*{Module framework}
+To successfully interoperate with other scientific software, ImageJ algorithms
+must be decoupled from the various user interfaces and applications which might
+want to expose them to end users.
+
+The key concept SciJava employs is that of \textbf{\textit{parameterized
+modules}}: executable routines with declared input and output parameters of
+specific types. These modules can take the form of \texttt{Command} plugins or
+be expressed as scripts written in any supported scripting language (via
+available \texttt{ScriptLanguage} plugins; see ``Plugin framework'' above). For
+example, a user might write the following parameterized Groovy script:
+
+\begin{quote}
+  \small
+  \begin{verbatim}
+  // @INPUT String name
+  // @INPUT int age
+  // @OUTPUT String greeting
+  greeting = "Hello, " + name + ". You are " + age + " years old."\end{verbatim}
+\end{quote}
+
+This script accepts two parameters as input---a name and an age---and outputs a
+greeting based on the input values. Note the typing: the name can be any string
+of characters, but the age must be an integer value; the greeting is also a
+string of characters. Note also that this script makes no assumptions about
+user interface; it is the responsibility of the framework to: A) prompt the
+user for the input values in the most appropriate way, B) execute the module
+code itself, and finally, C) process and/or display the output values in the
+most appropriate way.
+
+As such, this scheme has great potential for reuse across a wide
+variety of contexts. For example, when running the above script from
+the ImageJ user interface, a Swing dialog box will pop up allowing the
+user to enter the name and age values; and after OK is pressed, the
+greeting will be displayed in a new window. However, when running the
+script headless from the command line interface, the input values can be
+passed as command line arguments and the output values echoed to the
+standard output stream. See Supplemental Figure 1 for an
+illustration. Since many computational tools have this concept of
+parameterized modules, SciJava developers need only create some general
+adapter code to integrate the SciJava module framework with a given
+tool---and then all SciJava modules become automatically available
+within that tool's paradigm. We have already implemented such
+integration for several other tools in the SciJava ecosystem, including
+CellProfiler, \acrshort{knime} \cite{knip}, and the \acrshort{omero} image
+server \cite{omero}.
+
+SciJava Common has an important mechanism which facilitates the extensible and
+configurable execution of modules: module pre- and post-processing. Developers
+can write \texttt{ModulePreprocessor} and \texttt{ModulePostprocessor} plugins
+to extend what happens when a module is executed (see ``Plugin framework''
+above). Moreover, there are also two plugin types built on this module
+processing mechanism which make it easy to customize and extend how modules
+behave:
+
+\begin{enumerate}
+  \item {The process of collecting module inputs is known as \textit{input
+    harvesting}. The \texttt{InputWidget} plugin type lets developers create
+    widgets to harvest specific types of inputs from the user. In particular,
+    the SciJava project provides Swing widgets for several data types
+    (Supplemental Table 1).
+
+    Some inputs are also automatically populated via
+    \texttt{ModulePreprocessor} code. For example, when a single image
+    parameter is declared, an ``active image preprocessor'' detects the
+    situation, populating the value with the currently active image. In this
+    way, the user does not have to explicitly select an image upon which to
+    operate in the common case, but the module still has semantic knowledge
+    that an image is one of the routine's input parameters.}
+  \item The process of dealing with outputs after a module executes is known as
+    \textit{displaying}. The \texttt{Display} plugin type lets developers
+    visualize specific types of outputs in appropriate ways. The SciJava layer
+    provides a basic display plugin for text outputs, which shows the text in a
+    dedicated window, while the ImageJ layer provides additional similar
+    display plugins for image and tabular data.
+\end{enumerate}
+
+One final SciJava subsystem of note is the \textit{conversion framework}, which
+provides a general way of transforming data from one type to another. The
+\texttt{Converter} plugin type lets developers extend SciJava's conversion
+capabilities, allowing objects of one type to be used as module inputs of a
+different type, in cases where the two types are conceptually analogous. For
+example, data stored in memory as a \acrfull{matlab} matrix can be expressed as
+an ImageJ image object, even though \acrshort{matlab} matrices are not natively
+ImageJ images \cite{imagej_matlab}. When a suitable converter plugin is
+present, modules capable of operating only on \acrshort{matlab} matrices become
+transparently capable of accepting ImageJ images as inputs, thanks to the
+framework's auto-conversion. Similarly, a converter between ImageJ and the
+\acrfull{itk} \cite{itk} images greatly streamlines use of \acrshort{itk}-based
+algorithms within ImageJ \cite{imagej_itk}.
+
+\subsection*{ImageJ Common}
+
+Meeting the needs of contemporary scientific image analysis requires a flexible
+and extensible data model, including support for arbitrary dimensions, data
+types and image sizes. To this end, we have chosen to model ImageJ2 images
+using the ImgLib2 library, which itself provides an extensible,
+interface-driven design that supports numeric (8-bit unsigned integer, 32-bit
+floating point, etc.) and non-numeric data types. It also provides great
+flexibility regarding the source and structure of data. Out of the box, ImgLib2
+provides several data sources and sample organizations, including use of a
+single primitive array (``array image''), one array per plane (``planar
+image''), and block-based ``cell image.'' However, the library remains general
+enough that alternative structures are also feasible. To quote the ImgLib2
+article \cite{imglib2}:
+
+\begin{quote}
+  The core paradigm [of ImgLib2] is a clean separation of pixel algebra (how
+  sample values are manipulated), data access (how sample coordinates are
+  traversed), and data representation (how the samples are stored, laid out in
+  memory, or paged to disc). ImgLib2 relies on virtual access to both sample
+  values and coordinates, facilitating parallelizability and extensibility.
+\end{quote}
+
+ImageJ Common provides a unification of the type and storage-independence of
+ImgLib2 with the SciJava Common plugin framework (described above). A
+\texttt{Dataset} interface provides the fundamental representation of ImageJ
+images, collections of images, and corresponding metadata: \acrfullpl{roi},
+visualization settings, sample coordinates and physical calibrations, and much
+more. Also provided are plugins and services for working with these
+\texttt{Dataset} objects. Together, these classes form the access points for
+higher-level components to open, save, generate and process these images.
+
+Note that as of this writing, elements of the ImageJ Common data model and
+corresponding services are still stabilizing. As such, we do not describe these
+structures in technical detail here.
+
+\subsection*{\acrshort{scifio}} An essential goal of ImageJ2 is to establish
+universal image analysis routines, with no limits on application; however, the
+proliferation of proprietary image formats from scientific instruments creates
+a major obstacle to this ambition. To overcome this issue, the
+\acrshort{scifio} core library establishes a common framework for reading,
+writing and translating image data to and from the ImageJ Common data model, as
+well as between domain-specific standard metadata models. \acrshort{scifio}
+builds on the services provided in SciJava Common and ImageJ Common, defining
+image \texttt{Format} and metadata \texttt{Translator} plugin types to
+encapsulate the operations necessary to take an image source and standardize it
+as an ImageJ \texttt{Dataset}.
+
+\acrshort{scifio} builds upon SciJava Common's core I/O infrastructure, which
+allows it to operate on most data locations independent of their nature.
+SciJava Common provides a \texttt{Location} interface which acts as a data
+descriptor, similar to a \acrfull{uri}. This \texttt{Location} interface is
+specialized according to the nature of the data; for example, a
+\texttt{URLLocation} identifies data served by a remote \acrshort{url}, while
+an \texttt{OMEROLocation} (part of the ImageJ-\acrshort{omero} integration
+\cite{imagej_omero}) identifies an image from an \acrshort{omero} server. For
+data locations whose raw bytes can be accessed randomly and/or sequentially
+(e.g., remote \acrshortpl{url}, but not \acrshort{omero} images), SciJava
+Common provides a \texttt{DataHandle} plugin type which enables such access.
+The core library provides \texttt{DataHandle} plugins for several kinds of data
+locations, including files on disk, remote \acrshortpl{url}, and arrays of
+bytes in local computer memory. Developers can easily create new
+\texttt{DataHandle} plugins which provide random access into additional sorts
+of locations, and \acrshort{scifio} will be able to use them transparently
+without any changes to existing \texttt{Format} or \texttt{Translator} plugins.
+
+The \texttt{Format} plugin \acrshort{api} is architected to support reading and
+writing of image data in chunks, which provides scalability. It is no longer
+necessary to have a large quantity of computer \acrshort{ram} to work with
+large images---\acrshort{scifio} reads the data from the source location on
+demand, paging it into and out of memory as needed. \acrshort{scifio}'s caching
+mechanism persists any changes made to image pixels, even when chunks leave
+memory, by using temporary storage on disk.
+
+\acrshort{scifio} \texttt{Translator} plugins provide the means to translate
+not only between image formats, but between common metadata models of various
+scientific disciplines; for example, the
+\acrshort{scifio}-\acrshort{ome}-\acrshort{xml} component provides a suite of
+\acrshort{scifio} translators for converting between ImageJ Common data
+structures and \acrshort{ome}-\acrshort{xml}, the data model of the
+\acrfull{ome} \cite{ome_xml}. In this way, \acrshort{scifio} has the potential
+to bridge interoperability gaps across various discipline-specific scientific
+software packages.
+
+Further details about \acrshort{scifio} can be found in the \acrshort{bmc}
+BioInformatics software article ``\acrshort{scifio}: an extensible framework to
+support scientific image formats'' \cite{scifio}.
+
+\subsection*{ImageJ Ops}
+
+ImageJ's ultimate purpose is image processing and analysis. To that end, we
+have crafted the ImageJ Ops component: ImageJ2's shared, extensible library of
+reusable image processing operations. As of version 0.33.0, the core Ops
+library provides 788 \texttt{Op} plugins across nearly 350 types of ops in more
+than 20 namespaces, covering functionality such as: image arithmetic,
+trigonometry, Fourier transformations, deconvolution, global and local
+thresholding, image statistics, image filtering, binary morphological
+operations, type conversion, image transformations (scaling, rotation,
+etc.)---even 2D and 3D geometric operations such as marching cubes 3D mesh
+generation (see Figure 1 for examples).
+
+\begin{quote}
+[Figure 1: Examples of image processing algorithms available in ImageJ Ops.]
+\end{quote}
+
+ImageJ Ops was conceived with three major design goals: 1) easy to use and
+extend; 2) powerful and general; and 3) high performance. To achieve all three
+of these goals, Ops utilizes a plugin-based design enabling ``extensible case
+logic.'' Ops defines a new plugin type, \texttt{Op}, each of which has a name
+and a list of typed parameters, analogous to a function definition in most
+programming languages. When invoking an op, callers typically do not specify
+the exact \texttt{Op} plugin to use, but instead specify the operation's name
+and arguments; the Ops framework then performs a \textit{matching} process,
+finding the optimal fit for the given request. For example, calling
+\texttt{math.add} with a planar image and a 64-bit floating point number leads
+to a match of \texttt{net.imagej.ops.math.ConstantToPlanarImage.AddDouble},
+which adds a constant value to each element of an image, whereas calling
+\texttt{math.add} with two planar images results in a match of
+\texttt{net.imagej.ops.math.IIToIIOutputII.Add}, which adds two images
+element-wise.
+
+This scheme is similar to---but much more powerful than---the method
+overloading capabilities of many programming languages: op behavior can be
+further specialized by tailoring \texttt{Op} implementations for specific
+subclasses, generic parameters, and \texttt{Converter} substitutions (see
+``SciJava Common'' above). Consider an op sqrt(image), which computes the
+element-wise square root of an image. If we implement this op as
+\texttt{sqrt(Dataset)}, we miss out on performance optimizations for
+\texttt{ArrayImg}, an ImgLib2 container type where the entire collection of
+image samples is stored in a single Java primitive array. However, if we only
+implement \texttt{sqrt(ArrayImg)}, we are restricted in supported data types,
+since not all images can be stored in such a manner. The power of the Ops
+matching approach is that both of these and more can coexist simultaneously and
+extensibly, and the most specific will always be selected at runtime.
+
+The \texttt{Op} plugin type extends SciJava's \texttt{Command}, and therefore
+all ops are SciJava parameterized modules, usable anywhere SciJava modules are
+supported---see the ``module framework'' section in ``SciJava Common'' above.
+Like standard modules, an op declares typed inputs and outputs. However, unlike
+modules in general, an op must be a ``pure function'' with a fixed number of
+parameters and no side effects; i.e., it must be deterministic in its behavior,
+operating only on the given inputs, and populating or mutating only the given
+outputs. These restrictions provide some very useful guarantees which allow the
+system to reason about an op's use and behavior; e.g., after computing an op
+with particular arguments once, the result can be cached to dramatically
+improve subsequent time performance at the potential expense of additional
+space. Properly constructed ops will also always be usable headless because
+they do not rely on the existence of \acrshort{ui} elements.
+
+\paragraph*{Op chaining and special ops}
+It is often the case in image processing that an algorithm can be expressed as
+a composition of lower level algorithms. For example, a simple difference of
+Gaussians (``DoG'') operation is merely two Gaussian blur operations along with
+a subtraction:
+
+\begin{quote}
+  $dog(image, \sigma_1, \sigma_2) =
+  sub(gauss(image, \sigma_1), gauss(image, \sigma_2))$
+\end{quote}
+
+For users calling into the Ops framework via scripting, the core library
+provides an \texttt{eval} op backed by SciJava's expression parser library,
+which enables executing such sequences of ops via standard mathematical
+expressions, including use of unary and infix binary operators.
+
+For developers, the Ops library provides a mechanism for efficient
+\textit{chaining} of ops calls. An op may declare other ops as inputs,
+resulting in a tree of ops which are resolved when an op is matched; the
+matched op instance can then be reused across any number of input values. In
+this way, very general operations can be created to address a broad range of
+use cases---e.g., the \texttt{map} operation provides a unified way of
+executing an op such as \texttt{math.sqrt(number)} element-wise on a collection
+(e.g., an image) whose elements are numbers. Indeed, in the case of DoG, the
+Ops library's baseline implementation takes an image as input, along with two
+\texttt{filter.gauss} ops and a \texttt{math.sub} op, and then invokes them on
+the input image. The baseline \texttt{stats.mean} implementation is similar,
+built on the \texttt{stats.sum}, \texttt{stats.size} and \texttt{math.div} ops.
+Higher level DoG ops provide sensible defaults, enabling calls like
+\texttt{dog(image, sigma1, sigma2)} to work, making common operations simple,
+while leaving the door open for ultimate customization as needed.
+
+To facilitate type-safe and efficient chaining of ops, the Ops library has a
+subsystem known as \textit{special ops}. Such special ops are specifically
+intended to be called repeatedly from other ops, without needing to invoke the
+op matching algorithm every time. This repeat usage is achieved in a type-safe
+and efficient way by explicitly declaring the types of the op's primary
+inputs---i.e., the inputs whose values can be efficiently varied across
+invocations of the op---as well as the type of the op's primary output.
+
+Special ops have two major characteristics beyond regular ops. First, each
+special op has a declared \textit{arity}, indicating the number of primary
+inputs, which are explicitly typed via Java generics and can thus efficiently
+vary across invocations of the op. Three arities are currently implemented:
+\textit{nullary} for no inputs, \textit{unary} for one input, and
+\textit{binary} for two inputs. It is important to note that unlike a formal
+mathematical function, a unary special op may have more than one input
+parameter---the ``unary'' in this case refers to the number of explicitly typed
+parameters intended to vary when calling an instance of the op multiple times.
+For instance, in the DoG example above, the baseline DoG is declared as a unary
+op, so that the input image can vary efficiently while the sigmas etc. are held
+constant.
+
+Secondly, every special op is one of three kinds:
+
+\begin{itemize}
+  \item A \textit{function} operates on inputs, producing outputs, in a way
+    consistent with the functional programming paradigm. Inputs are immutable,
+    and outputs are generated during computation and subsequently also
+    immutable. Functions are very useful for parallel processing since they are
+    fully thread-safe even when object references overlap---but this safety
+    comes at the expense of space, since they offer no way to reuse
+    preallocated output buffers.
+  \item A \textit{computer} is similar to a function, but populates a
+    preallocated output object instead of generating a new object every time.
+    Computers have many of the same advantages of functions, but provide the
+    ability to reuse preallocated output buffers to improve efficiency in space
+    and time.
+  \item An \textit{inplace} op mutates its input(s) in place---i.e., its input
+    and output are the same object. Inplace ops are highly space efficient, but
+    lack the mathematical guarantees of functions and computers, since they
+    destroy the original input data.
+\end{itemize}
+
+Some ops are implemented as \textit{hybrids}, offering a choice between two or
+more of the function, computer and inplace computation mechanisms. Users of the
+ops library---even advanced users---will rarely if ever need to know about this
+implementation detail, but for developers crafting new ops, it is convenient to
+have unifying interfaces which provide common logic for combining these
+paradigms. See Supplemental Table 2 for a complete breakdown of the special op
+kinds and arities.
+
+\subsection*{ImageJ Legacy}
+To maximize backwards compatibility with ImageJ 1.x, ImageJ2 must continue to
+provide access to the complete existing \acrshort{ui} and \acrshort{api} with
+which ImageJ users are familiar, while also making all new ImageJ2 features
+available for exploration and use. Furthermore, to bridge the gap, ImageJ2 must
+provide improved functionality transparently when possible, as well as support
+seamless ``mixing and matching'' of the two respective \acrshortpl{api}. In
+this way, ImageJ2 can enable gradual migration to the more powerful
+capabilities of ImageJ2, while empowering developers' contributions to the
+framework to be immediately effective. To achieve this goal, we identified the
+major functional pathways of ImageJ 1.x and reworked them to delegate first to
+ImageJ2 equivalents, falling back on the old behavior if needed.
+
+There are two ImageJ components dedicated to maintaining backwards
+compatibility with ImageJ 1.x. The lower level of the two is the IJ1-patcher:
+using a tool called Javassist \cite{javassist} to perform an advanced Java
+technique known as bytecode manipulation, ImageJ 1.x code is modified at
+runtime to expose callback hooks at critical locations---e.g.: when opening
+images with \textit{File $\triangleright$ Open\ldots}, closing the ImageJ
+application, or displaying \acrshort{ui} components. These hooks are built
+using the SciJava plugin infrastructure, allowing new behavior to be injected
+into ImageJ 1.x despite the fact that it was not designed to support such
+extensibility. In essence, ImageJ2 ``rewrites'' portions of ImageJ 1.x at
+runtime to make integration possible. This approach is necessary because
+altering ImageJ 1.x directly to enable such hooks would break backwards
+compatibility with existing macros and plugins, ruining established scientific
+workflows which have otherwise remained functional across many years.
+
+By default, these hooks are exploited to inject ImageJ2 functionality in the
+second compatibility layer: ImageJ Legacy. ImageJ2 intercepts an ImageJ 1.x
+request and attempts to delegate to its own routines. For example, in our
+implementation of the \textit{File $\triangleright$ Open\ldots} hook, we use
+the SciJava I/O service, which provides extensible support for data types via
+SciJava I/O plugins. This allows the full power of \acrshort{scifio} to be
+called automatically by \textit{File $\triangleright$ Open\ldots} without
+requiring users to select individual loader plugins. In this way, ImageJ2
+exposes new ``seams'' which provide extensibility points not available in the
+standalone ImageJ 1.x project \cite{legacy_code}.
+
+A second major function of ImageJ Legacy is to provide a wrapping legacy
+\acrshort{ui}: an ImageJ2 \texttt{UserInterface} plugin that reuses the ImageJ
+1.x \acrshort{ui}, but maintains synchronization between respective data
+structures. For example, consider the \texttt{ImagePlus} structure in ImageJ
+1.x and its equivalent, the \texttt{Dataset}, in ImageJ2. By default, an
+\texttt{ImagePlus} and \texttt{Dataset} could not be interchanged; they have
+different Java class hierarchies, and with ImageJ2's expanded data model, a
+\texttt{Dataset} is much more expressive than an \texttt{ImagePlus}. However,
+requiring plugins to ``select one'' would impose a technical barrier, even if
+both structures are available in the same application. Thus, the legacy
+\acrshort{ui} notes when either an \texttt{ImagePlus} or a \texttt{Dataset} is
+created and ensures a complementary instance is mapped, via SciJava
+\texttt{Converter} plugins. This brings the ImageJ 1.x and ImageJ2 worlds
+closer together: when an image is opened, it can be used by plugins that would
+take an \texttt{ImagePlus} or a \texttt{Dataset} regardless of whether that
+image was opened via an ImageJ 1.x or ImageJ2 mechanism. Furthermore, because
+conversion is handled in the ImageJ Legacy layer, individual plugins do not
+require knowledge of the synchronization.
+
+Shared image data structures are but one aspect of the legacy \acrshort{ui}'s
+synchronization. Others include logging, notification, and status
+events---essentially all \acrshort{ui} events are mapped across paradigms.
+Whenever possible, these conversions are achieved using an adapter class that
+implements a common interface (e.g., \texttt{Dataset}), which wraps the object
+of interest (e.g., \texttt{ImagePlus}) by reference. This approach enables
+information to be translated between ImageJ 1.x and ImageJ2 structures on
+demand, while minimizing the performance impact. Wrapping by reference also
+mitigates the burden of updates; once synchronization is established, changes
+to the underlying object are automatically reflected in the wrapper.
+
+\subsection*{ImageJ Updater}
+The ImageJ Updater is the mechanism by which the available and installed
+components of ImageJ are managed. At its core, the Updater is a flexible
+component for tracking ImageJ update sites: endpoints containing versioned
+collections of files. Users can pick and choose which update sites they wish to
+enable, with ImageJ's core functionality offered on the base ``ImageJ'' update
+site, which is on by default. Distributions of ImageJ such as \acrfull{fiji}
+\cite{fiji} extend this base with additional functionality (Figure 2) in the
+form of more plugins, scripts, sample images, \acrlongpl{lut}, etc., leveraging
+the ability to override ImageJ's base behavior using SciJava's plugin priority
+mechanism (see ``SciJava Common'' above for details).
+
+\begin{quote}
+[Figure 2: ImageJ update sites provide additional functionality to ImageJ.]
+\end{quote}
+
+The Updater stores metadata in a \texttt{db.xml.gz} file in the root of each
+update site, which describes the files that are part of that update site,
+including checksums and timestamps for all previous versions. In this way, the
+Updater can tell whether each local file is: A) an up-to-date tracked file; B)
+an old version of a tracked file; C) a locally modified version of a tracked
+file; or D) an untracked file. Update sites are served to users over
+\acrshort{http}. Developers may upload files to an update site via an
+extensible set of protocols, as defined by Uploader plugins. The core ImageJ
+distribution includes two such plugins---one for
+\acrshort{ssh}/\acrshort{scp}/\acrshort{sftp} and one for
+\acrshort{webdav}---but in principle, the Updater makes no assumptions about
+how files are uploaded.
+
+The \texttt{db.xml.gz} structure was originally designed for use with the
+\acrshort{fiji} Updater, the ImageJ Updater's predecessor. The logic of the
+\acrshort{fiji} Updater was migrated into the core of ImageJ2, with backwards
+compatibility preserved for existing \acrshort{fiji} installations. As part of
+that migration, the Updater was heavily refactored to be \acrshort{ui}
+agnostic, such that additional user interface plugins for the Updater could be
+created which leverage the same core. Out of the box, ImageJ provides two
+different user interfaces for the Updater: a command-line tool intended for
+power users and developers, and a Swing \acrshort{ui} intended to make updating
+easy for end users. When ImageJ is first launched, it automatically runs the
+``Up-to-date check'' command, which then displays the Updater \acrshort{ui} if
+updates are available from any of the currently enabled update sites.
 
 %% The user interface should be described and a discussion of the intended uses
 %% of the software, and the benefits that are envisioned, should be included,
