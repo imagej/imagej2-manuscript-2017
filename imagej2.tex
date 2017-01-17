@@ -335,7 +335,203 @@
 %% issue which the software described is intended to address.
 
 \section*{Background}
-Text for this section.
+ImageJ \cite{imagej_history} is a powerful, oft-referenced platform for image
+processing, developed by Wayne Rasband at the \acrfull{nih}. Since its initial
+release in 1997, ImageJ has proven paramount in many scientific endeavors and
+projects, particularly those within the life sciences \cite{imagej_review}.
+Over the past nineteen years, the program has evolved far beyond its originally
+intended scope. After such an extended period of sustained growth, any software
+project benefits from a subsequent period of scrutiny and refactoring; ImageJ
+is no exception. Such restructuring helps the program to remain accessible to
+newcomers, powerful enough for experts, and relevant to the demands of its
+ever-growing community. As such, we have developed ImageJ2: a total redesign of
+the previous incarnation (hereafter ``ImageJ 1.x''), which builds on the
+original's successful qualities while improving its core architecture to
+encompass the scientific demands of the decades to come. Key motivations for
+the development of ImageJ2 include:
+
+\begin{enumerate}
+  \item \textbf{Supporting the next generation of image data.} Over time, the
+    infrastructure of image acquisition has grown in sophistication and
+    complexity. For example, in the field of microscopy we were once limited to
+    single image planes. However, with modern techniques we can record much
+    more information: physical location in time and space (X, Y, Z, time),
+    lifetime histograms across a range of spectral emission channels,
+    polarization state of light, phase and frequency, angles of rotation (e.g.,
+    in light sheet fluorescence microscopy), and high-throughput screens, just
+    to name a few. The ImageJ infrastructure needed improvement to work
+    effectively with these new modes of image data.
+
+  \item \textbf{Enabling new software collaborations.} The field of software
+    engineering has seen an explosion of available development tools and
+    infrastructure, and it is no longer realistic to expect a single standalone
+    application to remain universally relevant. ImageJ2 takes collaboration to
+    new levels, via a modular framework enabling effortless integration with
+    external software suites. For example, ImageJ2 plugins can be automatically
+    translated to nodes in a \acrshort{knime} \cite{knime} workflow, and new
+    JavaFX \cite{javafx} web interfaces can be built on top of ImageJ. Once
+    such bridges are established, algorithms can be written once and reused in
+    a variety of contexts without any extra work.
+
+  \item \textbf{Broadening the ImageJ community.} Though initially developed
+    for the life sciences, ImageJ has the potential to be a powerful tool for
+    any field that benefits from image visualization, processing, and analysis:
+    earth sciences, astronomy, fluid dynamics, computer vision, signal
+    processing, etc. We enhance ImageJ's impact throughout the scientific
+    community by providing central online resources which are comprehensive,
+    consistently structured and easily editable by the community.
+\end{enumerate}
+
+From these motivations emerge the six pillars of the ImageJ2 mission
+statement:
+
+\begin{itemize}
+  \item \textbf{Design} the next generation of ImageJ, driven by the needs of
+    the community.
+  \item \textbf{Collaborate} across organizations, fostering open development
+    through sharing and reuse.
+  \item \textbf{Broaden} ImageJ's usefulness and relevance across many
+    disciplines of the scientific community.
+  \item \textbf{Maintain} backwards compatibility with existing ImageJ
+    functionality.
+  \item \textbf{Unify} online resources to a central location for the ImageJ
+    community.
+  \item \textbf{Lead} ImageJ development with a clear vision.
+\end{itemize}
+
+%% The Design Goals section discusses ImageJ2's _goals_ only, not the
+%% _reality_ of what it does. So it uses language like "must" and "should"
+%% and "strives to" rather than "does" and "is". The latter (especially
+%% details thereof) is for Implementation and Results below only.
+
+\subsection*{Design Goals}
+The central technical design goals of ImageJ2 can be divided into seven key
+categories: functionality, extensibility, reproducibility, usability,
+performance, compatibility and community. In this section, we discuss the goals
+of ImageJ2 from its outset; for how these goals have been met in practice, see
+the subsequent sections.
+
+\subsubsection*{Functionality}
+The overriding principle of ImageJ2 is to create \textbf{\textit{powerful}}
+software, capable of meeting the expanding requirements of an ever-more-complex
+landscape of scientific image processing and analysis for the foreseeable
+future. As such, ImageJ needs to be more than just an application: it must be a
+\textbf{\textit{modular}}, multi-layered set of functions with each layer
+encapsulated and building upon lower layers. In computer science terminology,
+ImageJ2 strives to have a proper \textbf{\textit{separation of concerns}}
+between data model and display thereof, enabling use within a wide variety of
+scenarios, such as headless operation---i.e., running remotely on a server,
+cluster or cloud without a graphical \acrfull{ui}.
+
+At its core, ImageJ2 aims to provide robust support for
+\textbf{\textit{N-dimensional}} image data, to support domains with dimensions
+beyond time and space. Examples include: multispectral and hyperspectral
+images, fluorescence lifetime measured in the time or frequency domains,
+multi-angle data from acquisition modalities such as light sheet fluorescence
+microscopy, multi-position data from High Content Screens, and experiments
+using polarized light. In general, the design must be robust enough to express
+any newly emerging modalities within its infrastructure.
+
+Finally, it is not sufficient to provide a modular framework---ImageJ2 must
+also provide \textbf{\textit{built-in routines}} as default behavior for
+standard tasks in image processing and analysis. These core plugins must span a
+wealth of algorithms for image processing and analysis, image visualization,
+and image file import and export. Such built-in features ensure users have an
+application they can apply out-of-the-box.
+
+\subsubsection*{Extensibility}
+The quality that makes ImageJ most powerful---its greatest strength---is its
+\textbf{\textit{extensibility}}. From its inception \cite{imagej_history},
+ImageJ 1.x has had a mechanism by which users can develop their own plugins and
+macros to extend its capabilities. Two decades later, a plethora of such
+plugins and macros have been shared and published \cite{imagej_ecosystem}. It
+is paramount that ImageJ2 maintains this ease of modification and extension by
+its user community, and furthermore leverages its improved separation of
+concerns to actually make user extension easier and more powerful; e.g., if
+image processing plugins are agnostic to user interface, new interfaces can be
+developed without a loss of functionality.
+
+A related preeminent concern is \textbf{\textit{interoperability}}. There is no
+silver bullet in image processing. No matter how powerful ImageJ becomes or how
+many extensions exist, there will always be powerful and useful alternative
+tools available. Users benefit most when information can easily be exchanged
+between such tools. One of ImageJ2's primary motivations is to enable usage of
+ImageJ code from within other applications and to support open standards for
+data storage and exchange.
+
+\subsubsection*{Reproducibility}
+For ImageJ to be truly useful to the scientific community, it must be not only
+technically feasible to extend, but also socially feasible, without legal
+obstacles or other restrictions preventing the free exchange of scientific
+ideas. To that end, ImageJ must be not only open source, but offer full
+\textbf{\textit{reproducibility}}, following an \textbf{\textit{open
+development process}} which we believe is an optimal fit for open scientific
+inquiry \cite{software_usability}. We want to enable the community to not just
+use ImageJ, but also to build upon it, with all project resources---revision
+history, project roadmap, community contribution process, etc.---publicly
+accessible, and development discussions taking place in public, archived
+communication channels so that interested parties can remain informed of and
+contribute to the project's future directions. Such transparency also
+facilitates sensible, defensible software development processes and fosters
+responsibility amongst those involved in the ImageJ project.
+
+\subsubsection*{Usability}
+Modular systems composed of many components often have a corresponding increase
+in conceptual complexity, making them harder to understand and use. To avoid
+this pitfall, ImageJ2 employs the idea of complexity minimization: seeking
+\textbf{\textit{sensible defaults}} that make simple things easy, but difficult
+things still possible. The lowest-level software layers should define the
+program's full power, while each subsequent layer reduces visible complexity by
+choosing default parameters suitable for common tasks. The highest levels
+should provide users with the simplicity of a ``big green button,'' performing
+the most commonly desired tasks with ease---the powerful inner machinery
+remaining unseen, yet accessible when needed.
+
+To bridge the gap between extensibility and usability, there must be a painless
+process of installing new functionality: a built-in, configurable
+\textbf{\textit{automatic update mechanism}} to manage extensions and keep the
+software up-to-date. This update mechanism must be scalable and distributed,
+such that software developers can publish their own extensions on their own
+websites, without needing to obtain permission from a central authority.
+
+\subsubsection*{Performance}
+N-dimensional images and the ever-expanding size of datasets increase the
+computation requirements placed on analysis routines. For ImageJ2 to succeed,
+it must accomplish its goals without negatively impacting performance
+\textbf{\textit{efficiency}} in time---e.g., \acrfull{cpu} and
+\acrfull{gpu}---or space---e.g., \acrfull{ram} and disk. Furthermore, to ensure
+ImageJ2 meets performance needs for a wide variety of use cases, it should
+offer choices surrounding usage of available resources, as well as sensible
+defaults for balancing performance in common scenarios.
+
+Another key consideration for performance is \textbf{\textit{scalability}}:
+ImageJ must be capable of operating on increasingly huge datasets. In cloud
+computing, this requirement is often met via elasticity: the ability to
+transparently provision additional computing resources---i.e., throw more
+computers at the problem \cite{hardware_is_cheap}. We are at the dawn of the
+``Big Data'' era of computing, where both computation and storage are scalable
+resources which can be purchased from remote server farms. Software like ImageJ
+which hopes to remain effective for serious scientific inquiry into the coming
+decades must be architected so that its algorithms scale well to increasingly
+large data processed in parallel across increasingly large numbers of
+\acrshort{cpu} and \acrshort{gpu} cores.
+
+\subsubsection*{Compatibility}
+There are a vast number of existing extensions---plugins, macros, and
+scripts---for the original ImageJ 1.x application which have proven extremely
+useful to the user community \cite{imagej_ecosystem}. ImageJ2 must continue to
+support these extensions as faithfully as possible, while also providing a
+clear incremental migration path to take advantage of the new framework.
+
+\subsubsection*{Community}
+The principal non-technical goal of ImageJ2 is to serve the ImageJ community as
+it evolves and grows; to that end, several community-oriented technical goals
+naturally follow. The ImageJ project must provide \textbf{\textit{unified
+online resources}} including a central community-editable website, discussion
+forum, and online technical resources for managing community extensions of
+ImageJ. And the ImageJ application itself must work in concert with these
+resources---e.g., users should be able to report bugs directly to online issue
+tracking systems when something goes wrong.
 
 %% This should include a description of the overall architecture of the
 %% software implementation, along with details of any critical issues and
