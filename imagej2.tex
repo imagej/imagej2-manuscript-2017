@@ -111,15 +111,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \author[
-   addressref={aff1},                   % id's of addresses, e.g. {aff1,aff2}
-   corref={aff1},                       % id of corresponding address, if any
-   noteref={n1},                        % id's of article notes, if any
-   email={jane.e.doe@cambridge.co.uk}   % email address
-]{\inits{JE}\fnm{Jane E} \snm{Doe}}
+   addressref={aff1}
+]{\inits{CTR}\fnm{Curtis T} \snm{Rueden}}
+\author[
+   addressref={aff1,aff2}
+]{\inits{JS}\fnm{Johannes} \snm{Schindelin}}
+\author[
+   addressref={aff1}
+]{\inits{MCH}\fnm{Mark C} \snm{Hiner}}
+\author[
+   addressref={aff1}
+]{\inits{BED}\fnm{Barry E} \snm{DeZonia}}
+\author[
+   addressref={aff1}
+]{\inits{AEW}\fnm{Alison E} \snm{Walter}}
 \author[
    addressref={aff1,aff2},
-   email={john.RS.Smith@cambridge.co.uk}
-]{\inits{JRS}\fnm{John RS} \snm{Smith}}
+   email={eliceiri@wisc.edu}
+]{\inits{KWE}\fnm{Kevin W} \snm{Eliceiri}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -131,33 +140,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \address[id=aff1]{%                           % unique id
-  \orgname{Department of Zoology, Cambridge}, % university, etc
-  \street{Waterloo Road},                     %
-  %\postcode{}                                % post or zip code
-  \city{London},                              % city
-  \cny{UK}                                    % country
+  \orgname{Laboratory for Optical and Computational Instrumentation, University of Wisconsin at Madison},
+  \city{Madison},
+  \state{Wisconsin},
+  \cny{USA}
 }
 \address[id=aff2]{%
-  \orgname{Marine Ecology Department, Institute of Marine Sciences Kiel},
-  \street{D\"{u}sternbrooker Weg 20},
-  \postcode{24105}
-  \city{Kiel},
-  \cny{Germany}
+  \orgname{Morgridge Institute for Research},
+  \city{Madison},
+  \state{Wisconsin},
+  \cny{USA}
 }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Enter short notes here                   %%
-%%                                          %%
-%% Short notes will be after addresses      %%
-%% on first page.                           %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{artnotes}
-%\note{Sample of title note}     % note to the article
-\note[id=n1]{Equal contributor} % note, connected to author
-\end{artnotes}
 
 \end{fmbox}% comment this for two column layout
 
