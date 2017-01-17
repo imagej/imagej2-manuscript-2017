@@ -86,7 +86,7 @@
 \begin{frontmatter}
 
 \begin{fmbox}
-\dochead{Research}
+\dochead{Software}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -172,6 +172,14 @@
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% The Abstract of the manuscript should not exceed 350 words and must be
+%% structured into separate sections: Background, the context and purpose of
+%% the study; Results, the main findings; Conclusions, brief summary and
+%% potential implications.
+%%
+%% Please do not use abbreviations or references in the abstract. Please
+%% see also our guide for writing an easily accessible abstract.
+
 \begin{abstractbox}
 
 \begin{abstract} % abstract
@@ -232,52 +240,44 @@ Text for this section.
 %%%%%%%%%%%%%%%%%%%%%%%%% start of article main body
 % <put your article body there>
 
-%%%%%%%%%%%%%%%%
-%% Background %%
-%%
-\section*{Content}
-Text and results for this section, as per the individual journal's instructions for authors. %\cite{koon,oreg,khar,zvai,xjon,schn,pond,smith,marg,hunn,advi,koha,mouse}
+%% The Background section should be written in a way that is accessible to
+%% researchers without specialist knowledge in that area and must clearly
+%% state - and, if helpful, illustrate - the background to the research and its
+%% aims. It should clearly described the relevant context and the specific
+%% issue which the software described is intended to address.
 
-\section*{Section title}
-Text for this section \ldots
-\subsection*{Sub-heading for section}
-Text for this sub-heading \ldots
-\subsubsection*{Sub-sub heading for section}
-Text for this sub-sub-heading \ldots
-\paragraph*{Sub-sub-sub heading for section}
-Text for this sub-sub-sub-heading \ldots
-In this section we examine the growth rate of the mean of $Z_0$, $Z_1$ and $Z_2$. In
-addition, we examine a common modeling assumption and note the
-importance of considering the tails of the extinction time $T_x$ in
-studies of escape dynamics.
-We will first consider the expected resistant population at $vT_x$ for
-some $v>0$, (and temporarily assume $\alpha=0$)
-%
-\[
- E \bigl[Z_1(vT_x) \bigr]= E
-\biggl[\mu T_x\int_0^{v\wedge
-1}Z_0(uT_x)
-\exp \bigl(\lambda_1T_x(v-u) \bigr)\,du \biggr].
-\]
-%
-If we assume that sensitive cells follow a deterministic decay
-$Z_0(t)=xe^{\lambda_0 t}$ and approximate their extinction time as
-$T_x\approx-\frac{1}{\lambda_0}\log x$, then we can heuristically
-estimate the expected value as
-%
-\begin{eqnarray}\label{eqexpmuts}
-E\bigl[Z_1(vT_x)\bigr] &=& \frac{\mu}{r}\log x
-\int_0^{v\wedge1}x^{1-u}x^{({\lambda_1}/{r})(v-u)}\,du
-\nonumber\\
-&=& \frac{\mu}{r}x^{1-{\lambda_1}/{\lambda_0}v}\log x\int_0^{v\wedge
-1}x^{-u(1+{\lambda_1}/{r})}\,du
-\nonumber\\
-&=& \frac{\mu}{\lambda_1-\lambda_0}x^{1+{\lambda_1}/{r}v} \biggl(1-\exp \biggl[-(v\wedge1) \biggl(1+
-\frac{\lambda_1}{r}\biggr)\log x \biggr] \biggr).
-\end{eqnarray}
-%
-Thus we observe that this expected value is finite for all $v>0$ (also see \cite{koon,khar,zvai,xjon,marg}).
-%\nocite{oreg,schn,pond,smith,marg,hunn,advi,koha,mouse}
+\section*{Background}
+Text for this section.
+
+%% This should include a description of the overall architecture of the
+%% software implementation, along with details of any critical issues and
+%% how they were addressed.
+
+\section*{Implementation}
+Text for this section.
+
+%% The user interface should be described and a discussion of the intended uses
+%% of the software, and the benefits that are envisioned, should be included,
+%% together with data on how its performance and functionality compare with,
+%% and improve, on functionally similar existing software. A case study of the
+%% use of the software may be presented. The planned future development of new
+%% features, if any, should be mentioned.
+
+\section*{Results and Discussion}
+Text for this section.
+
+%% This should state clearly the main conclusions and provide an explanation of
+%% the importance and relevance of the case, data, opinion, database or
+%% software reported.
+
+\section*{Conclusions}
+Text for this section.
+
+%% If abbreviations are used in the text they should be defined in the text at
+%% first use, and a list of abbreviations should be provided.
+
+\section*{List of abbreviations}
+Text for this section.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -287,14 +287,25 @@ Thus we observe that this expected value is finite for all $v>0$ (also see \cite
 
 \begin{backmatter}
 
-\section*{Competing interests}
+\section*{Declarations}
+
+\subsection*{Competing interests}
   The authors declare that they have no competing interests.
 
-\section*{Author's contributions}
+\subsection*{Author's contributions}
     Text for this section \ldots
 
-\section*{Acknowledgements}
+\subsection*{Acknowledgements}
   Text for this section \ldots
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Endnotes                      %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Endnotes}
+  None.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                  The Bibliography                       %%
 %%                                                         %%
