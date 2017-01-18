@@ -1209,7 +1209,593 @@ updates are available from any of the currently enabled update sites.
 %% features, if any, should be mentioned.
 
 \section*{Results and Discussion}
-Text for this section.
+ImageJ has transformed from a single-user, single-bench application to a
+versatile framework of extensible, reusable operations. In the following
+sections, we discuss how each core aspect of ImageJ2 has impacted community
+usage and how we expect these qualities to shape future developments.
+
+\subsection*{Functionality}
+
+The architecture of ImageJ2 enables it to meet current and future demands in
+image analysis.
+
+\textbf{Dimensions.} Using ImgLib2 opens up caching options for operating on
+extremely large images, an area in which ImageJ 1.x has previously struggled.
+ImageJ 1.x is inherently limited to five dimensions (X, Y, Z, time, and
+channel) with fewer than $2^{31}$ pixels per XY plane, e.g. a $50,000 \times
+50,000$ plane being too large to represent. ImageJ 1.x allows composite images,
+but is constrained to a maximum of seven composited channels. ImageJ2's
+N-dimensional data model supports up to $2^{31} - 1$ dimensions, each with up
+to $2^{63} - 1$ elements, and composite rendering over any dimension of
+interest regardless of length. There are several preset dimensional axis types,
+and new types can also be defined as needed. When visualizing multi-channel
+data, each channel can now have its own \acrfull{lut} without constraint.
+
+\begin{quote}
+[Figure 3: ImageJ 1.x case logic compared to a unified ImgLib2 implementation.]
+\end{quote}
+
+\textbf{Types.} ImageJ 1.x supports only five image types for representing
+sample values: 8-bit unsigned integer grayscale, 8-bit with a color lookup
+table, 16-bit unsigned integer grayscale, 32-bit floating point, and a 32-bit
+integer-packed color type representing three 8-bit unsigned color channels:
+red, green, and blue. Furthermore, this support is highly static, sometimes
+requiring case logic for algorithms to properly handle each of desired image
+types independently. In contrast, ImgLib2 is explicitly designed to facilitate
+algorithms developed agnostic of image type (Figure 3). ImageJ2 already
+supports over twenty different image types (Supplemental Table 3), including
+arbitrary precision integer and decimal types, and further types are definable
+using SciJava Common's flexible plugin framework. SciJava \texttt{Converter}
+plugins also extend the reach of ImageJ2-based algorithms even further into
+additional data structures, such as \acrshort{matlab} matrices
+\cite{imagej_matlab} and \acrshort{itk} images \cite{imagej_itk}.
+
+\textbf{Storage.} The prime example of an alternate storage source in ImageJ
+1.x is the virtual stack, allowing image slices to be read on demand---e.g., if
+the image would not normally fit in memory. However, ImageJ 1.x commands must
+explicitly account for whether or not they can operate on a virtual stack,
+requiring a proliferation of case logic and complexity. ImageJ2 takes advantage
+of ImgLib2's extensible container system, which enables data to be stored
+flexibly: as files on disk, remote \acrshortpl{url}, within a database,
+generated on-the-fly, etc. Such routines can even be used with pixel and
+storage types implemented well after their creation without having to change
+the original implementation. As image acquisition sizes increase, we expect
+virtualized image data to be particularly critical to the future of image
+analysis. The \acrshort{scifio} library already provides an ImgLib2 image type
+(``\acrshort{scifio} cell image'') that supports block-based read/write caching
+from disk, effectively behaving as a writeable virtual stack.
+
+\textbf{\Acrfullpl{roi}.} Like ImageJ 1.x, ImageJ2 provides support for
+\textit{\acrfullpl{roi}}, which are functions that identify samples upon which
+to operate, as well as \textit{overlays}, which are visuals (e.g., text)
+superimposed for visualization. ImageJ2 builds upon the \acrshort{roi}
+interfaces of ImgLib2, allowing for any number of simultaneous \acrshortpl{roi}
+and overlays to be associated with a particular image without the need for
+additional tools like ImageJ 1.x's global \acrshort{roi} Manager window.
+
+Because \acrshortpl{roi} are part of the core ImgLib2 library, it is possible
+to process subsets of images identified by one or more \acrshortpl{roi} using
+an ImgLib2-based algorithm, and the Ops library can process data within a
+\acrshort{roi} as a single functional operation. This continues ImageJ2's
+migration towards image processing algorithms that need not add explicit case
+logic---e.g., to handle \acrshortpl{roi} separately---but instead simply
+provide a pixelwise function, or iterate using ImgLib2's generic iteration
+mechanism. In this way, we continue to reduce the effort and complexity of
+ImageJ2 plugins, while increasing their utility and application.
+
+\textbf{Modularity.} ImageJ 1.x was developed with a ``single computer, single
+user, single operation'' in mind. Although ImageJ 1.x can be used as a library,
+it will always be a single unit that cannot be decoupled from its dependencies,
+which are implicit in its source code. ImageJ2 has succeeded in building a
+cohesive application from encapsulated, modular components unified by the
+SciJava plugin framework. Each component is independently deployed and
+accessible via the build automation tool Maven \cite{apache_maven}, allowing
+developers to pick and choose the individual pieces relevant to them---be it
+the ImageJ application, a particular scripting language, image format, or the
+SciJava Common core. SciJava-based projects inherit a ``bill of materials''
+which enables components to be combined at versions known to be compatible with
+each other \cite{imagej_architecture}. We have already seen the benefits of
+this modularity---for example, the use of the \acrshort{scifio} library in
+\acrfull{knip} to produce images compatible with ImageJ2 commands.
+
+\textbf{Ops.} The ImageJ Ops library is the centerpiece of ImageJ2, bringing
+Java's mantra of ``write once, run anywhere'' to image processing algorithms.
+Ops provides a wealth of image processing algorithms to users, accessible in a
+unified way that empowers developers to transparently extend and enhance the
+behavior and capabilities of each operation. It is critical to appreciate that
+each type of op (more than 350 different operations as of version 0.33.0)
+represents a potential extension point for optimizing existing parameters, or
+supporting new ones. In contrast to algorithms coded using ImageJ 1.x data
+structures, all ops work without modification on all image types (Supplemental
+Table 3) and containers, including those not yet in existence. As the Ops
+project is a very active collaboration across several institutions including
+the University of Konstanz, University of Wisconsin-Madison and others, we
+expect the core library to continue to grow in both available functionality and
+use within the community.
+
+\subsection*{Extensibility}
+
+\textbf{Plugins.} The ImageJ2 plugin framework, built on top of SciJava Common,
+is a modular and extensible infrastructure for adding features. Plugins can now
+take many forms, including image processing operations, new tools, and even
+completely new displays. In ImageJ 1.x there are three kinds of plugins: 1) the
+standard \texttt{PlugIn}, which provides a freeform \texttt{run(String arg)}
+method; 2) \texttt{PlugInFilter}, which processes images one plane at a time;
+and 3) \texttt{PlugInTool}, which adds a function to the toolbar. In ImageJ2,
+these ideas are expressed in the form of \texttt{Command}, \texttt{Op} and
+\texttt{Tool} plugins, respectively---although these plugin types have many
+advantages over their ImageJ 1.x analogues: type-safe chaining of operations,
+dynamic selection of ops based on arguments, \acrshort{ui} agnosticism, etc.
+Furthermore, many other types of plugins are available as well, and the
+flexibility of the SciJava plugin framework also allows for additional new
+types of plugins to be defined.
+
+\textbf{Modules.} The ImageJ application's menu structure is made up of SciJava
+modules---most commonly commands and scripts. Thus, scripts and
+\texttt{Command} plugins are probably the most common points of extension for
+developers exploring the ImageJ2 architecture. Writing such extensions in
+ImageJ2 is much simpler than in ImageJ 1.x, which requires each extension to
+explicitly create its own dialog box to collect user input. In ImageJ2, the use
+of parameters results in more declarative extensions, freeing software
+developers from the need to explicitly ask the user for input values in the
+vast majority of cases, and substantially reducing boilerplate and
+\acrshort{ui}-specific code, making commands shorter and easier to understand
+(see Figure 5 in ``Usability'' below). Moreover, this mechanism makes ImageJ2
+modules truly independent of the user interface, allowing them to work with any
+\acrshort{ui} or headlessly. The module simply declares its inputs and outputs
+using the appropriate parameter syntax, and lets ImageJ do the rest.
+
+\textbf{Formats.} In an open source image analysis program like ImageJ, an
+extensive collection of supported image formats is necessary to maximize
+relevance and impact across the community. ImageJ 1.x provided a central
+\texttt{HandleExtraFileTypes} class to enable extensibility, but required
+direct modification of this class to do so, resulting in many third parties
+each shipping their own modified version. Only one modification could ``win,''
+effectively breaking any other supported formats. To fill this role in ImageJ2,
+the \acrfull{scifio} library provides extensible image format support tailored
+to the ImageJ Common data model.
+
+As of version 0.29.0, the core \acrshort{scifio} library provides a collection
+of \textasciitilde{}30 open formats, and also includes a wrapping of the
+Bio-Formats library \cite{bio_formats}, which enables a wide variety of
+supported images throughout all ImageJ operations. Furthermore,
+\acrshort{scifio} enables developers to create their own \texttt{Format}
+plugins to smoothly integrate support for new proprietary formats and metadata
+standards without modification of core functions or proliferation of one-off
+format commands.
+
+\textbf{Image processing.} ImageJ's ultimate goal is to be a supremely powerful
+tool for image processing; it is therefore paramount that ImageJ include a
+world-class extension mechanism for image processing algorithms. ImageJ2's op
+matching subsystem offers extensible case logic: an \texttt{Op} plugin can be
+written to add a new algorithm, to extend an existing algorithm to support new
+data structures, or to make an algorithm more efficient for specific data
+types, all without impacting previously written code. As the Ops library
+matures, we expect to see new \texttt{Op} implementations along all of these
+lines in existing third-party suites, conveniently shipped to users via ImageJ
+update sites. Hence, unlike in ImageJ 1.x, existing user scripts using the Ops
+library will automatically benefit from new performance-enhancing ops.
+
+\textbf{User interface.} ImageJ 1.x's user interface is written in Java
+\acrshort{awt} with many assumptions throughout the codebase relying on this
+fact. Hence, ImageJ 1.x is only limitedly usable in a headless way (e.g., for
+image processing on a server cluster). Normally, ImageJ 1.x cannot be used
+headless at all: some lynchpin ImageJ 1.x classes---notably \texttt{ij.ImageJ}
+and \texttt{ij.gui.GenericDialog}---derive from \texttt{java.awt.Window}, and
+such classes cannot be instantiated when running in headless mode. Fortunately,
+the ImageJ Legacy layer's runtime patcher rewrites affected ImageJ 1.x classes
+to derive from non-\acrshort{awt} window classes when in headless mode; as
+such, ImageJ2 makes headless execution of ImageJ 1.x scripts feasible.
+
+Furthermore, ImageJ 1.x's reliance on \acrshort{awt} also limits its ability to
+be embedded into other applications using different \acrshort{ui} frameworks,
+such as Swing or Eclipse \acrshort{swt}. While some applications have succeeded
+in doing so \cite{bio7}, the amount of work required in response to each ImageJ
+1.x update is considerable, since many changes must be made to the ImageJ 1.x
+core source code.
+
+In contrast, ImageJ2's separation between the underlying data model and the
+user interface enables it to run headless or within a variety of different user
+interface paradigms with no changes to the core. Developers can create their
+own plugins to provide alternative user interfaces. ImageJ2 is even capable of
+displaying multiple \acrshortpl{ui} simultaneously in the same Java runtime.
+Making ImageJ support multiple user interfaces in this way is surely worth the
+effort for many years to come; one of the most common questions about ImageJ
+from software developers is how to customize the ImageJ \acrshort{ui}, for
+which ImageJ2 now provides a clear mechanism. Adding support for a new
+\acrshort{ui} now only requires writing a new user interface plugin and
+corresponding display and widget plugins.
+
+While the current flagship user interface for ImageJ2 is still the ImageJ 1.x
+\acrshort{ui} via the ImageJ Legacy component, ImageJ2 also has a Swing user
+interface modeled after the ImageJ 1.x \acrshort{ui}, but which stands alone
+with no dependence on ImageJ 1.x code. We have been successful in
+``reskinning'' this Swing \acrshort{ui} with various Java \acrfullpl{laf},
+including the Metal, Motif, Nimbus, Aqua, Windows and \acrfull{gtk}
+\acrshortpl{laf}. Furthermore, we explored proof-of-concept \acrshort{ui}
+implementations in other frameworks, such as Eclipse's \acrfull{swt}, Java
+\acrfull{awt} sans Swing, and Apache Pivot. There is also a JavaFX
+\acrshort{ui} for ImageJ2 developed by Cyril Mongis at the University of
+Heidelberg \cite{imagejfx}, as well as integrations of ImageJ into other
+powerful end-user applications such as \acrshort{knime} and CellProfiler. See
+Figure 4 for a side-by-side illustration of \acrshortpl{ui}.
+
+\begin{quote}
+[Figure 4: Side-by-side comparison of ImageJ2-based user interfaces and
+integrations.]
+\end{quote}
+
+\textbf{Interoperability.} There is no one-size-fits-all tool for scientific
+image processing. A diversity of tools benefits users, even more so when they
+can interoperate. ImageJ 1.x was designed to be run by a single user on a
+single desktop computer. Many aspects of the program are structured as
+singletons: one macro interpreter, one \texttt{WindowManager}, one active
+image, one \texttt{PlugInClassLoader}, one active \acrshort{roi} per image, one
+set of overlays, one active \acrshort{roi} in the \acrshort{roi} manager, etc.
+This structure imposes many limitations: for example, multiple macros cannot
+run concurrently, and it is not possible to operate more than one instance of
+ImageJ 1.x in the same \acrshort{jvm} simultaneously---e.g., on a single web
+page as applets.
+
+ImageJ2 is structured as an application container, avoiding the static
+singleton pattern and hence many of ImageJ 1.x's limitations. Multiple
+instances of ImageJ2 can run in the same \acrshort{jvm}, each with multiple (or
+no) user interfaces and multiple concurrent operations. Our primary goal is to
+make each encapsulated component of ImageJ2 usable in other software projects.
+
+There are several examples of external developers leaning on this generality to
+expose SciJava modules in interesting ways: for example, automated conversion
+to nodes in a \acrshort{knime} workflow. Continuing efforts are underway to
+foster further interoperability with several other projects, including
+\acrshort{itk}, \acrshort{omero}, CellProfiler, \acrshort{matlab},
+\acrshort{alida} and \acrshort{mitobo} \cite{mitobo}.
+
+\subsection*{Reproducibility}
+
+In the interest of transparency and reproducibility---especially in the context
+of open science---the ImageJ2 project strives to be accessible. Ultimately, we
+want to spur the community to improve ImageJ in a collaborative way, by
+providing open access to resources. Of course, we recognize the need for
+responsive, reliable maintainers to coordinate and facilitate contributions.
+However, with the Internet's modern software infrastructure, it is now quite
+feasible to push ImageJ development in a more collaborative and
+community-driven direction, embracing the ``GitHub effect''
+\cite{github_effect} of worldwide, distributed development.
+
+All ImageJ2 source code is open and publicly available on GitHub
+\cite{imagej_source_code}, and all core components are permissively licensed
+\cite{imagej_licensing} to avoid any ambiguity over how the code can be used.
+But visibility alone is not sufficient to keep a project open; each line of
+code adds complexity, making the project harder to understand and maintain.
+Modular, encapsulated design, the application of the ``\acrfull{dry}'' concept,
+and avoidance of overly ``clever'' code keeps ImageJ2 well-organized and easier
+to understand. Extensive online documentation \cite{imagej_web_site} and
+Javadoc \cite{imagej_javadoc} provide further insight, while effective unit
+testing and dedicated tutorial components illustrate concrete use cases. By
+keeping a clean, well-organized and well-documented codebase, we facilitate
+community contributions, as well as continued maintenance of ImageJ into the
+future.
+
+ImageJ2's open development process provides many benefits over the centralized
+process of ImageJ 1.x. The use of Maven makes dependency management human
+readable and enables the use of a ``bill of materials'' to unambiguously
+determine which versions of each ImageJ component are compatible. The use of
+Git has evolved revision control to a new level of documentation, clearly
+communicating why changes are made and encouraging atomic, easily understood
+changes. Furthermore, ImageJ2 minimizes the barrier to community contributions
+via an open issue tracking system \cite{imagej_issues} and open patch
+submission process \cite{imagej_contributing}. We also maintain a \acrfull{ci}
+server \cite{imagej_jenkins} which runs automated regression tests whenever
+modifications to ImageJ's source code are published; such tests help to avoid
+and detect regression bugs so that core functionality and behavior will
+continue to work reliably as the program evolves. This same CI server manages
+release and deployment, javadoc generation, website validation, and more. On
+the application side, the ImageJ Updater functions in a way similar to version
+control, with all prior binaries retained and metadata in \acrshort{xml}
+format.
+
+\subsection*{Usability}
+
+The ImageJ community includes both end users---who use ImageJ as an application
+and want it to ``just work''---and software developers---who want to customize
+and invoke parts of ImageJ as a software library from their own programs.
+However, these roles are not rigid; many users write scripts and macros to
+facilitate their image analysis, and many developers also use ImageJ as an
+application. ImageJ2 includes a powerful Script Editor with many tools to aid
+users as they transition into the realm of development. This tool removes much
+of the complexity of traditional software development, allowing users to focus
+on coding without the added burden of applying compilers, \acrshortpl{ide}, or
+the command line.
+
+In addition, the SciJava parameterized scripting mechanism makes it easier for
+users to write scripts whose inputs and outputs are declared in a clear and
+straightforward manner. SciJava parameters reduce the boilerplate code
+historically needed to define a script's input values, in some cases by 50\% or
+more (Figure 5). Leveraging SciJava annotations also frees the plugin from the
+Java \acrshort{awt} dependencies of ImageJ 1.x's \texttt{GenericDialog},
+allowing the plugin to be used headlessly, in future \acrshortpl{ui}, and even
+in other applications.
+
+\begin{quote}
+[Figure 5: Comparison of pure ImageJ 1.x command with one using SciJava
+declarative syntax.]
+\end{quote}
+
+\textbf{Sensible defaults.} A key example of reasonable default behavior is the
+SciJava conversion framework with its specialized \texttt{Converter} plugin
+type. \texttt{Converter} plugins define useful type substitutions that would
+not normally be allowed by the Java type hierarchy. For example, conversion of
+ImageJ \texttt{Dataset} objects to and from other paradigms (\acrshort{matlab}
+arrays, \acrshort{itk} images, etc.) is facilitated by \texttt{Converter}
+plugins which encapsulate the logic for each conversion case. The framework
+then uses the converters automatically when modules are executed, so when a
+user says e.g. ``run this \acrshort{itk} algorithm on this dataset I opened''
+everything ``just works'' without the user needing to perform an explicit
+manual conversion. From a software development perspective, this scheme lets
+ImageJ2 retain the advantages of strong typing while escaping the corresponding
+shackles that often accompany it.
+
+The ImageJ Ops library provides another illustration of ImageJ2's sensible
+defaults structured in layers. While every op in the system is a dynamically
+callable plugin, the core Ops library also organizes its built-in operations
+into a centrally accessible collection of type-safe namespaces in a standard
+Java \acrshort{api} explorable from \acrshortpl{ide} like Eclipse e.g. via its
+Content Assist functions. This structure also provides an elegant and
+easy-to-read syntax for calling ops in script-driven workflows (see Figure 7 in
+``Compatibility'' below).
+
+\textbf{Automatic updates.} In ImageJ 1.x, plugin installation requires users
+to download a \acrshort{jar} or Java class file and place it within the ImageJ
+plugins folder. Updating an installed plugin essentially requires repeating the
+manual installation steps, which is both tedious and error-prone. Developers
+have to manually manage their plugin's dependencies, which in practice leads to
+users receiving cryptic error messages when multiple plugins require
+incompatible component versions. Even worse, some developers then make
+suboptimal design decisions to work around this difficulty, such as
+reimplementing functionality already provided by well-tested third party
+libraries, and/or creating so-called ``uber-\acrshortpl{jar}'' which lump
+together the dependencies into intractable bundles \cite{imagej_uber_jar}.
+
+The ImageJ Updater vastly simplifies this process by informing users
+automatically when a new plugin version is available and enabling single-click
+upgrades to the latest version of all components. On the development side, the
+use of Maven by the ImageJ2 and \acrshort{fiji} projects provides a clear best
+practice for managing dependencies in a consistent way, which reduces the
+chance of broken end-user installations.
+
+ImageJ's support for multiple update sites makes it feasible for community
+developers and third parties to create their own update sites from which users
+can pick and choose, without them needing to become a part of the core ImageJ
+or \acrshort{fiji} distribution. This distributed model of update sites fits in
+very well with the community-driven aspects of ImageJ, dramatically lowering
+the barrier for sharing effort. This capability is made even more potent by the
+Personal Update Sites feature, which lets users link their ImageJ wiki account
+to their own personal web space. Furthermore, the Updater derives its initial
+list of available update sites from the ``List of update sites'' wiki page of
+the ImageJ website \cite{imagej_list_of_update_sites}---plugin developers can
+edit this wiki page in the same way as the rest of the ImageJ website, in order
+to make their site automatically available to all users of ImageJ. Editing this
+page is not mandatory, however; users can also manually edit their ImageJ
+installation's list of available update sites---e.g., if their organization
+offers an internally managed update site for plugins specific to their
+institute.
+
+Although manual plugin installation is still supported in ImageJ2, many
+organizations have already publicized their own update sites, and thanks to the
+Updater together with the ImageJ Legacy layer, all of the plugins served from
+those sites are easily accessible within ImageJ2. This has helped to focus the
+\acrshort{fiji} project on its original goal of being a curated collection of
+plugins facilitating scientific image analysis. In addition to \acrshort{fiji},
+hundreds of third-party update sites are available, such as \acrshort{loci},
+\acrfull{bar}, BioVoxxel, the Stowers Institute, and the BioImaging and Optics
+platform of the \acrfull{epfl}, most of which are served from the centrally
+managed Personal Update Sites server \cite{imagej_sites}.
+
+\subsubsection*{Performance}
+
+ImageJ2 is engineered to accommodate the growing size and complexity of image
+data. Although performance has been a serious design consideration, we believe
+in aggressive performance optimization only on an as-needed basis as software
+components stabilize and mature \cite{premature_optimization}. By designing a
+robust framework that allows for specialization at every level, we avoid
+compromising design for the sake of incremental performance gains, while
+empowering developers to optimize when necessary. Furthermore, the fact that
+ImageJ2 maintains 100\% backwards compatibility with ImageJ 1.x (see
+``Compatibility'' below) means that existing high-performance image processing
+approaches continue to work as is, even if they do not benefit from ImageJ2's
+architectural improvements.
+
+\textbf{Efficiency.} The time performance of ImageJ2 data structures is
+generally consistent with those of ImageJ 1.x. The core of performance in
+ImageJ2 hinges on the efficiency of the various ImgLib2 containers. We have run
+benchmarks comparing the time performance of iteration and access on ImgLib2
+image structures with that of ImageJ 1.x images, as well as compared to raw
+array access \cite{imglib2_benchmarks}. We found that thanks to Java's
+\acrfull{jit} compiler, ImgLib2 is highly comparable to ImageJ 1.x in these
+regards (Supplemental Figure 2).
+
+When time performance is dominated by the overhead of looping itself, some
+ImgLib2 container types such as cell images may be measurably slower to iterate
+and access. However, this loop overhead is generally very small, and for most
+container types (e.g., array and planar images) the \acrshort{jit} quickly
+optimizes the code to equal the speed of raw array access. Hence, for
+non-trivial image processing operations which take significant time to compute
+per sample, overall time performance converges across all data structures and
+container types, ImageJ 1.x and ImageJ2 alike.
+
+The advantages of ImgLib2's type- and container-agnostic algorithm development
+outweigh any minor differences in time performance, saving developer time and
+effort via simpler, more maintainable code. Furthermore, ImgLib2's more
+comprehensive set of image types (Supplemental Table 3) make it easier to
+optimize for space efficiency. For example, an image sequence recorded using a
+12-bit detector requires 16 bits per sample in ImageJ 1.x, whereas ImageJ2 can
+pack that data without wasted bits using ImgLib2's \texttt{uint12} data type,
+resulting in a 33\% increase in space efficiency.
+
+Relatedly, the design of the ImageJ Ops library realizes these same efficiency
+advantages. End user scripts invoke ops by name and arguments, and the Ops
+matching algorithm takes care of selecting the implementation optimized for
+those arguments. This scheme enables image processing algorithms to be written
+once, then automatically benefit from future performance optimizations without
+explicit case logic.
+
+\begin{quote}
+[Figure 6: Benchmarks of a simple addition operation with ImageJ Ops and ImageJ
+1.x.]
+\end{quote}
+
+To validate this approach, we benchmarked the core Ops library's math.add
+operations which add a constant value to each element of an image (Figure 6).
+As evidenced by the results, the inplace ImageJ 1.x version of this operation
+(the \textit{Add\ldots} command under Math in the Process menu) performs much
+better than some generalized op implementations (\texttt{II} source to
+\texttt{RAI} destination) which work on all image types---but the optimized ops
+outperform it, with the single-threaded inplace \texttt{ArrayImg} op finishing
+7 times faster, and the multithreaded version finishing 9 times faster. While
+some of this gain is likely due to the expense of ImageJ 1.x's bounds checking,
+it is also evident from the results that the optimized ops are comparable in
+efficiency to operations on raw primitive arrays.
+
+\textbf{Scalability.} As discussed in ``Functionality'' above, ImageJ 1.x is
+fundamentally limited to XY image planes of less than $2^{31}$ pixels due to
+its use of one Java primitive array per plane, and to the size of available
+computer memory for many of its image processing operations. In contrast,
+ImageJ2 has been engineered at every level to support scalable image processing
+using cell images which are cached to and from mass storage on demand.
+ImageJ2's careful separation of concerns and enhanced command line parameter
+handling enable ImageJ to run headless on remote servers, opening up a wide
+array of possibilities for scalable computation. The \acrshort{scifio} library
+enables direct access into image data samples, so that image data many orders
+of magnitude larger than available computer memory can be systematically
+processed on an individual workstation or using a cluster. And thanks to
+visualization tools like the BigDataViewer plugin \cite{bigdataviewer}, which
+is also built on ImgLib2 cell images, it is now realistic to quickly visualize
+and explore such massive datasets.
+
+\subsection*{Compatibility}
+As ImageJ2 continues to mature, ImageJ 1.x functionality will be increasingly
+replaced with more powerful ImageJ2 equivalents: image processing algorithms
+built on ImageJ Ops, data format plugins built on \acrshort{scifio}, etc. But
+this process is both lengthy and necessarily incomplete: migrating ImageJ 1.x
+core functionality alone is a years-long process as the ImageJ2
+\acrshortpl{api} continue to evolve, mature and stabilize---and there are
+countless other useful plugins and scripts in the wild, some of which will
+never be updated to the new \acrshortpl{api}. Meanwhile, development of ImageJ
+1.x also progresses, with users continuing to request bug fixes and new
+features within its intended scope. As such, the importance of a robust
+transitional strategy for migrating from ImageJ 1.x to ImageJ2 cannot be
+overstated.
+
+Fortunately, thanks to the ImageJ Legacy and IJ1-patcher components, the
+community can blend usage of ImageJ 1.x and ImageJ2 functionality,
+cherry-picking the best from each world to accomplish their image analysis
+tasks. Parameterized ImageJ commands and scripts may continue to use ImageJ 1.x
+data structures and plugins as needed, while also taking advantage of ImageJ2
+functionality as appropriate (Figure 7), and declaring and populating input
+values with less boilerplate code (see Figure 5 in ``Usability'' above).
+
+\begin{quote}
+[Figure 7: A mixed-world ImageJ 1.x + ImageJ2 script.]
+\end{quote}
+
+Although the development of ImageJ2 has necessitated re-implementation of
+ImageJ 1.x functionality, maintaining backwards compatibility with ImageJ 1.x
+will remain a fundamental goal. Abandoning or ignoring ImageJ 1.x would have
+been a significant disservice to the community, causing a rift to the detriment
+of all parties. Our efforts to enable incremental migration from ImageJ 1.x to
+ImageJ2 allow the two projects to continue developing in tandem, with new
+features in each reaching a unified ImageJ community.
+
+\subsection*{Community}
+
+Ultimately, the goal of ImageJ is to enable scientific collaboration and
+achievement, which requires community management as much as code management.
+ImageJ 1.x leverages open-source code, a public web site and a mailing list to
+support discussion and contributions from people across the globe. However, it
+follows a centralized ``cathedral'' development model, rather than a
+community-driven ``bazaar'' style model \cite{cathedral_bazaar}, with its
+primary resources and scalability fundamentally limited by a single
+``gatekeeper.'' For ImageJ's continued success and growth, it is critical to
+renew its focus on partnership and communication with the community
+\cite{imagej_communication}.
+
+\textbf{Online resources.} The centrally organized documentation of ImageJ2
+takes the form of a collaborative wiki \cite{imagej_web_site} with over 800
+articles: a ``world-writable'' location for both users and developers to learn
+about and contribute to ImageJ. The wiki is complemented by the ImageJ Forum
+\cite{imagej_forum}, a powerful, friendly and universally accessible discussion
+channel driven by the excellent Discourse software, which is engineered to
+encourage civil interaction \cite{discourse}. Finally, ImageJ's source code and
+issue tracking via GitHub completes the community-centric approach for managing
+and discussing changes and improvements.
+
+These resources together enable project developers to clearly communicate the
+expectations and norms surrounding plugin development, contribution,
+maintenance and support, empowering users to easily see who is responsible for
+each plugin as well as its support and development status \cite{imagej_team},
+outstanding bugs \cite{imagej_issues} and future plans \cite{imagej_roadmap}.
+This is a critical service for the community: it is not enough to provide a
+convenient way for people to publish, share and consume extensions---we have
+learned from experience that there must be a social framework in place for
+managing and understanding the software development lifecycle of the myriad
+community efforts.
+
+\subsection*{Future directions}
+ImageJ is more than a single application: it is a living ecosystem of
+scientific exchange. As acquisition technology continues to advance, there will
+always be a need for new development and maintenance within ImageJ. There are
+still key technical tasks remaining for ImageJ2 to achieve stability, as well
+as new directions made possible by the ImageJ2 platform which we are excited to
+explore:
+
+\begin{itemize}
+  \item Finalize the ImageJ Common data model to support extensible attachment
+    of metadata, including spatial metadata, that respond robustly to image
+    processing operations such as transformation.
+  \item Extend ImgLib2's N-dimensional \acrshort{roi} interfaces to cover all
+    needed cases.
+  \item Update the core SciJava I/O mechanism to be plugin-driven for improved
+    extensibility of data source location.
+  \item Generalize \acrshort{scifio}'s planar model to operate on arbitrary
+    ``blocks'' at a fundamental level.
+  \item Retire the custom C-based ImageJ desktop application launcher,
+    migrating to the industry-standard application bundling of JavaFX.
+  \item Complete our ongoing effort to automate the documentation regarding
+    development and maintenance responsibility for every core component of the
+    ImageJ ecosystem, including \acrshort{fiji} components \cite{imagej_team}.
+  \item Develop our ImageJ-based \acrshort{rest} image server prototype toward
+    production use, providing a common language- and implementation-independent
+    \acrshort{api}.
+  \item Implement a web \acrshort{ui} built on the \acrshort{rest} image
+    server.
+  \item Improve the ImageJ Updater user interface to be more user friendly, so
+    that users can more easily cherry-pick extensions of interest from each
+    update site.
+  \item Expand the list of built-in ImageJ Ops with additional image processing
+    and analysis routines, including Deep Learning approaches
+    \cite{deep_learning} and novel algorithms from computer vision and
+    statistics.
+  \item Continue building bridges between ImageJ and other image processing
+    frameworks such as \acrshort{opencv} \cite{opencv} and scikit-image
+    \cite{scikit_image}.
+  \item Integrate support for cloud computing frameworks such as Apache Spark
+    \cite{apache_spark} running on platforms such as Amazon Web Services
+    \cite{aws}.
+  \item Continue supporting community requests for bug fixes, new features and
+    image analysis advice.
+  \item Continue migrating ImageJ resources into the main ImageJ wiki website,
+    including the ImageJ User Guide \cite{imagej_user_guide}, ImageJ 1.x
+    documentation \cite{imagej1_docs} and \acrshort{list}'s ImageJ Information
+    and Documentation Portal \cite{imagej_docu}.
+  \item Redesign ImageJ's bug submission system such that users can
+    automatically submit an issue report to the correct location online
+    whenever something goes wrong in the software.
+\item Continue listening to, and working with, the user and developer
+  community.
+\end{itemize}
+
+A detailed breakdown and discussion of each specific issue can be found on
+GitHub, searchable from the unified ImageJ Search portal \cite{imagej_search}.
 
 %% This should state clearly the main conclusions and provide an explanation of
 %% the importance and relevance of the case, data, opinion, database or
