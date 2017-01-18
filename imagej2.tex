@@ -52,6 +52,61 @@
 %\usepackage[applemac]{inputenc} %applemac support if unicode package fails
 %\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
 
+%% We use the glossaries package for the list of acronyms.
+\usepackage[nonumberlist]{glossaries}
+\renewcommand{\glossarypreamble}{\footnotesize}
+\makeglossaries
+\newacronym{alida}{Alida}{Advanced Library for Integrated Development of data analysis Applications}
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{awt}{AWT}{Abstract Windowing Toolkit}
+\newacronym{bar}{BAR}{Broadly Applicable Routines}
+\newacronym{bmc}{BMC}{BioMed Central}
+\newacronym{bsd}{BSD}{Berkeley Software Distribution}
+\newacronym{ci}{CI}{continuous integration}
+\newacronym{cpu}{CPU}{Central Processing Unit}
+\newacronym{di}{DI}{dependency injection}
+\newacronym{dry}{DRY}{Don't Repeat Yourself}
+\newacronym{epfl}{EPFL}{École Polytechnique Fédérale de Lausanne}
+\newacronym{fiji}{Fiji}{Fiji Is Just ImageJ}
+\newacronym{gimp}{GIMP}{GNU Image Manipulation Program}
+\newacronym{gnu}{GNU}{GNU's Not Unix}
+\newacronym{gpu}{GPU}{Graphics Processing Unit}
+\newacronym{gtk}{GTK}{GIMP ToolKit}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{io}{I/O}{Input/Output}
+\newacronym{ide}{IDE}{Integrated Development Environment}
+\newacronym{ioc}{IoC}{inversion of control}
+\newacronym{itk}{ITK}{Insight ToolKit}
+\newacronym{jar}{JAR}{Java ARchive}
+\newacronym{jit}{JIT}{Just-In-Time compiler}
+\newacronym{jvm}{JVM}{Java Virtual Machine}
+\newacronym{knime}{KNIME}{KoNstanz Information MinEr}
+\newacronym{knip}{KNIP}{KNIME Image Processing}
+\newacronym{laf}{L\&F}{Look \& Feel}
+\newacronym{list}{LIST}{Luxembourg Institute of Science and Technology}
+\newacronym{lut}{LUT}{color lookup table}
+\newacronym{loci}{LOCI}{Laboratory for Optical and Computational Instrumentation}
+\newacronym{macos}{macOS}{Macintosh Operating System}
+\newacronym{matlab}{MATLAB}{MATrix LABoratory}
+\newacronym{mitobo}{MiToBo}{Microscopy image analysis ToolBox}
+\newacronym{nih}{NIH}{National Institutes of Health}
+\newacronym{ome}{OME}{Open Microscopy Environment}
+\newacronym{omero}{OMERO}{OME Remote Objects}
+\newacronym{opencv}{OpenCV}{Open source Computer Vision library}
+\newacronym{pom}{POM}{Project Object Model}
+\newacronym{ram}{RAM}{Random-Access Memory}
+\newacronym{rest}{RESTful}{REpresentational State Transfer}
+\newacronym[longplural={regions of interest}]{roi}{ROI}{region of interest}
+\newacronym{scifio}{SCIFIO}{SCientific Image File Input and Output}
+\newacronym{scp}{SCP}{Secure CoPy}
+\newacronym{sftp}{SFTP}{Secure File Transfer Protocol}
+\newacronym{ssh}{SSH}{Secure SHell}
+\newacronym{swt}{SWT}{Standard Widget Toolkit}
+\newacronym{ui}{UI}{user interface}
+\newacronym{uri}{URI}{Uniform Resource Identifier}
+\newacronym{url}{URL}{Uniform Resource Locator}
+\newacronym{webdav}{WebDAV}{Web Distributed Authoring and Versioning}
+\newacronym{xml}{XML}{eXtensible Markup Language}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                             %%
@@ -309,8 +364,7 @@ Text for this section.
 %% If abbreviations are used in the text they should be defined in the text at
 %% first use, and a list of abbreviations should be provided.
 
-\section*{List of abbreviations}
-Text for this section.
+\printglossary[title=List of abbreviations,type=\acronymtype,style=long]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
