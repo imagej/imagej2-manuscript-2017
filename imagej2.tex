@@ -52,6 +52,8 @@
 %\usepackage[applemac]{inputenc} %applemac support if unicode package fails
 %\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
 \usepackage{placeins} %for FloatBarrier hack
+\usepackage{multirow} %for multirow table cells
+\usepackage{enumitem} %for itemize leftmargin
 
 %% We use the glossaries package for the list of acronyms.
 \usepackage[nonumberlist]{glossaries}
@@ -98,6 +100,7 @@
 \newacronym{pom}{POM}{Project Object Model}
 \newacronym{ram}{RAM}{Random-Access Memory}
 \newacronym{rest}{RESTful}{REpresentational State Transfer}
+\newacronym{rgb}{RGB}{Red+Green+Blue color model}
 \newacronym[longplural={regions of interest}]{roi}{ROI}{region of interest}
 \newacronym{scifio}{SCIFIO}{SCientific Image File Input and Output}
 \newacronym{scp}{SCP}{Secure CoPy}
@@ -1965,100 +1968,115 @@ published article.
   %% Figure 1
   \begin{figure}[h!]
     \caption{Examples of image processing algorithms available in ImageJ Ops.}
-    Panel A (top left): 3D wireframe mesh of ImageJ's Bat Cochlea Volume sample
-    dataset \cite{bat_cochlea_volume}, computed by the
-    \texttt{geom.marchingCubes} op, an implementation of the marching cubes
-    algorithm \cite{marching_cubes}, visualized using MeshLab \cite{meshlab}.
-    Credit to Kyle Harrington for the figure, Tim-Oliver Buchholz for authoring
-    the op, and Art Keating for the dataset.
-    Panel B (top right): Richardson-Lucy Total Variation deconvolution
-    \cite{richardson_lucy} of the Stellaris FISH dataset \#1
-    \cite{stellaris_fish}, computed by the \texttt{deconvolve.richardsonLucyTV}
-    op. Credit to Brian Northan for authoring the op and figure
-    \cite{bnorthan_ops_decon}, and George McNamara for the dataset.
-    Panel C (bottom): Grayscale morphology and neighborhood filter operations
-    on ImageJ's Lena sample image, using a diamond-shaped structuring element
-    with radius 3. Credit to Jean-Yves Tinevez, Jonathan Hale and Leon Yang for
-    authoring the ops.
+    \begin{flushleft}
+      Panel A (top left): 3D wireframe mesh of ImageJ's Bat Cochlea Volume
+      sample dataset \cite{bat_cochlea_volume}, computed by the
+      \texttt{geom.marchingCubes} op, an implementation of the marching cubes
+      algorithm \cite{marching_cubes}, visualized using MeshLab \cite{meshlab}.
+      Credit to Kyle Harrington for the figure, Tim-Oliver Buchholz for
+      authoring the op, and Art Keating for the dataset. Panel B (top right):
+      Richardson-Lucy Total Variation deconvolution \cite{richardson_lucy} of
+      the Stellaris FISH dataset \#1 \cite{stellaris_fish}, computed by the
+      \texttt{deconvolve.richardsonLucyTV} op. Credit to Brian Northan for
+      authoring the op and figure \cite{bnorthan_ops_decon}, and George
+      McNamara for the dataset. Panel C (bottom): Grayscale morphology and
+      neighborhood filter operations on ImageJ's Lena sample image, using a
+      diamond-shaped structuring element with radius 3. Credit to Jean-Yves
+      Tinevez, Jonathan Hale and Leon Yang for authoring the ops.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 2
   \begin{figure}[h!]
     \caption{ImageJ update sites provide additional functionality to ImageJ.}
-    The Morphological Segmentation plugin, part of the MorphoLibJ plugin
-    collection \cite{morpholibj}, easily segments the rings of ImageJ's Tree
-    Rings sample dataset (panel A). The MorphoLibJ plugins are installed into
-    the Fiji distribution of ImageJ by enabling the IJPB-plugins update site
-    (panel B). Credit to David Legland and Ignacio Arganda-Carreras for
-    authoring the plugins.
+    \begin{flushleft}
+      The Morphological Segmentation plugin, part of the MorphoLibJ plugin
+      collection \cite{morpholibj}, easily segments the rings of ImageJ's Tree
+      Rings sample dataset (panel A). The MorphoLibJ plugins are installed into
+      the Fiji distribution of ImageJ by enabling the IJPB-plugins update site
+      (panel B). Credit to David Legland and Ignacio Arganda-Carreras for
+      authoring the plugins.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 3
   \begin{figure}[h!]
     \caption{ImageJ 1.x ~case logic compared to a unified ImgLib2
     implementation.}
-    Panel A (left) shows~the ImageJ 1.x implementation of a rolling ball
-    background subtraction method, part of the
-    \texttt{ij.plugin.filter.BackgroundSubtracter} class. Panel B (right) shows
-    an equivalent implementation using ImgLib2, without the need for extensive
-    case logic.
+    \begin{flushleft}
+      Panel A (left) shows~the ImageJ 1.x implementation of a rolling ball
+      background subtraction method, part of the
+      \texttt{ij.plugin.filter.BackgroundSubtracter} class. Panel B (right)
+      shows an equivalent implementation using ImgLib2, without the need for
+      extensive case logic.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 4
   \begin{figure}[h!]
     \caption{Side-by-side comparison of ImageJ2-based user interfaces
     and integrations.}
-    Panel A (top left): ImageJFX, a JavaFX-based user interface built on
-    ImageJ2. Panel B (top right): ImageJ2's default user interface, the ImageJ
-    Legacy \acrshort{ui}, which wraps ImageJ 1.x. Panel C (bottom left):
-    Example \acrshort{knime} workflow utilizing ImageJ2 image processing
-    nodes. Panel D (middle right): Swing \acrshort{ui} prototype, closely
-    modeled after ImageJ 1.x so that it remains familiar to existing users, in
-    various Java ``\acrlong{laf}'' modes. Panel E (bottom right): A
-    proof-of-concept Apache Pivot user interface. The ImageJFX and ImageJ
-    Legacy \acrshortpl{ui} display an XY slice of ImageJ's Confocal Series
-    sample dataset (dataset courtesy of Joel Sheffield), which has been
-    rotated, smoothed and colorized.
+    \begin{flushleft}
+      Panel A (top left): ImageJFX, a JavaFX-based user interface built on
+      ImageJ2. Panel B (top right): ImageJ2's default user interface, the
+      ImageJ Legacy \acrshort{ui}, which wraps ImageJ 1.x. Panel C (bottom
+      left): Example \acrshort{knime} workflow utilizing ImageJ2 image
+      processing nodes. Panel D (middle right): Swing \acrshort{ui} prototype,
+      closely modeled after ImageJ 1.x so that it remains familiar to existing
+      users, in various Java ``\acrlong{laf}'' modes. Panel E (bottom right): A
+      proof-of-concept Apache Pivot user interface. The ImageJFX and ImageJ
+      Legacy \acrshortpl{ui} display an XY slice of ImageJ's Confocal Series
+      sample dataset (dataset courtesy of Joel Sheffield), which has been
+      rotated, smoothed and colorized.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 5
   \begin{figure}[h!]
     \caption{Comparison of pure ImageJ 1.x command with one using SciJava
     declarative syntax.}
-    Panel A (left) shows an ImageJ 1.x implementation of a plugin that copies
-    slice labels from one image to another, as chosen by the user. Panel B
-    (right) shows~the same plugin written using the SciJava declarative command
-    syntax. Changed lines are highlighted in blue, new lines in green. The
-    actual operation (the \texttt{copyLabels} method) is identical, but the
-    routine for selecting which images to process is no longer necessary.
+    \begin{flushleft}
+      Panel A (left) shows an ImageJ 1.x implementation of a plugin that copies
+      slice labels from one image to another, as chosen by the user. Panel B
+      (right) shows~the same plugin written using the SciJava declarative
+      command syntax. Changed lines are highlighted in blue, new lines in
+      green. The actual operation (the \texttt{copyLabels} method) is
+      identical, but the routine for selecting which images to process is no
+      longer necessary.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 6
   \begin{figure}[h!]
     \caption{Benchmarks of a simple addition operation with ImageJ Ops and
     ImageJ 1.x.}
-    Time performance comparison of simple addition operations between raw Java
-    array manipulation, various math.add~operations of ImageJ Ops, and ImageJ
-    1.x's \textit{Process $\triangleright$ Math $\triangleright$ Add\ldots}
-    command. Benchmarks were run for 20 rounds on randomly generated
-    \texttt{uint8} noise images dimensioned $15,000 * 15,000$, using the JUnit
-    Benchmarks framework, on a MacBook Pro (Retina, 15-inch, Mid 2015) running
-    \acrshort{macos} Sierra 10.12 with 2.5 GHz Intel Core i7 processor and 16
-    GB 1600 MHz DDR3 memory. The routines which produced these results can be
-    found in the ImageJ Ops test code, in the \texttt{AddOpBenchmarkTest} class
-    of the \texttt{net.imagej.ops.benchmark} package.
+    \begin{flushleft}
+      Time performance comparison of simple addition operations between raw
+      Java array manipulation, various math.add~operations of ImageJ Ops, and
+      ImageJ 1.x's \textit{Process $\triangleright$ Math $\triangleright$
+      Add\ldots} command. Benchmarks were run for 20 rounds on randomly
+      generated \texttt{uint8} noise images dimensioned $15,000 \times 15,000$,
+      using the JUnit Benchmarks framework, on a MacBook Pro (Retina, 15-inch,
+      Mid 2015) running \acrshort{macos} Sierra 10.12 with 2.5 GHz Intel Core
+      i7 processor and 16 GB 1600 MHz DDR3 memory. The routines which produced
+      these results can be found in the ImageJ Ops test code, in the
+      \texttt{AddOpBenchmarkTest} class of the
+      \texttt{net.imagej.ops.benchmark} package.
+    \end{flushleft}
   \end{figure}
 
   %% Figure 7
   \begin{figure}[h!]
     \caption{A mixed-world ImageJ 1.x + ImageJ2 script.}
-    This example Python script (panel D) uses ImageJ Ops to preprocess a
-    confocal image and perform an automatic thresholding (panel B). ImageJ
-    1.x's Analyze Particles routine is then called to isolate (panel A) and
-    measure (panel C) foreground objects. Script contributed by Brian Northan,
-    True North Intelligent Algorithms LLC. This script is available within
-    ImageJ as a sample from the Tutorials submenu of the Script Editor's
-    Templates menu.
+    \begin{flushleft}
+      This example Python script (panel D) uses ImageJ Ops to preprocess a
+      confocal image and perform an automatic thresholding (panel B). ImageJ
+      1.x's Analyze Particles routine is then called to isolate (panel A) and
+      measure (panel C) foreground objects. Script contributed by Brian
+      Northan, True North Intelligent Algorithms LLC. This script is available
+      within ImageJ as a sample from the Tutorials submenu of the Script
+      Editor's Templates menu.
+    \end{flushleft}
   \end{figure}
 
 %% HACK: Without this, some figures end up floating in subsequent sections.
@@ -2072,33 +2090,213 @@ published article.
 
 %% Use of \listoftables is discouraged.
 %%
-\section*{Tables}
-\begin{table}[h!]
-\caption{Sample table title. This is where the description of the table should go.}
-      \begin{tabular}{cccc}
-        \hline
-           & B1  &B2   & B3\\ \hline
-        A1 & 0.1 & 0.2 & 0.3\\
-        A2 & ... & ..  & .\\
-        A3 & ..  & .   & .\\ \hline
-      \end{tabular}
-\end{table}
+\section*{Tables and captions}
+  None.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Additional Files              %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Supplemental material}
 
-\section*{Additional Files}
-  \subsection*{Additional file 1 --- Sample additional file title}
-    Additional file descriptions text (including details of how to
-    view the file, if it is in a non-standard format or the file extension).  This might
-    refer to a multi-page table or a figure.
+\subsection*{Figures and illustrations}
+  %% Use "Figure S.#" naming scheme for supplemental figures
+  \renewcommand\thefigure{S.\arabic{figure}}
+  \setcounter{figure}{0}
 
-  \subsection*{Additional file 2 --- Sample additional file title}
-    Additional file descriptions text.
+  %% Figure S.1
+  \begin{figure}[h!]
+    \caption{Module execution in different contexts.}
+    \begin{flushleft}
+      When running a parameterized script (panel B) from the ImageJ user
+      interface (panel A), a pop-up dialog box (panel C) enables the user to
+      enter the name and age values; when running the script headless from the
+      command line (panel D), input values are passed as arguments and output
+      values echoed to the standard output stream.
+    \end{flushleft}
+  \end{figure}
 
+  %% Figure S.2
+  \begin{figure}[h!]
+    \caption{Comparison of time performance across ImageJ 1.x and ImgLib2 data
+    structures.}
+    \begin{flushleft}
+      For ten iterations, we ran a ``cheap'' per-pixel operation and an
+      ``expensive'' operation on a 25 Mpx image stored in the ImageJ 1.x
+      container, various ImgLib2 containers, and raw byte arrays. Panel A
+      (left) shows the time (ms) it took to complete a ``cheap'' operations
+      versus the loop iteration for each container. Panel B (right) shows the
+      same information but for the time (ms) it took to complete the expensive
+      operation.
+    \end{flushleft}
+  \end{figure}
+
+\subsection*{Tables and captions}
+  %% Use "Table S.#" naming scheme for supplemental tables
+  \renewcommand\thetable{S.\arabic{table}}
+  \setcounter{table}{0}
+
+  %% Table S.1
+  \begin{table}[h!]
+    \caption{Built-in SciJava input widgets}
+    \begin{tabular}{| l | l |}
+      \hline
+      \textbf{Java data type}                                                                                                            & \textbf{Widget type}                   \\ \hline
+      \texttt{boolean} $\vert$ \texttt{Boolean}                                                                                          & checkbox                               \\ \hline
+      \texttt{byte} $\vert$ \texttt{short} $\vert$ \texttt{int}     $\vert$ \texttt{long} $\vert$ \texttt{float} $\vert$ \texttt{double} & numeric field                          \\ \hline
+      \texttt{Byte} $\vert$ \texttt{Short} $\vert$ \texttt{Integer} $\vert$ \texttt{Long} $\vert$ \texttt{Float} $\vert$ \texttt{Double} & numeric field                          \\ \hline
+      \texttt{BigInteger} $\vert$ \texttt{BigDecimal}                                                                                    & numeric field                          \\ \hline
+      \texttt{char} $\vert$ \texttt{Character} $\vert$ \texttt{String}                                                                   & text field                             \\ \hline
+      \texttt{Dataset} $\vert$ \texttt{ImagePlus}                                                                                        & (\textgreater=2 images) drop-down list \\ \hline
+      \texttt{ColorRGB}                                                                                                                  & color chooser                          \\ \hline
+      \texttt{Date}                                                                                                                      & date chooser                           \\ \hline
+      \texttt{File}                                                                                                                      & file chooser                           \\ \hline
+    \end{tabular}
+  \end{table}
+
+  %% Table S.2
+  \begin{table}[h!]
+    \caption{Kinds and arities of special ops}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{| l | l | c | l | p{1.4in} |}
+      \hline
+      \textbf{Kind}              & \textbf{Stipulations} & \textbf{Arity} & \textbf{Interface}         & \textbf{Methods}                    \\ \hline
+      \multirow{3}{*}{computer}  & \multirow{3}{1.8in}{
+                                   \begin{itemize}[leftmargin=*]
+                                     \renewcommand{\labelitemi}{-}
+                                     \item Mutating the inputs is forbidden.\\
+                                     \item The output and input references must differ (i.e., computers do not work in-place).\\
+                                     \item The output's initial contents must not affect the value of the result.
+                                   \end{itemize}
+                                   }                     & 0              & \texttt{NullaryComputerOp} & \texttt{void compute(O)}            \\ \cline{3-5}
+                                 &                       & 1              & \texttt{UnaryComputerOp}   & \texttt{void compute(I, O)}         \\ \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryComputerOp}  & \texttt{void compute(I1, I2, O)}    \\[0.45in] \hline
+      \multirow{3}{*}{function}  & \multirow{3}{1.8in}{
+                                   Mutating the inputs is forbidden.
+                                   }                     & 0              & \texttt{NullaryFunctionOp} & \texttt{O calculate()}              \\ \cline{3-5}
+                                 &                       & 1              & \texttt{UnaryFunctionOp}   & \texttt{O calculate(I)}             \\ \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryFunctionOp}  & \texttt{O calculate(I1, I2)}        \\ \hline
+      \multirow{3}{*}{inplace}   & \multirow{3}{1.8in}{
+                                   -
+                                   }                     & 1              & \texttt{UnaryInplaceOp}    & \texttt{void mutate(O)}             \\ \cline{3-5}
+                                 &                       & 1              & \texttt{BinaryInplace1Op}  & \texttt{void mutate1(O, I2)}        \\ \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryInplaceOp}   & \parbox[t]{2in}{
+                                                                                                         \texttt{void mutate1(O, I2)}\\
+                                                                                                         \texttt{void mutate2(I1, O)}
+                                                                                                         }                                   \\[0.15in] \hline
+      \multirow{3}{*}{hybrid CF} & \multirow{3}{1.8in}{
+                                   Same as \textit{computer} and \textit{function} respectively.
+                                   }                     & 0              & \texttt{NullaryHybridCF}   & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(O)}\\
+                                                                                                         \texttt{O calculate()}
+                                                                                                         }                                   \\[0.15in] \cline{3-5}
+                                 &                       & 1              & \texttt{UnaryHybridCF}     & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I, O)}\\
+                                                                                                         \texttt{O calculate(I)}
+                                                                                                         }                                   \\[0.15in] \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryHybridCF}    & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I1, I2, O)}\\
+                                                                                                         \texttt{O calculate(I1, I2)}
+                                                                                                         }                                   \\[0.15in] \hline
+      \multirow{3}{*}{hybrid CI} & \multirow{3}{1.8in}{
+                                   Same as \textit{computer} and \textit{inplace} respectively.
+                                   }                     & 1              & \texttt{UnaryHybridCI}     & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I, O)}\\
+                                                                                                         \texttt{void mutate(O)}
+                                                                                                         }                                   \\[0.15in] \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryHybridCI1}   & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I1, I2, O)}\\
+                                                                                                         \texttt{void mutate1(O, I2)}
+                                                                                                         }                                   \\[0.15in] \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryHybridCI}    & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I1, I2, O)}\\
+                                                                                                         \texttt{void mutate1(O, I2)}\\
+                                                                                                         \texttt{void mutate2(I1, O)}
+                                                                                                         }                                   \\[0.25in] \hline
+      \multirow{3}{*}{hybrid CFI}& \multirow{3}{1.8in}{
+                                   Same as \textit{computer}, \textit{function} and \textit{inplace} respectively.
+                                   }                     & 1              & \texttt{UnaryHybridCFI}    & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I, O)}\\
+                                                                                                         \texttt{O calculate(I)}\\
+                                                                                                         \texttt{void mutate(O)}
+                                                                                                         }                                   \\[0.25in] \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryHybridCFI1}  & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I1, I2, O)}\\
+                                                                                                         \texttt{O calculate(I1, I2)}\\
+                                                                                                         \texttt{void mutate1(O, I2)}
+                                                                                                         }                                   \\[0.25in] \cline{3-5}
+                                 &                       & 2              & \texttt{BinaryHybridCFI}   & \parbox[t]{2in}{
+                                                                                                         \texttt{void compute(I1, I2, O)}\\
+                                                                                                         \texttt{O calculate(O, I1, I2)}\\
+                                                                                                         \texttt{void mutate1(O, I2)}\\
+                                                                                                         \texttt{void mutate2(I1, O)}
+                                                                                                         }                                   \\[0.4in] \hline
+    \end{tabular}
+  \end{table}
+
+  %% Table S.3
+  \begin{table}[h!]
+    \caption{Image types supported by ImageJ}
+    \begin{tabular}{| l | l | l | p{0.4in} | p{0.8in} | p{0.8in} | l | l |}
+      \hline
+      \textbf{Name}        & \textbf{Bit depth} & \textbf{Signedness} & \textbf{Values} & \textbf{Min. Value}     & \textbf{Max. Value}    & \textbf{ImageJ 1.x} & \textbf{ImageJ2} \\ \hline
+      \texttt{bool}        & 1-bit              & N/A                 & boolean         & $false$                 & $true$                 & no                  & yes              \\ \hline
+      \texttt{bit}         & 1-bit              & unsigned            & binary          & $0$                     & $1$                    & no                  & yes              \\ \hline
+      \texttt{uint2}       & 2-bit              & unsigned            & integer         & $0$                     & $3$                    & no                  & yes              \\ \hline
+      \texttt{uint4}       & 4-bit              & unsigned            & integer         & $0$                     & $15$                   & no                  & yes              \\ \hline
+      \texttt{uint8}       & 8-bit              & unsigned            & integer         & $0$                     & $255$                  & yes                 & yes              \\ \hline
+      \texttt{uint12}      & 12-bit             & unsigned            & integer         & $0$                     & $4,095$                & no                  & yes              \\ \hline
+      \texttt{uint16}      & 16-bit             & unsigned            & integer         & $0$                     & $65,535$               & yes                 & yes              \\ \hline
+      \texttt{uint32}      & 32-bit             & unsigned            & integer         & $0$                     & $232 - 1$              & no                  & yes              \\ \hline
+      \texttt{uint64}      & 64-bit             & unsigned            & integer         & $0$                     & $264 - 1$              & no                  & yes              \\ \hline
+      \texttt{uint128}     & 128-bit            & unsigned            & integer         & $0$                     & $2128 - 1$             & no                  & yes              \\ \hline
+      \texttt{int8}        & 8-bit              & signed              & integer         & $-128$                  & $127$                  & partial*            & yes              \\ \hline
+      \texttt{int16}       & 16-bit             & signed              & integer         & $-32,768$               & $32,767$               & partial*            & yes              \\ \hline
+      \texttt{int32}       & 32-bit             & signed              & integer         & $-231$                  & $231 - 1$              & no                  & yes              \\ \hline
+      \texttt{float32}     & 32-bit             & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                          approx.\\
+                                                                                          $-3.4 \times 1,038$
+                                                                                          }                       & \parbox[t]{0.8in}{
+                                                                                                                    approx.\\
+                                                                                                                    $3.4 \times 1,038$
+                                                                                                                    }                      & yes                 & yes              \\ \hline
+      \texttt{float64}     & 64-bit             & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                          approx.\\
+                                                                                          $-1.8 \times 10,308$
+                                                                                          }                       & \parbox[t]{0.8in}{
+                                                                                                                    approx.\\
+                                                                                                                    $1.8 \times 10,308$
+                                                                                                                    }                      & no                  & yes              \\ \hline
+      \texttt{cfloat32}    & 2 $\times$ 32-bit  & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                          approx.\\
+                                                                                          $(-3.4 \times 1,038,\\
+                                                                                          -3.4 \times 1,038)$
+                                                                                          }                       & \parbox[t]{0.8in}{
+                                                                                                                    approx.\\
+                                                                                                                    $(3.4 \times 1,038,\\
+                                                                                                                    3.4 \times 1,038)$
+                                                                                                                    }                      & no                  & yes              \\ \hline
+      \texttt{cfloat64}    & 2 $\times$ 64-bit  & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                          approx.\\
+                                                                                          $(-1.8 \times 10,308,\\
+                                                                                          -1.8 \times 10,308)$
+                                                                                          }                       & \parbox[t]{0.8in}{
+                                                                                                                    approx.\\
+                                                                                                                    $(1.8 \times 10,308,\\
+                                                                                                                    1.8 \times 10,308)$
+                                                                                                                    }                      & no                  & yes              \\ \hline
+      \texttt{bigint}      & unlimited          & signed              & integer         & none                    & none                   & no                  & yes              \\ \hline
+      \texttt{bigdec}      & arbitrary          & signed              & decimal         & none                    & none                   & no                  & yes              \\ \hline
+      \acrshort{rgb}       & 3 $\times$ 8-bit   & unsigned            & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\dagger$ \\ \hline
+      8-bit color          & 8-bit              & indexed             & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\dagger$ \\ \hline
+      custom               & any                & any                 & any             & any                     & any                    & no                  & yes              \\ \hline
+    \end{tabular}
+    \begin{flushleft}
+      * ImageJ 1.x partially supports \texttt{int8} and \texttt{int16} types
+      via an ``image calibration'' feature.
+
+      $^\dagger$ ImageJ2 supports these image types only for backwards
+      compatibility with ImageJ 1.x, since composite color mode with one
+      \acrshort{lut} per channel achieves the same results in a more flexible
+      way.
+    \end{flushleft}
+  \end{table}
 
 \end{backmatter}
 \end{document}
