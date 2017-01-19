@@ -11,5 +11,7 @@
 /*.log
 /*.pdf
 /*.synctex.gz
+/arxiv/
 /bmc/
+/imagej2-arxiv.zip
 /imagej2-bmc.zip
