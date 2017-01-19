@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+	   .tickLabel { font-size: 24px }
+        
+        div.legend {
+            font-size: 22px;
+            text-align: left;
+        }
+        
+        div.legend > div {
+            height: 177px !important;
+            border: 1px black solid;
+        }
+        
+        .stripe-red {
+            color: white;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 12px,
+                red 10px,
+                red 22px
+            );
+            opacity: 0.45;
+        }
+        
+        .stripe-green {
+            color: white;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 12px,
+                green 10px,
+                green 22px
+            );
+            opacity: 0.45;
+        }
+
+        .stripe-v {
+            color: white;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 12px,
+                red 10px,
+                red 22px
+            );
+            opacity: 0.45;
+        }
+
+        .stripe-op-legend {
+            color: white;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                #444342 2px,
+                #444342 6px
+            );
+            opacity: 0.45;
+        }
+        
+        .stripe-java-legend {
+            color: white;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 3px,
+                #444342 2px,
+                #444342 6px
+            );
+            opacity: 0.45;
+        }
+    </style>
+    
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="flot/excanvas.min.js"></script><![endif]-->
+                 
+    <script type="text/javascript" src="flot/jquery.flot.min.js"></script>    
+    <script type="text/javascript" src="flot/jquery.flot.symbol.js"></script>
+    <script type="text/javascript" src="flot/jquery.flot.axislabels.js"></script>
+
+    <script type="text/javascript">
+        //******* ImageJ Benchmark - BAR CHART
+        var dataset = [{data: [[1.795, 10],[1.467, 9],[1.124, 8],[1.124, 7]], color: "red", label: "Slower than ImageJ 1.x"},
+                       {data: [[0.590, 6]], color: "blue", label: "ImageJ 1.x"},
+                       {data: [[0.407, 5], [0.155, 4], [-0.201, 3], [-0.252, 2], [-0.276, 1], [-0.367, 0]], color: "green", label: "Faster than ImageJ 1.x"}];
+        var ticks = [[10, "byte[ ] - Byte[ ]"], [9, "II - RAI"], [8, "II - RAI <sup>&#8224;</sup>"], [7, "II <sup>*</sup>"], [6, "ImageJ 1.x <sup>*</sup>"], [5, "II - II <sup>&#8224;</sup>"], [4, "II <sup>*, &#8224;     </sup>"], [3, "byte[ ] - byte[ ]"], [2, "ArrayImg <sup>*</sup>"], [1, "byte[ ] <sup>*</sup>"], [0, "ArrayImg <sup>*, &#8224;</sup>"]];
+	  
+        var options = {
+            series: {
+                bars: {
+                    show: true,
+                }
+            },
+            bars: {
+                align: "center",
+                barWidth: 0.5,
+                horizontal: true
+            },
+            xaxis: {
+                min: -0.5,
+                max: 2
+            },
+            yaxis: {
+                ticks: ticks
+            },
+            legend: {
+                noColumns: 1,
+                labelBoxBorderColor: "#000000",
+                position: "se"
+            },
+            grid: {
+                borderWidth: 2,
+                backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+            }
+        };
+
+        $(document).ready(function () {
+            var p = $.plot($("#flot-placeholder"), dataset, options);
+        
+            $.each(p.getData()[0].data, function(a, el){
+                var o = p.pointOffset({x: el[0], y: el[1]});
+                $('<div class="data-point-label">' + parseFloat(el[0]).toFixed(3) + '</div>').css( {
+                    position: 'absolute',
+                    left: o.left + 10,
+                    top: o.top - 12,
+                    display: 'none',
+                    fontSize: 22,
+                    color: '#545454',
+                }).appendTo(p.getPlaceholder()).fadeIn('slow');
+            });
+            
+            $.each(p.getData()[1].data, function(a, el){
+                var o = p.pointOffset({x: el[0], y: el[1]});
+                $('<div class="data-point-label">' + parseFloat(el[0]).toFixed(3) + '</div>').css( {
+                    position: 'absolute',
+                    left: o.left + 10,
+                    top: o.top - 12,
+                    display: 'none',
+                    fontSize: 22,
+                    color: '#545454',
+                }).appendTo(p.getPlaceholder()).fadeIn('slow');
+            });
+            
+            $.each(p.getData()[2].data, function(a, el){
+                var o = p.pointOffset({x: el[0], y: el[1]});
+                if(a < 2) {
+                    $('<div class="data-point-label">' + parseFloat(el[0]).toFixed(3) + '</div>').css( {
+                        position: 'absolute',
+                        left: o.left + 10,
+                        top: o.top - 12,
+                        display: 'none',
+                        fontSize: 22,
+                        color: '#545454',
+                    }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                }
+                else {
+                    $('<div class="data-point-label">' + parseFloat(el[0]).toFixed(3) + '</div>').css( {
+                        position: 'absolute',
+                        left: o.left - 65,
+                        top: o.top - 12,
+                        display: 'none',
+                        fontSize: 22,
+                        color: '#545454',
+                    }).appendTo(p.getPlaceholder()).fadeIn('slow');  
+                }
+            });
+            
+            $('div.legend table tr:last').after('<tr><td class="legendColorBox"><div style="border:1px solid #000000;padding:1px"><div class="stripe-java-legend" style="width:14px;height:9px;overflow:hidden"></div></div></td><td class="legendLabel">Java mapping</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #000000;padding:1px"><div class="stripe-op-legend" style="width:14px;height:9px;overflow:hidden"></div></div></td><td class="legendLabel">Ops mapping</td></tr><tr><td class="legendColorBox"><sup>*</sup></td><td class="legendLabel">Inplace</td></tr><tr><td class="legendColorBox"><sup>&#8224;</sup></td><td class="legendLabel">Multithreaded</td></tr>');
+            $("#flot-placeholder").UseTooltip();
+        });
+  </script>
+</head>
+<body>
+    <div style="width:1800px;height:925px;text-align:center;margin:10px; position: relative;">
+        <div id="flot-placeholder" style="width:100%;height:100%;"></div>
+        <div style="font-size: 20px; padding-top: 15px; color: #545454;">Time Bench (log(s))</div>
+        <div class="stripe-v" style="height: 38px; width: 1170px; position: absolute; top: 35px; left: 482px;">&nbsp;</div>
+        <div class="stripe-red" style="height: 38px; width: 730px; position: absolute; top: 195px; left: 482px;">&nbsp;</div>
+        <div class="stripe-green" style="height: 38px; width: 266px; position: absolute; top: 435px; left: 482px;">&nbsp;</div>
+        <div class="stripe-green" style="height: 38px; width: 102px; position: absolute; top: 515px; left: 482px;">&nbsp;</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+	   .tickLabel { font-size: 24px }
+        
+        div.legend {
+            font-size: 22px;
+            text-align: left;
+        }
+        
+        div.legend > div {
+            height: 175px !important;
+            border: 1px black solid;
+            width: 135px !important;
+        }
+        
+        .stripe-ops-map {
+            color: white;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 12px,
+                green 10px,
+                green 22px
+            );
+            opacity: 0.45;
+        }
+
+        .stripe-java-map {
+            color: white;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 12px,
+                #FFCC00 10px,
+                #FFCC00 22px
+            );
+            opacity: 0.45;
+        }
+
+        .stripe-op-legend {
+            color: white;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                #444342 2px,
+                #444342 6px
+            );
+            opacity: 0.45;
+        }
+        
+        .stripe-java-legend {
+            color: white;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 3px,
+                #444342 2px,
+                #444342 6px
+            );
+            opacity: 0.45;
+        }
+    </style>
+    
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="flot/excanvas.min.js"></script><![endif]-->
+                 
+    <script type="text/javascript" src="flot/jquery.flot.min.js"></script>    
+    <script type="text/javascript" src="flot/jquery.flot.symbol.js"></script>
+    <script type="text/javascript" src="flot/jquery.flot.axislabels.js"></script>
+
+    <script type="text/javascript">
+        //******* ImageJ Benchmark - BAR CHART
+        var raw = [62.42, 29.31, 13.31, 13.3, 3.89, 2.55, 1.43, 0.63, 0.56, 0.53, 0.43];
+        var data = [];
+        
+        $.each(raw, function(i) {
+            if(i<4) {
+                data[i] = - raw[i] / raw[4]; 
+            }
+            else {
+                data[i] = raw[4] / raw[i];
+            }
+        });
+        
+        var java = [];
+        var imagej2 = [];
+        var imagej1 = [];
+        var javaInd = 0;
+        var ij2Ind = 0;
+        
+        $.each(data, function(a) {
+           if(a == 0 || a == 7 || a == 9) {
+               java[javaInd] = [data[a], 10 - a];
+               javaInd++;
+           }
+            else if(a == 4){
+                imagej1[0] = [data[a], 10 - a];
+            }
+            else {
+                imagej2[ij2Ind] = [data[a], 10 - a];
+                ij2Ind++;
+            }
+        });
+        
+        var dataset = [{data: java, color: "#FFCC00", label: "Plain Java"},
+                       {data: imagej2, color: "green", label: "ImageJ2"},
+                       {data: imagej1, color: "blue", label: "ImageJ 1.x"},
+                       ];
+        var ticks = [[10, "byte[ ] &ndash; Byte[ ]"], [9, "II &ndash; RAI"], [8, "II &ndash; RAI <sup>&#8224;</sup>"], [7, "II <sup>*</sup>"], [6, "ImageJ 1.x <sup>*</sup>"], [5, "II &ndash; II <sup>&#8224;</sup>"], [4, "II <sup>*, &#8224;</sup>"], [3, "byte[ ] &ndash; byte[ ]"], [2, "ArrayImg <sup>*</sup>"], [1, "byte[ ] <sup>*</sup>"], [0, "ArrayImg <sup>*, &#8224;</sup>"]];
+	  
+        var options = {
+            series: {
+                bars: {
+                    show: true,
+                }
+            },
+            bars: {
+                align: "center",
+                barWidth: 0.5,
+                horizontal: true
+            },
+            xaxis: {
+                min: -18,
+                max: 14
+            },
+            yaxis: {
+                ticks: ticks
+            },
+            legend: {
+                noColumns: 1,
+                labelBoxBorderColor: "#000000",
+                position: "se"
+            },
+            grid: {
+                borderWidth: 2,
+                backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+            }
+        };
+
+        $(document).ready(function () {
+            var p = $.plot($("#flot-placeholder"), dataset, options);
+        
+            $.each(p.getData(), function(i) {
+                $.each(p.getData()[i].data, function(a, el){
+                    var o = p.pointOffset({x: el[0], y: el[1]});
+                    
+                    // Add data labels
+                    if(i == 0 && a == 0) {
+                        $('<div class="data-point-label">' + el[0].toFixed(2) + '</div>').css( {
+                            position: 'absolute',
+                            left: o.left - 65,
+                            top: o.top - 12,
+                            display: 'none',
+                            fontSize: 22,
+                            color: '#545454',
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                        
+                        // Add stripes for Java mapping
+                        $('<div class="stripe-java-map">&nbsp;</div>').css( {
+                            position: 'absolute',
+                            top: o.top - (p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale) / 2,
+                            left: o.left,
+                            height: p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale,
+                            width: Math.abs(el[0] * p.getXAxes()[0].scale),
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                    }
+                    else if((i == 0 && a > 0) || (i == 1 && a > 2) || i == 2){
+                        $('<div class="data-point-label">' + el[0].toFixed(2) + '</div>').css( {
+                            position: 'absolute',
+                            left: o.left + 10,
+                            top: o.top - 12,
+                            display: 'none',
+                            fontSize: 22,
+                            color: '#545454',
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                    }
+                    else {
+                        $('<div class="data-point-label">' + el[0].toFixed(2) + '</div>').css( {
+                            position: 'absolute',
+                            left: o.left - 55,
+                            top: o.top - 12,
+                            display: 'none',
+                            fontSize: 22,
+                            color: '#545454',
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                    }
+                    
+                    // Add stripes to Ops bars
+                    if(i == 1 && a == 1){
+                        $('<div class="stripe-ops-map">&nbsp;</div>').css( {
+                            position: 'absolute',
+                            top: o.top - (p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale) / 2,
+                            left: o.left,
+                            height: p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale,
+                            width: Math.abs(el[0] * p.getXAxes()[0].scale),
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                    }
+                    if(i == 1 && (a == 3 || a == 4)) {
+                        $('<div class="stripe-ops-map">&nbsp;</div>').css( {
+                            position: 'absolute',
+                            top: o.top - (p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale) / 2,
+                            left: o.left - ( el[0] * p.getXAxes()[0].scale ),
+                            height: p.getOptions().series.bars.barWidth * p.getYAxes()[0].scale,
+                            width: Math.abs(el[0] * p.getXAxes()[0].scale),
+                        }).appendTo(p.getPlaceholder()).fadeIn('slow');
+                        
+                    }
+                });
+            });
+            
+            // Adds custom entries to the legend
+            $('div.legend table tr:last').after('<tr><td class="legendColorBox"><div style="border:1px solid #000000;padding:1px"><div class="stripe-java-legend" style="width:14px;height:9px;overflow:hidden"></div></div></td><td class="legendLabel">Java 8 map</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #000000;padding:1px"><div class="stripe-op-legend" style="width:14px;height:9px;overflow:hidden"></div></div></td><td class="legendLabel">Ops map</td></tr><tr><td class="legendColorBox"><sup>*</sup></td><td class="legendLabel">Inplace</td></tr><tr><td class="legendColorBox"><sup>&#8224;</sup></td><td class="legendLabel">Multithreaded</td></tr>');
+            $("#flot-placeholder").UseTooltip();
+        });
+  </script>
+</head>
+<body>
+    <div style="width:1830px;height:920px;text-align:center;margin:0px; position: relative;">
+        <div id="flot-placeholder" style="width:100%;height:100%;"></div>
+        <div style="font-size: 24px; padding-top: 15px; color: #545454;">Fold Difference (Relative to ImageJ 1.x)</div>
+  </div>
+</body>
+</html>
