@@ -140,8 +140,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\def\includegraphic{}
-\def\includegraphics{}
+%\def\includegraphic{}
+%\def\includegraphics{}
+\usepackage{graphicx} %for inline figures
 
 
 
@@ -1042,9 +1043,28 @@ etc.)---even 2- and 3-dimensional geometric operations such as marching cubes
 treatment of available ops can be found in the ImageJ Ops tutorial notebook
 \cite{imagej_notebooks}.
 
-\begin{quote}
-[Figure 1: Examples of image processing algorithms available in ImageJ Ops.]
-\end{quote}
+  %% Figure 1
+  \begin{figure}[h]
+    \caption{Examples of image processing algorithms available in ImageJ Ops.}
+    \includegraphics[width=4.75in,natwidth=997,natheight=713]{figure-1/figure-config1-label.png}
+    \begin{flushleft}
+      \footnotesize
+      Panel A (top left): \acrshort{3d} wireframe mesh of ImageJ's Bat Cochlea
+      Volume sample dataset \cite{bat_cochlea_volume}, computed by the
+      \texttt{geom.marchingCubes} op, an implementation of the marching cubes
+      algorithm \cite{marching_cubes}, visualized using MeshLab \cite{meshlab}.
+      Credit to Kyle Harrington for the figure, Tim-Oliver Buchholz for
+      authoring the op, and Art Keating for the dataset. Panel B (top right):
+      Richardson-Lucy Total Variation deconvolution \cite{richardson_lucy} of
+      the Stellaris FISH dataset \#1 \cite{stellaris_fish}, computed by the
+      \texttt{deconvolve.richardsonLucyTV} op. Credit to Brian Northan for
+      authoring the op and figure \cite{bnorthan_ops_decon}, and George
+      McNamara for the dataset. Panel C (bottom): Grayscale morphology and
+      neighborhood filter operations on Fiji's New Lenna sample image, using a
+      diamond-shaped structuring element with radius 3. Credit to Jean-Yves
+      Tinevez, Jonathan Hale and Leon Yang for authoring the ops.
+    \end{flushleft}
+  \end{figure}
 
 ImageJ Ops was conceived with three major design goals: 1) easy to use and
 extend; 2) powerful and general; and 3) high performance. To achieve all three
@@ -1260,9 +1280,20 @@ form of more plugins, scripts, sample images, \acrfullpl{lut}, etc., leveraging
 the ability to override ImageJ's base behavior using SciJava's plugin priority
 mechanism (see ``SciJava Common'' above for details).
 
-\begin{quote}
-[Figure 2: ImageJ update sites provide additional functionality to ImageJ.]
-\end{quote}
+  %% Figure 2
+  \begin{figure}[h]
+    \caption{ImageJ update sites provide additional functionality to ImageJ.}
+    \includegraphics[width=4.75in,natwidth=2515,natheight=1379]{figure-2/figure-labeled.png}
+    \begin{flushleft}
+      \footnotesize
+      The Morphological Segmentation plugin, part of the MorphoLibJ plugin
+      collection \cite{morpholibj}, easily segments the rings of ImageJ's Tree
+      Rings sample dataset (panel A). The MorphoLibJ plugins are installed into
+      the \acrshort{fiji} distribution of ImageJ by enabling the IJPB-plugins
+      update site (panel B). Credit to David Legland and Ignacio
+      Arganda-Carreras for authoring the plugins.
+    \end{flushleft}
+  \end{figure}
 
 The Updater stores metadata in a \texttt{db.xml.gz} file in the root of each
 update site, which describes the files that are part of that update site,
@@ -1319,9 +1350,20 @@ interest regardless of length. There are several preset dimensional axis types,
 and new types can also be defined as needed. When visualizing multi-channel
 data, each channel can now have its own \acrshort{lut} without constraint.
 
-\begin{quote}
-[Figure 3: ImageJ 1.x case logic compared to a unified ImgLib2 implementation.]
-\end{quote}
+  %% Figure 3
+  \begin{figure}[h]
+    \caption{ImageJ 1.x ~case logic compared to a unified ImgLib2
+    implementation.}
+    \includegraphics[width=4.75in,natwidth=2384,natheight=1402]{figure-3/figure-labeled.png}
+    \begin{flushleft}
+      \footnotesize
+      Panel A (left) shows the ImageJ 1.x implementation of a rolling ball
+      background subtraction method, part of the
+      \texttt{ij.plugin.filter.BackgroundSubtracter} class. Panel B (right)
+      shows an equivalent implementation using ImgLib2, without the need for
+      extensive case logic.
+    \end{flushleft}
+  \end{figure}
 
 \textbf{Types.} ImageJ 1.x supports only five image types for representing
 sample values: 8-bit unsigned integer grayscale, 8-bit with a color lookup
@@ -1506,10 +1548,26 @@ Heidelberg \cite{imagejfx}, as well as integrations of ImageJ into other
 powerful end-user applications such as \acrshort{knime} and CellProfiler. See
 Figure 4 for a side-by-side illustration of \acrshortpl{ui}.
 
-\begin{quote}
-[Figure 4: Side-by-side comparison of ImageJ2-based user interfaces and
-integrations.]
-\end{quote}
+  %% Figure 4
+  \begin{figure}[h]
+    \caption{Side-by-side comparison of ImageJ2-based user interfaces
+    and integrations.}
+    \includegraphics[width=4.75in,natwidth=2690,natheight=1708]{figure-4/figure-label.png}
+    \begin{flushleft}
+      \footnotesize
+      Panel A (top left): ImageJFX, a JavaFX-based user interface built on
+      ImageJ2. Panel B (top right): ImageJ2's default user interface, the
+      ImageJ Legacy \acrshort{ui}, which wraps ImageJ 1.x. Panel C (bottom
+      left): Example \acrshort{knime} workflow utilizing ImageJ2 image
+      processing nodes. Panel D (middle right): Swing \acrshort{ui} prototype,
+      closely modeled after ImageJ 1.x so that it remains familiar to existing
+      users, in various Java ``\acrlong{laf}'' modes. Panel E (bottom right): A
+      proof-of-concept Apache Pivot user interface. The ImageJFX and ImageJ
+      Legacy \acrshortpl{ui} display an XY slice of ImageJ's Confocal Series
+      sample dataset (dataset courtesy of Joel Sheffield), which has been
+      rotated, smoothed and colorized.
+    \end{flushleft}
+  \end{figure}
 
 \textbf{Interoperability.} There is no one-size-fits-all tool for scientific
 image processing. A diversity of tools benefits users, even more so when they
@@ -1534,9 +1592,53 @@ to nodes in a \acrshort{knime} workflow. Continuing efforts are underway at
 the \acrfull{loci} and elsewhere to integrate ImageJ with many other software
 projects, script languages and paradigms (Table 1).
 
-\begin{quote}
-[Table 1: ImageJ software integrations.]
-\end{quote}
+  %% Table 1
+  \begin{table}[h!]
+    \caption{ImageJ software integrations}
+    \begin{tabular}{| l | l | l |}
+      \hline
+      \textbf{Software}                                                  & \textbf{Integration project}                                         & \textbf{Supporting technologies}                                           \\ \hline
+      Apache Groovy                               \cite{groovy}          & SciJava Scripting: Groovy             \cite{scripting_groovy}        & -                                                                          \\ \hline
+      BeanShell                                   \cite{beanshell}       & SciJava Scripting: BeanShell          \cite{scripting_beanshell}     & -                                                                          \\ \hline
+      Bio-Formats                                 \cite{bio_formats}     & \acrshort{scifio}-Bio-Formats         \cite{scifio_bf_compat}        & \acrshort{scifio}-\acrshort{ome}-\acrshort{xml}     \cite{scifio_ome_xml}  \\ \hline
+      Bio7 (R + ImageJ 1.x)                       \cite{bio7}            & -                                                                    & Eclipse                                             \cite{eclipse}         \\ \hline
+      CellProfiler                                \cite{cellprofiler}    & ImageJ Server*                        \cite{imagej_server}           & -                                                                          \\ \hline
+      ImageJ 1.x                                  \cite{imagej_history}  & ImageJ Legacy                         \cite{imagej_legacy}           & ImageJ 1.x Patcher \cite{ij1_patcher}, Javassist    \cite{javassist}       \\ \hline
+      \acrshort{itk}                              \cite{itk}             & ImageJ-\acrshort{itk}                 \cite{imagej_itk}              & SimpleITK                                           \cite{simpleitk}       \\ \hline
+      JavaScript                                  \cite{javascript}      & SciJava Scripting: JavaScript         \cite{scripting_javascript}    & Nashorn \cite{nashorn}, Rhino                       \cite{rhino}           \\ \hline
+      Jupyter Notebook                            \cite{jupyter}         & SciJava Jupyter Kernel                \cite{scijava_jupyter_kernel}  & \acrshort{beakerx}$^\ddagger$                       \cite{beakerx}         \\ \hline
+      \acrshort{knime}                            \cite{knime}           & \acrshort{knime} Image Processing     \cite{knip}                    & -                                                                          \\ \hline
+      Kotlin                                      \cite{kotlin}          & SciJava Scripting: Kotlin             \cite{scripting_kotlin}        & -                                                                          \\ \hline
+      Lisp (\acrshort{jvm})                       \cite{lisp}            & SciJava Scripting: Clojure            \cite{scripting_clojure}       & Clojure                                             \cite{clojure}         \\ \hline
+      \acrshort{matlab}                           \cite{matlab}          & SciJava Scripting: \acrshort{matlab}  \cite{scripting_matlab}        & matlabcontrol                                       \cite{matlabcontrol}   \\ \hline
+      \acrshort{matlab}                                                  & ImageJ-\acrshort{matlab}              \cite{imagej_matlab}           & SciJava Scripting: \acrshort{matlab}                                       \\ \hline
+      \acrshort{mitobo}$^\mathsection$            \cite{mitobo}          & -                                                                    & \acrshort{alida}$^\dagger$                          \cite{alida}           \\ \hline
+      \acrshort{omero}                            \cite{omero}           & ImageJ-\acrshort{omero}               \cite{imagej_omero}            & -                                                                          \\ \hline
+      \acrshort{opencv}$^\mathparagraph$          \cite{opencv}          & IJ-OpenCV                             \cite{ij_opencv}               & JavaCV                                              \cite{javacv}          \\ \hline
+      Python (CPython or \acrshort{jvm})          \cite{python}          & imglib2-imglyb                        \cite{imglib2_imglyb}          & pyJNIus \cite{pyjnius}, Jython \cite{jython}, JyNI  \cite{jyni}            \\ \hline
+      Python (CPython)                                                   & imagey                                \cite{imagey}                  & imglib2-imglyb                                                             \\ \hline
+      Python (CPython)                                                   & SciJava Scripting: CPython            \cite{scripting_cpython}       & javabridge                                          \cite{javabridge}      \\ \hline
+      Python (\acrshort{jvm})                                            & SciJava Scripting: Jython             \cite{scripting_jython}        & Jython, JyNI                                                               \\ \hline
+      R (\acrshort{jvm})                          \cite{r}               & SciJava Scripting: Renjin             \cite{scripting_renjin}        & Renjin                                              \cite{renjin}          \\ \hline
+      \acrshort{rest}$^\|$                        \cite{rest}            & ImageJ Server*                        \cite{imagej_server}           & Dropwizard                                          \cite{dropwizard}      \\ \hline
+      Ruby (\acrshort{jvm})                       \cite{ruby}            & SciJava Scripting: JRuby              \cite{scripting_jruby}         & Ruby                                                \cite{ruby}            \\ \hline
+      Scala                                       \cite{scala}           & SciJava Scripting: Scala              \cite{scripting_scala}         & -                                                                          \\ \hline
+      TensorFlow                                  \cite{tensorflow}      & ImageJ-TensorFlow                     \cite{imagej_tensorflow}       & -                                                                          \\ \hline
+    \end{tabular}
+    \begin{flushleft}
+      * Provides cross-language interprocess integration with JavaScript, Python and others.
+
+      $^\dagger$ \acrfull{alida}.
+
+      $^\ddagger$ \acrfull{beakerx}.
+
+      $^\mathsection$ \acrfull{mitobo}.
+
+      $^\mathparagraph$ \acrfull{opencv}.
+
+      $^\|$ \acrfull{rest}.
+    \end{flushleft}
+  \end{table}
 
 \subsection*{Reproducibility}
 
@@ -1609,10 +1711,22 @@ Java \acrshort{awt} dependencies of ImageJ 1.x's \texttt{GenericDialog},
 allowing the plugin to be used headlessly, in future \acrshortpl{ui}, and even
 in other applications.
 
-\begin{quote}
-[Figure 5: Comparison of pure ImageJ 1.x command with one using SciJava
-declarative syntax.]
-\end{quote}
+  %% Figure 5
+  \begin{figure}[h]
+    \caption{Comparison of pure ImageJ 1.x command with one using SciJava
+    declarative syntax.}
+    \includegraphics[width=4.75in,natwidth=1327,natheight=889]{figure-5/figure-labeled.png}
+    \begin{flushleft}
+      \footnotesize
+      Panel A (left) shows an ImageJ 1.x implementation of a plugin that copies
+      slice labels from one image to another, as chosen by the user. Panel B
+      (right) shows the same plugin written using the SciJava declarative
+      command syntax. Changed lines are highlighted in blue, new lines in
+      green. The actual operation (the \texttt{copyLabels} method) is
+      identical, but the routine for selecting which images to process is no
+      longer necessary.
+    \end{flushleft}
+  \end{figure}
 
 \textbf{Sensible defaults.} A key example of reasonable default behavior is the
 SciJava conversion framework with its specialized \texttt{Converter} plugin
@@ -1732,10 +1846,27 @@ those arguments. This scheme enables image processing algorithms to be written
 once, then automatically benefit from future performance optimizations without
 explicit case logic.
 
-\begin{quote}
-[Figure 6: Benchmarks of a simple addition operation with ImageJ Ops and ImageJ
-1.x.]
-\end{quote}
+  %% Figure 6
+  \begin{figure}[h]
+    \caption{Benchmarks of a simple addition operation with ImageJ Ops and
+    ImageJ 1.x.}
+    \includegraphics[width=4.75in,natwidth=1836,natheight=959]{figure-6/figure.png}
+    \begin{flushleft}
+      \footnotesize
+      Time performance comparison of simple addition operations between raw
+      Java array manipulation, various \texttt{math.add} operations of ImageJ
+      Ops, and ImageJ 1.x's \textit{Process $\triangleright$ Math
+      $\triangleright$ Add\ldots} command. Benchmarks were run for 20 rounds on
+      randomly generated \texttt{uint8} noise images dimensioned $15,000 \times
+      15,000$, using the JUnit Benchmarks framework, on a MacBook Pro (Retina,
+      15-inch, Mid 2015) running \acrshort{macos} Sierra 10.12 with 2.5 GHz
+      Intel Core i7 processor and 16 GB 1600 MHz DDR3 memory. Positive numbers
+      are fold faster, negative numbers are fold slower. The routines which
+      produced these results can be found in the ImageJ Ops test code, in the
+      \texttt{AddOpBenchmarkTest} class of the
+      \texttt{net.imagej.ops.benchmark} package.
+    \end{flushleft}
+  \end{figure}
 
 To validate this approach, we benchmarked the core Ops library's
 \texttt{math.add} operations which add a constant value to each element of an
@@ -1813,9 +1944,21 @@ structures and plugins as needed, while taking advantage of ImageJ2
 functionality as appropriate (Figure 7), and declaring and populating input
 values with less boilerplate code (see Figure 5 in ``Usability'' above).
 
-\begin{quote}
-[Figure 7: A mixed-world ImageJ 1.x + ImageJ2 script.]
-\end{quote}
+  %% Figure 7
+  \begin{figure}[h]
+    \caption{A mixed-world ImageJ 1.x + ImageJ2 script.}
+    \includegraphics[width=4.75in,natwidth=3324,natheight=1450]{figure-7/figure-labeled.png}
+    \begin{flushleft}
+      \footnotesize
+      This example Python script (panel D) uses ImageJ Ops to preprocess a
+      confocal image and perform an automatic thresholding (panel B). ImageJ
+      1.x's Analyze Particles routine is then called to isolate (panel A) and
+      measure (panel C) foreground objects. Script contributed by Brian
+      Northan, True North Intelligent Algorithms LLC. This script is available
+      within ImageJ as a sample from the Tutorials submenu of the Script
+      Editor's Templates menu.
+    \end{flushleft}
+  \end{figure}
 
 As ImageJ2 continues to mature, usage of ImageJ 1.x functionality will be
 increasingly replaced with more powerful ImageJ2 equivalents: image processing
@@ -2081,201 +2224,6 @@ published article.
 % \bibitem{b1}
 % \end{thebibliography}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Figures                       %%
-%%                               %%
-%% NB: this is for captions and  %%
-%% Titles. All graphics must be  %%
-%% submitted separately and NOT  %%
-%% included in the Tex document  %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%
-%% Do not use \listoffigures as most will included as separate files
-
-\section*{Figures and illustrations}
-  %% Figure 1
-  \begin{figure}[h!]
-    \caption{Examples of image processing algorithms available in ImageJ Ops.}
-    \begin{flushleft}
-      Panel A (top left): \acrshort{3d} wireframe mesh of ImageJ's Bat Cochlea
-      Volume sample dataset \cite{bat_cochlea_volume}, computed by the
-      \texttt{geom.marchingCubes} op, an implementation of the marching cubes
-      algorithm \cite{marching_cubes}, visualized using MeshLab \cite{meshlab}.
-      Credit to Kyle Harrington for the figure, Tim-Oliver Buchholz for
-      authoring the op, and Art Keating for the dataset. Panel B (top right):
-      Richardson-Lucy Total Variation deconvolution \cite{richardson_lucy} of
-      the Stellaris FISH dataset \#1 \cite{stellaris_fish}, computed by the
-      \texttt{deconvolve.richardsonLucyTV} op. Credit to Brian Northan for
-      authoring the op and figure \cite{bnorthan_ops_decon}, and George
-      McNamara for the dataset. Panel C (bottom): Grayscale morphology and
-      neighborhood filter operations on Fiji's New Lenna sample image, using a
-      diamond-shaped structuring element with radius 3. Credit to Jean-Yves
-      Tinevez, Jonathan Hale and Leon Yang for authoring the ops.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 2
-  \begin{figure}[h!]
-    \caption{ImageJ update sites provide additional functionality to ImageJ.}
-    \begin{flushleft}
-      The Morphological Segmentation plugin, part of the MorphoLibJ plugin
-      collection \cite{morpholibj}, easily segments the rings of ImageJ's Tree
-      Rings sample dataset (panel A). The MorphoLibJ plugins are installed into
-      the \acrshort{fiji} distribution of ImageJ by enabling the IJPB-plugins
-      update site (panel B). Credit to David Legland and Ignacio
-      Arganda-Carreras for authoring the plugins.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 3
-  \begin{figure}[h!]
-    \caption{ImageJ 1.x ~case logic compared to a unified ImgLib2
-    implementation.}
-    \begin{flushleft}
-      Panel A (left) shows the ImageJ 1.x implementation of a rolling ball
-      background subtraction method, part of the
-      \texttt{ij.plugin.filter.BackgroundSubtracter} class. Panel B (right)
-      shows an equivalent implementation using ImgLib2, without the need for
-      extensive case logic.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 4
-  \begin{figure}[h!]
-    \caption{Side-by-side comparison of ImageJ2-based user interfaces
-    and integrations.}
-    \begin{flushleft}
-      Panel A (top left): ImageJFX, a JavaFX-based user interface built on
-      ImageJ2. Panel B (top right): ImageJ2's default user interface, the
-      ImageJ Legacy \acrshort{ui}, which wraps ImageJ 1.x. Panel C (bottom
-      left): Example \acrshort{knime} workflow utilizing ImageJ2 image
-      processing nodes. Panel D (middle right): Swing \acrshort{ui} prototype,
-      closely modeled after ImageJ 1.x so that it remains familiar to existing
-      users, in various Java ``\acrlong{laf}'' modes. Panel E (bottom right): A
-      proof-of-concept Apache Pivot user interface. The ImageJFX and ImageJ
-      Legacy \acrshortpl{ui} display an XY slice of ImageJ's Confocal Series
-      sample dataset (dataset courtesy of Joel Sheffield), which has been
-      rotated, smoothed and colorized.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 5
-  \begin{figure}[h!]
-    \caption{Comparison of pure ImageJ 1.x command with one using SciJava
-    declarative syntax.}
-    \begin{flushleft}
-      Panel A (left) shows an ImageJ 1.x implementation of a plugin that copies
-      slice labels from one image to another, as chosen by the user. Panel B
-      (right) shows the same plugin written using the SciJava declarative
-      command syntax. Changed lines are highlighted in blue, new lines in
-      green. The actual operation (the \texttt{copyLabels} method) is
-      identical, but the routine for selecting which images to process is no
-      longer necessary.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 6
-  \begin{figure}[h!]
-    \caption{Benchmarks of a simple addition operation with ImageJ Ops and
-    ImageJ 1.x.}
-    \begin{flushleft}
-      Time performance comparison of simple addition operations between raw
-      Java array manipulation, various \texttt{math.add} operations of ImageJ
-      Ops, and ImageJ 1.x's \textit{Process $\triangleright$ Math
-      $\triangleright$ Add\ldots} command. Benchmarks were run for 20 rounds on
-      randomly generated \texttt{uint8} noise images dimensioned $15,000 \times
-      15,000$, using the JUnit Benchmarks framework, on a MacBook Pro (Retina,
-      15-inch, Mid 2015) running \acrshort{macos} Sierra 10.12 with 2.5 GHz
-      Intel Core i7 processor and 16 GB 1600 MHz DDR3 memory. Positive numbers
-      are fold faster, negative numbers are fold slower. The routines which
-      produced these results can be found in the ImageJ Ops test code, in the
-      \texttt{AddOpBenchmarkTest} class of the
-      \texttt{net.imagej.ops.benchmark} package.
-    \end{flushleft}
-  \end{figure}
-
-  %% Figure 7
-  \begin{figure}[h!]
-    \caption{A mixed-world ImageJ 1.x + ImageJ2 script.}
-    \begin{flushleft}
-      This example Python script (panel D) uses ImageJ Ops to preprocess a
-      confocal image and perform an automatic thresholding (panel B). ImageJ
-      1.x's Analyze Particles routine is then called to isolate (panel A) and
-      measure (panel C) foreground objects. Script contributed by Brian
-      Northan, True North Intelligent Algorithms LLC. This script is available
-      within ImageJ as a sample from the Tutorials submenu of the Script
-      Editor's Templates menu.
-    \end{flushleft}
-  \end{figure}
-
-%% HACK: Without this, some figures end up floating in subsequent sections.
-\FloatBarrier
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Tables                        %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Use of \listoftables is discouraged.
-%%
-\section*{Tables and captions}
-  \setcounter{table}{0}
-
-  %% Table 1
-  \begin{table}[h!]
-    \caption{ImageJ software integrations}
-    \begin{tabular}{| l | l | l |}
-      \hline
-      \textbf{Software}                                                  & \textbf{Integration project}                                         & \textbf{Supporting technologies}                                           \\ \hline
-      Apache Groovy                               \cite{groovy}          & SciJava Scripting: Groovy             \cite{scripting_groovy}        & -                                                                          \\ \hline
-      BeanShell                                   \cite{beanshell}       & SciJava Scripting: BeanShell          \cite{scripting_beanshell}     & -                                                                          \\ \hline
-      Bio-Formats                                 \cite{bio_formats}     & \acrshort{scifio}-Bio-Formats         \cite{scifio_bf_compat}        & \acrshort{scifio}-\acrshort{ome}-\acrshort{xml}     \cite{scifio_ome_xml}  \\ \hline
-      Bio7 (R + ImageJ 1.x)                       \cite{bio7}            & -                                                                    & Eclipse                                             \cite{eclipse}         \\ \hline
-      CellProfiler                                \cite{cellprofiler}    & ImageJ Server*                        \cite{imagej_server}           & -                                                                          \\ \hline
-      ImageJ 1.x                                  \cite{imagej_history}  & ImageJ Legacy                         \cite{imagej_legacy}           & ImageJ 1.x Patcher \cite{ij1_patcher}, Javassist    \cite{javassist}       \\ \hline
-      \acrshort{itk}                              \cite{itk}             & ImageJ-\acrshort{itk}                 \cite{imagej_itk}              & SimpleITK                                           \cite{simpleitk}       \\ \hline
-      JavaScript                                  \cite{javascript}      & SciJava Scripting: JavaScript         \cite{scripting_javascript}    & Nashorn \cite{nashorn}, Rhino                       \cite{rhino}           \\ \hline
-      Jupyter Notebook                            \cite{jupyter}         & SciJava Jupyter Kernel                \cite{scijava_jupyter_kernel}  & \acrshort{beakerx}$^\ddagger$                       \cite{beakerx}         \\ \hline
-      \acrshort{knime}                            \cite{knime}           & \acrshort{knime} Image Processing     \cite{knip}                    & -                                                                          \\ \hline
-      Kotlin                                      \cite{kotlin}          & SciJava Scripting: Kotlin             \cite{scripting_kotlin}        & -                                                                          \\ \hline
-      Lisp (\acrshort{jvm})                       \cite{lisp}            & SciJava Scripting: Clojure            \cite{scripting_clojure}       & Clojure                                             \cite{clojure}         \\ \hline
-      \acrshort{matlab}                           \cite{matlab}          & SciJava Scripting: \acrshort{matlab}  \cite{scripting_matlab}        & matlabcontrol                                       \cite{matlabcontrol}   \\ \hline
-      \acrshort{matlab}                                                  & ImageJ-\acrshort{matlab}              \cite{imagej_matlab}           & SciJava Scripting: \acrshort{matlab}                                       \\ \hline
-      \acrshort{mitobo}$^\mathsection$            \cite{mitobo}          & -                                                                    & \acrshort{alida}$^\dagger$                          \cite{alida}           \\ \hline
-      \acrshort{omero}                            \cite{omero}           & ImageJ-\acrshort{omero}               \cite{imagej_omero}            & -                                                                          \\ \hline
-      \acrshort{opencv}$^\mathparagraph$          \cite{opencv}          & IJ-OpenCV                             \cite{ij_opencv}               & JavaCV                                              \cite{javacv}          \\ \hline
-      Python (CPython or \acrshort{jvm})          \cite{python}          & imglib2-imglyb                        \cite{imglib2_imglyb}          & pyJNIus \cite{pyjnius}, Jython \cite{jython}, JyNI  \cite{jyni}            \\ \hline
-      Python (CPython)                                                   & imagey                                \cite{imagey}                  & imglib2-imglyb                                                             \\ \hline
-      Python (CPython)                                                   & SciJava Scripting: CPython            \cite{scripting_cpython}       & javabridge                                          \cite{javabridge}      \\ \hline
-      Python (\acrshort{jvm})                                            & SciJava Scripting: Jython             \cite{scripting_jython}        & Jython, JyNI                                                               \\ \hline
-      R (\acrshort{jvm})                          \cite{r}               & SciJava Scripting: Renjin             \cite{scripting_renjin}        & Renjin                                              \cite{renjin}          \\ \hline
-      \acrshort{rest}$^\|$                        \cite{rest}            & ImageJ Server*                        \cite{imagej_server}           & Dropwizard                                          \cite{dropwizard}      \\ \hline
-      Ruby (\acrshort{jvm})                       \cite{ruby}            & SciJava Scripting: JRuby              \cite{scripting_jruby}         & Ruby                                                \cite{ruby}            \\ \hline
-      Scala                                       \cite{scala}           & SciJava Scripting: Scala              \cite{scripting_scala}         & -                                                                          \\ \hline
-      TensorFlow                                  \cite{tensorflow}      & ImageJ-TensorFlow                     \cite{imagej_tensorflow}       & -                                                                          \\ \hline
-    \end{tabular}
-    \begin{flushleft}
-      * Provides cross-language interprocess integration with JavaScript, Python and others.
-
-      $^\dagger$ \acrfull{alida}.
-
-      $^\ddagger$ \acrfull{beakerx}.
-
-      $^\mathsection$ \acrfull{mitobo}.
-
-      $^\mathparagraph$ \acrfull{opencv}.
-
-      $^\|$ \acrfull{rest}.
-    \end{flushleft}
-  \end{table}
-
-%% HACK: Without this, some tables end up floating in subsequent sections.
-\FloatBarrier
-
 \section*{Supplemental material}
 
 \subsection*{Figures and illustrations}
@@ -2286,6 +2234,7 @@ published article.
   %% Figure S.1
   \begin{figure}[h!]
     \caption{Module execution in different contexts.}
+    \includegraphics[width=4.75in,natwidth=1396,natheight=1126]{figure-s.1/module-execution-labeled.png}
     \begin{flushleft}
       When running a parameterized script (panel B) from the ImageJ user
       interface (panel A), a pop-up dialog box (panel C) enables the user to
@@ -2299,6 +2248,7 @@ published article.
   \begin{figure}[h!]
     \caption{Comparison of time performance across ImageJ 1.x and ImgLib2 data
     structures.}
+    \includegraphics[width=4.75in,natwidth=776,natheight=274]{figure-s.2/figure-labeled.png}
     \begin{flushleft}
       For ten iterations, we ran a ``cheap'' per-pixel operation and an
       ``expensive'' operation on a 25 Mpx image stored in the ImageJ 1.x
@@ -2313,6 +2263,7 @@ published article.
   %% Figure S.3
   \begin{figure}[h!]
     \caption{Sample ImageJ plugin usage of ImageJ 1.x and ImageJ2.}
+    \includegraphics[width=4.75in,natwidth=1743,natheight=859]{figure-s.3/ij-imagej-plugins-figure.png}
     \begin{flushleft}
       This plot displays a select few ImageJ plugins in varying stages of
       transition, from ImageJ 1.x to ImageJ2, as of 11 Aug 2017 2:35 PM CDT.
@@ -2339,6 +2290,9 @@ published article.
       MorphoLibJ                   \cite{morpholibj}.
     \end{flushleft}
   \end{figure}
+
+%% HACK: Without this, some figures end up floating in subsequent sections.
+\FloatBarrier
 
 \subsection*{Tables and captions}
   %% Use "Table S.#" naming scheme for supplemental tables
