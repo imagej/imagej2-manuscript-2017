@@ -11,3 +11,5 @@
 /*.log
 /*.pdf
 /*.synctex.gz
+/bmc/
+/imagej2-bmc.zip
