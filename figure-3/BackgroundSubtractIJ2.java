@@ -12,7 +12,7 @@ while (imgCursor.hasNext()) {
     final T sample = imgCursor.get();
     final double bgVal = bgAccess.get().getRealDouble();
 
-    final double value = sample.getRealDouble() - bgVal + offset;
+    double value = sample.getRealDouble() - bgVal + offset;
     if (value < min) value = min;
     if (value > max) value = max;
     sample.setReal(value);
