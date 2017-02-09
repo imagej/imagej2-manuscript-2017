@@ -2244,43 +2244,43 @@ published article.
       \texttt{uint8}       & 8-bit              & unsigned            & integer         & $0$                     & $255$                  & yes                 & yes              \\ \hline
       \texttt{uint12}      & 12-bit             & unsigned            & integer         & $0$                     & $4,095$                & no                  & yes              \\ \hline
       \texttt{uint16}      & 16-bit             & unsigned            & integer         & $0$                     & $65,535$               & yes                 & yes              \\ \hline
-      \texttt{uint32}      & 32-bit             & unsigned            & integer         & $0$                     & $232 - 1$              & no                  & yes              \\ \hline
-      \texttt{uint64}      & 64-bit             & unsigned            & integer         & $0$                     & $264 - 1$              & no                  & yes              \\ \hline
-      \texttt{uint128}     & 128-bit            & unsigned            & integer         & $0$                     & $2128 - 1$             & no                  & yes              \\ \hline
+      \texttt{uint32}      & 32-bit             & unsigned            & integer         & $0$                     & $2^{32} - 1$           & no                  & yes              \\ \hline
+      \texttt{uint64}      & 64-bit             & unsigned            & integer         & $0$                     & $2^{64} - 1$           & no                  & yes              \\ \hline
+      \texttt{uint128}     & 128-bit            & unsigned            & integer         & $0$                     & $2^{128} - 1$          & no                  & yes              \\ \hline
       \texttt{int8}        & 8-bit              & signed              & integer         & $-128$                  & $127$                  & partial*            & yes              \\ \hline
       \texttt{int16}       & 16-bit             & signed              & integer         & $-32,768$               & $32,767$               & partial*            & yes              \\ \hline
-      \texttt{int32}       & 32-bit             & signed              & integer         & $-231$                  & $231 - 1$              & no                  & yes              \\ \hline
+      \texttt{int32}       & 32-bit             & signed              & integer         & $-2^{31}$               & $2^{31} - 1$           & no                  & yes              \\ \hline
       \texttt{float32}     & 32-bit             & signed              & floating point  & \parbox[t]{0.8in}{
                                                                                           approx.\\
-                                                                                          $-3.4 \times 1,038$
+                                                                                          $-3.4 \times 10^{38}$
                                                                                           }                       & \parbox[t]{0.8in}{
                                                                                                                     approx.\\
-                                                                                                                    $3.4 \times 1,038$
+                                                                                                                    $3.4 \times 10^{38}$
                                                                                                                     }                      & yes                 & yes              \\ \hline
       \texttt{float64}     & 64-bit             & signed              & floating point  & \parbox[t]{0.8in}{
                                                                                           approx.\\
-                                                                                          $-1.8 \times 10,308$
+                                                                                          $-1.8 \times 10^{308}$
                                                                                           }                       & \parbox[t]{0.8in}{
                                                                                                                     approx.\\
-                                                                                                                    $1.8 \times 10,308$
+                                                                                                                    $1.8 \times 10^{308}$
                                                                                                                     }                      & no                  & yes              \\ \hline
       \texttt{cfloat32}    & 2 $\times$ 32-bit  & signed              & floating point  & \parbox[t]{0.8in}{
                                                                                           approx.\\
-                                                                                          $(-3.4 \times 1,038,\\
-                                                                                          -3.4 \times 1,038)$
+                                                                                          $(-3.4 \times 10^{38},\\
+                                                                                          -3.4 \times 10^{38})$
                                                                                           }                       & \parbox[t]{0.8in}{
                                                                                                                     approx.\\
-                                                                                                                    $(3.4 \times 1,038,\\
-                                                                                                                    3.4 \times 1,038)$
+                                                                                                                    $(3.4 \times 10^{38},\\
+                                                                                                                    3.4 \times 10^{38})$
                                                                                                                     }                      & no                  & yes              \\ \hline
       \texttt{cfloat64}    & 2 $\times$ 64-bit  & signed              & floating point  & \parbox[t]{0.8in}{
                                                                                           approx.\\
-                                                                                          $(-1.8 \times 10,308,\\
-                                                                                          -1.8 \times 10,308)$
+                                                                                          $(-1.8 \times 10^{308},\\
+                                                                                          -1.8 \times 10^{308})$
                                                                                           }                       & \parbox[t]{0.8in}{
                                                                                                                     approx.\\
-                                                                                                                    $(1.8 \times 10,308,\\
-                                                                                                                    1.8 \times 10,308)$
+                                                                                                                    $(1.8 \times 10^{308},\\
+                                                                                                                    1.8 \times 10^{308})$
                                                                                                                     }                      & no                  & yes              \\ \hline
       \texttt{bigint}      & unlimited          & signed              & integer         & none                    & none                   & no                  & yes              \\ \hline
       \texttt{bigdec}      & arbitrary          & signed              & decimal         & none                    & none                   & no                  & yes              \\ \hline
