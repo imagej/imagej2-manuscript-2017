@@ -405,6 +405,49 @@ statement:
   \item \textbf{Lead} ImageJ development with a clear vision.
 \end{itemize}
 
+\subsection*{Why ImageJ?}
+Any time a development effort of this scale is undertaken on an existing tool,
+it is worth evaluating its impact and the decision to invest such resources.
+The bioimage informatics field \cite{bioimage_informatics} is fortunate to have
+a wide range of software tools available in both commercial and open source
+arenas \cite{bioimaging_software_review}. Open-source tools are especially
+important in science due to their transparency and inherent ability for sharing
+and extensibility \cite{bioimaging_cell_biology}. This need and ability for
+method sharing has resulted in a plethora of open-source solutions in bioimage
+informatics, ranging from image acquisition tools such as $\mu$Manager
+\cite{micro_manager_2010, micro_manager_2014}; databases such as Bisque
+\cite{bisque} and OMERO \cite{omero}; image analysis suites such as Icy
+\cite{icy} and BioImageXD \cite{bioimagexd}; scientific workflow and pipeline
+tools such as CellProfiler \cite{cellprofiler, cellprofiler_2011}, KNIME
+\cite{knime, knip} and Pipeline Pilot \cite{workflow_systems}; and 3D rendering
+applications such as FluoRender \cite{fluorender} and Vaa3D \cite{vaa3d}. There
+are many other open, bioimaging-oriented software packages besides these,
+including solutions written in powerful scripting platforms such as R, Python
+and MATLAB. With such an extensive array of tools, does it make sense to invest
+in an updated ImageJ platform, rather than building on some combination of more
+recent tools?
+
+Actually, the ImageJ2 project does both: it rearchitects ImageJ as a shared
+platform for integration and interoperability across many bioimaging software
+packages. ImageJ has a unique niche in that it is not a monolithic or
+single-purpose application, but instead is designed as a platform for discovery
+where the bench biologist can adapt and deploy new image analysis methods. What
+makes ImageJ great is not only a set of pre-designed, distributed tools
+developed for a single purpose and regularly maintained and updated, but also
+its powerful yet approachable plugin and macro environments that have enabled
+hundreds of groups to generate results through the development of thousands of
+customized plugins and scripts \cite{imagej_ecosystem, imagej_review,
+imagej_list_of_update_sites}. It is this ability for sharing, and the desire to
+engage the professional and amateur developer alike, that drove the development
+for ImageJ2. The new version of ImageJ is a platform for extensibility and
+cross-application cooperation, broadening the scope of ImageJ into a new effort
+called SciJava \cite{scijava}: a collaboration of projects striving to
+cooperate and build on one another both socially and technically. It is our
+intent that with the developments detailed in this paper, the synergy between
+these tools, which include ImageJ, KNIME, CellProfiler, OMERO and others, will
+only increase as each tool continues to develop, benefiting not only existing
+users, but new users and communities as well.
+
 %% The Design Goals section discusses ImageJ2's _goals_ only, not the
 %% _reality_ of what it does. So it uses language like "must" and "should"
 %% and "strives to" rather than "does" and "is". The latter (especially
