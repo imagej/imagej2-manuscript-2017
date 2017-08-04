@@ -67,6 +67,7 @@
 \newacronym{bsd}{BSD}{Berkeley Software Distribution}
 \newacronym{ci}{CI}{continuous integration}
 \newacronym{cpu}{CPU}{Central Processing Unit}
+\newacronym{cuda}{CUDA}{Compute Unified Device Architecture}
 \newacronym{di}{DI}{dependency injection}
 \newacronym{dry}{DRY}{Don't Repeat Yourself}
 \newacronym{epfl}{EPFL}{École Polytechnique Fédérale de Lausanne}
@@ -96,6 +97,7 @@
 \newacronym{nih}{NIH}{National Institutes of Health}
 \newacronym{ome}{OME}{Open Microscopy Environment}
 \newacronym{omero}{OMERO}{OME Remote Objects}
+\newacronym{opencl}{OpenCL}{Open Computing Language}
 \newacronym{opencv}{OpenCV}{Open source Computer Vision library}
 \newacronym{pom}{POM}{Project Object Model}
 \newacronym{ram}{RAM}{Random-Access Memory}
@@ -1045,6 +1047,13 @@ implement \texttt{sqrt(ArrayImg)}, we are restricted in supported data types,
 since not all images can be stored in such a manner. The power of the Ops
 matching approach is that both of these and more can coexist simultaneously and
 extensibly, and the most specific will always be selected at runtime.
+
+Furthermore, as algorithm implementations increasingly become available for the
+\acrshort{gpu} via libraries such as \acrfull{opencl} \cite{opencl} and
+Nvidia's \acrfull{cuda} \cite{cuda}, as well as for clusters via libraries such
+as Apache Spark \cite{apache_spark}, such implementations could also be
+expressed as ops so that they can be selected automatically based on the
+currently available hardware environment.
 
 The \texttt{Op} plugin type extends SciJava's \texttt{Command}, and therefore
 all ops are SciJava parameterized modules, usable anywhere SciJava modules are
