@@ -1704,17 +1704,18 @@ explicit case logic.
 1.x.]
 \end{quote}
 
-To validate this approach, we benchmarked the core Ops library's math.add
-operations which add a constant value to each element of an image (Figure 6).
-As evidenced by the results, the inplace ImageJ 1.x version of this operation
-(the \textit{Add\ldots} command under Math in the Process menu) performs much
-better than some generalized op implementations (\texttt{II} source to
-\texttt{RAI} destination) which work on all image types---but the optimized ops
-outperform it, with the single-threaded inplace \texttt{ArrayImg} op finishing
-7 times faster, and the multithreaded version finishing 9 times faster. While
-some of this gain is likely due to the expense of ImageJ 1.x's bounds checking,
-it is also evident from the results that the optimized ops are comparable in
-efficiency to operations on raw primitive arrays.
+To validate this approach, we benchmarked the core Ops library's
+\texttt{math.add} operations which add a constant value to each element of an
+image (Figure 6). As evidenced by the results, the inplace ImageJ 1.x version
+of this operation (the \textit{Add\ldots} command under Math in the Process
+menu) performs much better than some generalized op implementations
+(\texttt{II} source to \texttt{RAI} destination) which work on all image
+types---but the optimized ops outperform it, with the single-threaded inplace
+\texttt{ArrayImg} op finishing 7 times faster, and the multithreaded version
+finishing 9 times faster. While some of this gain is likely due to the expense
+of ImageJ 1.x's bounds checking, it is also evident from the results that the
+optimized ops are comparable in efficiency to operations on raw primitive
+arrays.
 
 \textbf{Scalability.} As discussed in ``Functionality'' above, ImageJ 1.x is
 fundamentally limited to XY image planes of less than $2^{31}$ pixels due to
@@ -2110,15 +2111,15 @@ published article.
     ImageJ 1.x.}
     \begin{flushleft}
       Time performance comparison of simple addition operations between raw
-      Java array manipulation, various math.add operations of ImageJ Ops, and
-      ImageJ 1.x's \textit{Process $\triangleright$ Math $\triangleright$
-      Add\ldots} command. Benchmarks were run for 20 rounds on randomly
-      generated \texttt{uint8} noise images dimensioned $15,000 \times 15,000$,
-      using the JUnit Benchmarks framework, on a MacBook Pro (Retina, 15-inch,
-      Mid 2015) running \acrshort{macos} Sierra 10.12 with 2.5 GHz Intel Core
-      i7 processor and 16 GB 1600 MHz DDR3 memory. The routines which produced
-      these results can be found in the ImageJ Ops test code, in the
-      \texttt{AddOpBenchmarkTest} class of the
+      Java array manipulation, various \texttt{math.add} operations of ImageJ
+      Ops, and ImageJ 1.x's \textit{Process $\triangleright$ Math
+      $\triangleright$ Add\ldots} command. Benchmarks were run for 20 rounds on
+      randomly generated \texttt{uint8} noise images dimensioned $15,000 \times
+      15,000$, using the JUnit Benchmarks framework, on a MacBook Pro (Retina,
+      15-inch, Mid 2015) running \acrshort{macos} Sierra 10.12 with 2.5 GHz
+      Intel Core i7 processor and 16 GB 1600 MHz DDR3 memory. The routines
+      which produced these results can be found in the ImageJ Ops test code, in
+      the \texttt{AddOpBenchmarkTest} class of the
       \texttt{net.imagej.ops.benchmark} package.
     \end{flushleft}
   \end{figure}
