@@ -850,22 +850,20 @@ user for the input values in the most appropriate way, B) execute the module
 code itself, and finally, C) process and/or display the output values in the
 most appropriate way.
 
-As such, this scheme has great potential for reuse across a wide
-variety of contexts. For example, when running the above script from
-the ImageJ user interface, a Swing dialog box will pop up allowing the
-user to enter the name and age values; and after OK is pressed, the
-greeting will be displayed in a new window. However, when running the
-script headless from the command line interface, the input values can be
-passed as command line arguments and the output values echoed to the
-standard output stream. See Supplemental Figure 1 for an
-illustration. Since many computational tools have this concept of
-parameterized modules, SciJava developers need only create some general
-adapter code to integrate the SciJava module framework with a given
-tool---and then all SciJava modules become automatically available
-within that tool's paradigm. We have already implemented such
-integration for several other tools in the SciJava ecosystem, including
-CellProfiler, \acrshort{knime} \cite{knip}, and the \acrshort{omero} image
-server \cite{omero}.
+As such, this scheme has great potential for reuse across a wide variety of
+contexts. For example, when running the above script from the ImageJ user
+interface, a Swing dialog box will pop up allowing the user to enter the name
+and age values; and after OK is pressed, the greeting will be displayed in a
+new window. However, when running the script headless from the command line
+interface, the input values can be passed as command line arguments and the
+output values echoed to the standard output stream. See Supplemental Figure 1
+for an illustration. Since many computational tools have this concept of
+parameterized modules, SciJava developers need only create some general adapter
+code to integrate the SciJava module framework with a given tool---and then all
+SciJava modules become automatically available within that tool's paradigm. We
+have already implemented such integration for several other tools in the
+SciJava ecosystem, including CellProfiler, \acrshort{knime} \cite{knip}, and
+the \acrshort{omero} image server \cite{omero}.
 
 SciJava Common has an important mechanism which facilitates the extensible and
 configurable execution of modules: module pre- and post-processing. Developers
