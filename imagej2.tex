@@ -1451,12 +1451,11 @@ user interface enables it to run headless or within a variety of different user
 interface paradigms with no changes to the core. Developers can create their
 own plugins to provide alternative user interfaces. ImageJ2 is even capable of
 displaying multiple \acrshortpl{ui} simultaneously in the same Java runtime.
-Making ImageJ support multiple user interfaces in this way is surely worth the
-effort for many years to come; one of the most common questions about ImageJ
-from software developers is how to customize the ImageJ \acrshort{ui}, for
-which ImageJ2 now provides a clear mechanism. Adding support for a new
-\acrshort{ui} now only requires writing a new user interface plugin and
-corresponding display and widget plugins.
+Adding support for a new \acrshort{ui} now only requires writing a new
+\texttt{UserInterface} plugin and corresponding display and widget plugins.
+As one of the most common questions about ImageJ from software developers is
+how to customize the ImageJ \acrshort{ui}, we believe that this improved user
+interface framework will yield substantial future dividends.
 
 While the current flagship user interface for ImageJ2 is still the ImageJ 1.x
 \acrshort{ui} via the ImageJ Legacy component, ImageJ2 also has a Swing user
