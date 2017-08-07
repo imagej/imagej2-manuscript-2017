@@ -99,7 +99,6 @@
 \newacronym{omero}{OMERO}{OME Remote Objects}
 \newacronym{opencl}{OpenCL}{Open Computing Language}
 \newacronym{opencv}{OpenCV}{Open source Computer Vision library}
-\newacronym{pom}{POM}{Project Object Model}
 \newacronym{ram}{RAM}{Random-Access Memory}
 \newacronym{rest}{RESTful}{REpresentational State Transfer}
 \newacronym{rgb}{RGB}{Red+Green+Blue color model}
@@ -438,7 +437,7 @@ informatics, ranging from image acquisition tools such as $\mu$Manager
 \cite{bisque} and \acrfull{omero} \cite{omero}; image analysis suites such as
 Icy \cite{icy} and BioImageXD \cite{bioimagexd}; scientific workflow and
 pipeline tools such as CellProfiler \cite{cellprofiler, cellprofiler_2011},
-\acrshort{knime} \cite{knime, knip} and Pipeline Pilot \cite{workflow_systems};
+\acrfull{knime} \cite{knime, knip} and Pipeline Pilot \cite{workflow_systems};
 and 3D rendering applications such as FluoRender \cite{fluorender} and Vaa3D
 \cite{vaa3d}. There are many other open, bioimaging-oriented software packages
 besides these, including solutions written in powerful scripting platforms such
@@ -689,7 +688,7 @@ services, such as:
     available objects.
   \item A \textbf{thread service}, which manages a thread pool and dispatch
     thread(s) for code execution.
-  \item An \textbf{I/O service}, for reading and writing of data.
+  \item An \textbf{\acrfull{io} service}, for reading and writing of data.
   \item A \textbf{preference service}, for saving and restoring user-specific
     preferences.
 \end{itemize}
@@ -698,11 +697,11 @@ In principle, SciJava Common is similar to frameworks such as Spring
 \cite{spring}, offering standard software engineering patterns such as
 \acrfull{di} \cite{dependency_injection} and \acrfull{ioc} \cite{ioc}, but
 tailored to the needs of collaborative scientific projects like ImageJ. For
-example, SciJava Common provides a generalized I/O mechanism for opening data
-from any source, but the library itself has no specific knowledge of how to
-open \acrshort{xml} documents, microscopy image formats, or spreadsheets of
-numerical results---such functionality is provided by downstream components as
-SciJava plugins (see next section).
+example, SciJava Common provides a generalized \acrshort{io} mechanism for
+opening data from any source, but the library itself has no specific knowledge
+of how to open \acrfull{xml} documents, microscopy image formats, or
+spreadsheets of numerical results---such functionality is provided by
+downstream components as SciJava plugins (see next section).
 
 \subsubsection*{Plugin framework}
 SciJava Common provides a unified mechanism for defining \textbf{plugins}:
@@ -719,19 +718,19 @@ include:
 \paragraph*{Core extensibility}
 \begin{itemize}
   \item \textbf{\texttt{Service}} -- A collection of related functionality,
-    expressed as an \acrfull{api}. SciJava services are singletons with respect
-    to each application context. For example, each instance of ImageJ2 has
-    exactly one \texttt{AnimationService} responsible for managing animations,
-    with methods to start and stop animations, select the dimension over which
-    to animate, adjust frame rate, and other options. Note that while the
-    behavior of services can certainly be modified by extensions, doing so is
-    primarily the domain of advanced developers looking to radically alter
-    behavior of the system.
+    expressed as an \acrshort{api}. SciJava services are singletons with
+    respect to each application context. For example, each instance of ImageJ2
+    has exactly one \texttt{AnimationService} responsible for managing
+    animations, with methods to start and stop animations, select the dimension
+    over which to animate, adjust frame rate, and other options. Note that
+    while the behavior of services can certainly be modified by extensions,
+    doing so is primarily the domain of advanced developers looking to
+    radically alter behavior of the system.
   \item \textbf{\texttt{IOPlugin}} -- A plugin that reads data from and/or
     writes data to a location, such as a file on disk. For example, the SciJava
-    layer provides I/O plugins for common text formats such as Markdown
-    \cite{markdown}, while the \acrshort{scifio} layer provides an I/O plugin
-    for image formats.
+    layer provides \acrshort{io} plugins for common text formats such as
+    Markdown \cite{markdown}, while the \acrshort{scifio} layer provides an
+    \acrshort{io} plugin for image formats.
 \end{itemize}
 
 \paragraph*{Modules}
@@ -787,7 +786,7 @@ include:
   \item \textbf{\texttt{Platform}} -- A plugin which enables customization of
     behavior based on machine-specific criteria, such as specific flavor of
     operating system or Java language, including type, architecture, or
-    version. For example, on \acrshort{macos}, the menu bar appears at the top
+    version. For example, on \acrfull{macos}, the menu bar appears at the top
     of the screen, with the About, Preferences, and Quit commands relocated to
     the Application menu.
   \item \textbf{\texttt{InputWidget}} -- A user interface element for
@@ -978,12 +977,12 @@ image \texttt{Format} and metadata \texttt{Translator} plugin types to
 encapsulate the operations necessary to take an image source and standardize it
 as an ImageJ \texttt{Dataset}.
 
-\acrshort{scifio} builds upon SciJava Common's core I/O infrastructure, which
-allows it to operate on most data locations independent of their nature.
-SciJava Common provides a \texttt{Location} interface which acts as a data
-descriptor, similar to a \acrfull{uri}. This \texttt{Location} interface is
-specialized according to the nature of the data; for example, a
-\texttt{URLLocation} identifies data served by a remote \acrshort{url}, while
+\acrshort{scifio} builds upon SciJava Common's core \acrshort{io}
+infrastructure, which allows it to operate on most data locations independent
+of their nature. SciJava Common provides a \texttt{Location} interface which
+acts as a data descriptor, similar to a \acrfull{uri}. This \texttt{Location}
+interface is specialized according to the nature of the data; for example, a
+\texttt{URLLocation} identifies data served by a remote \acrfull{url}, while
 an \texttt{OMEROLocation} (part of the ImageJ-\acrshort{omero} integration
 \cite{imagej_omero}) identifies an image from an \acrshort{omero} server. For
 data locations whose raw bytes can be accessed randomly and/or sequentially
@@ -1006,15 +1005,14 @@ memory, by using temporary storage on disk.
 
 \acrshort{scifio} \texttt{Translator} plugins provide the means to translate
 not only between image formats, but between common metadata models of various
-scientific disciplines; for example, the
+scientific disciplines. For example, the \acrfull{ome} defines a data model
+called \acrshort{ome}-\acrshort{xml} \cite{ome_xml}, for which the
 \acrshort{scifio}-\acrshort{ome}-\acrshort{xml} component provides a suite of
-\acrshort{scifio} translators for converting between ImageJ Common data
-structures and \acrshort{ome}-\acrshort{xml}, the data model of the
-\acrfull{ome} \cite{ome_xml}. In this way, \acrshort{scifio} has the potential
-to bridge interoperability gaps across various discipline-specific scientific
-software packages.
+translators to and from ImageJ Common data structures. In this way,
+\acrshort{scifio} has the potential to bridge interoperability gaps across
+various discipline-specific scientific software packages.
 
-Further details about \acrshort{scifio} can be found in the \acrshort{bmc}
+Further details about \acrshort{scifio} can be found in the \acrfull{bmc}
 BioInformatics software article ``\acrshort{scifio}: an extensible framework to
 support scientific image formats'' \cite{scifio}.
 
@@ -1200,12 +1198,12 @@ By default, these hooks are exploited to inject ImageJ2 functionality in the
 second compatibility layer: ImageJ Legacy. ImageJ2 intercepts an ImageJ 1.x
 request and attempts to delegate to its own routines. For example, in our
 implementation of the \textit{File $\triangleright$ Open\ldots} hook, we use
-the SciJava I/O service, which provides extensible support for data types via
-SciJava I/O plugins. This allows the full power of \acrshort{scifio} to be
-called automatically by \textit{File $\triangleright$ Open\ldots} without
-requiring users to select individual loader plugins. In this way, ImageJ2
-exposes new ``seams'' which provide extensibility points not available in the
-standalone ImageJ 1.x project \cite{legacy_code}.
+the SciJava \acrshort{io} service, which provides extensible support for data
+types via SciJava \acrshort{io} plugins. This allows the full power of
+\acrshort{scifio} to be called automatically by \textit{File $\triangleright$
+Open\ldots} without requiring users to select individual loader plugins. In
+this way, ImageJ2 exposes new ``seams'' which provide extensibility points not
+available in the standalone ImageJ 1.x project \cite{legacy_code}.
 
 A second major function of ImageJ Legacy is to provide a wrapping legacy
 \acrshort{ui}: an ImageJ2 \texttt{UserInterface} plugin that reuses the ImageJ
@@ -1245,7 +1243,7 @@ collections of files. Users can pick and choose which update sites they wish to
 enable, with ImageJ's core functionality offered on the base ``ImageJ'' update
 site, which is on by default. Distributions of ImageJ such as \acrfull{fiji}
 \cite{fiji} extend this base with additional functionality (Figure 2) in the
-form of more plugins, scripts, sample images, \acrlongpl{lut}, etc., leveraging
+form of more plugins, scripts, sample images, \acrfullpl{lut}, etc., leveraging
 the ability to override ImageJ's base behavior using SciJava's plugin priority
 mechanism (see ``SciJava Common'' above for details).
 
@@ -1259,12 +1257,11 @@ including checksums and timestamps for all previous versions. In this way, the
 Updater can tell whether each local file is: A) an up-to-date tracked file; B)
 an old version of a tracked file; C) a locally modified version of a tracked
 file; or D) an untracked file. Update sites are served to users over
-\acrshort{http}. Developers may upload files to an update site via an
-extensible set of protocols, as defined by Uploader plugins. The core ImageJ
-distribution includes two such plugins---one for
-\acrshort{ssh}/\acrshort{scp}/\acrshort{sftp} and one for
-\acrshort{webdav}---but in principle, the Updater makes no assumptions about
-how files are uploaded.
+\acrfull{http}. Developers may upload files to an update site via an extensible
+set of protocols, as defined by Uploader plugins. The core ImageJ distribution
+includes plugins for \acrfull{ssh}, \acrfull{scp}, \acrfull{sftp} and
+\acrfull{webdav}, but in principle, the Updater makes no assumptions about how
+files are uploaded.
 
 The \texttt{db.xml.gz} structure was originally designed for use with the
 \acrshort{fiji} Updater, the ImageJ Updater's predecessor. The logic of the
@@ -1307,7 +1304,7 @@ N-dimensional data model supports up to $2^{31} - 1$ dimensions, each with up
 to $2^{63} - 1$ elements, and composite rendering over any dimension of
 interest regardless of length. There are several preset dimensional axis types,
 and new types can also be defined as needed. When visualizing multi-channel
-data, each channel can now have its own \acrfull{lut} without constraint.
+data, each channel can now have its own \acrshort{lut} without constraint.
 
 \begin{quote}
 [Figure 3: ImageJ 1.x case logic compared to a unified ImgLib2 implementation.]
@@ -1344,7 +1341,7 @@ analysis. The \acrshort{scifio} library already provides an ImgLib2 image type
 from disk, effectively behaving as a writeable virtual stack.
 
 \textbf{\Acrfullpl{roi}.} Like ImageJ 1.x, ImageJ2 provides support for
-\textit{\acrfullpl{roi}}, which are functions that identify samples upon which
+\textit{\acrshortpl{roi}}, which are functions that identify samples upon which
 to operate, as well as \textit{overlays}, which are visuals (e.g., text)
 superimposed for visualization. ImageJ2 builds upon the \acrshort{roi}
 interfaces of ImgLib2, allowing for any number of simultaneous \acrshortpl{roi}
@@ -1430,7 +1427,7 @@ relevance and impact across the community. ImageJ 1.x provided a central
 direct modification of this class to do so, resulting in many third parties
 each shipping their own modified version. Only one modification could ``win,''
 effectively breaking any other supported formats. To fill this role in ImageJ2,
-the \acrfull{scifio} library provides extensible image format support tailored
+the \acrshort{scifio} library provides extensible image format support tailored
 to the ImageJ Common data model.
 
 As of version 0.29.0, the core \acrshort{scifio} library provides a collection
@@ -1455,7 +1452,7 @@ update sites. Hence, unlike in ImageJ 1.x, existing user scripts using the Ops
 library will automatically benefit from new performance-enhancing ops.
 
 \textbf{User interface.} ImageJ 1.x's user interface is written in Java
-\acrshort{awt} with many assumptions throughout the codebase relying on this
+\acrfull{awt} with many assumptions throughout the codebase relying on this
 fact. Hence, ImageJ 1.x is only limitedly usable in a headless way (e.g., for
 image processing on a server cluster). Normally, ImageJ 1.x cannot be used
 headless at all: some lynchpin ImageJ 1.x classes---notably \texttt{ij.ImageJ}
@@ -1467,7 +1464,7 @@ such, ImageJ2 makes headless execution of ImageJ 1.x scripts feasible.
 
 Furthermore, ImageJ 1.x's reliance on \acrshort{awt} also limits its ability to
 be embedded into other applications using different \acrshort{ui} frameworks,
-such as Swing or Eclipse \acrshort{swt}. While some applications have succeeded
+such as Swing or Eclipse \acrfull{swt}. While some applications have succeeded
 in doing so \cite{bio7}, the amount of work required in response to each ImageJ
 1.x update is considerable, since many changes must be made to the ImageJ 1.x
 core source code.
@@ -1490,8 +1487,8 @@ with no dependence on ImageJ 1.x code. We have been successful in
 ``reskinning'' this Swing \acrshort{ui} with various Java \acrfullpl{laf},
 including the Metal, Motif, Nimbus, Aqua, Windows and \acrfull{gtk}
 \acrshortpl{laf}. Furthermore, we explored proof-of-concept \acrshort{ui}
-implementations in other frameworks, such as Eclipse's \acrfull{swt}, Java
-\acrfull{awt} sans Swing, and Apache Pivot. There is also a JavaFX
+implementations in other frameworks, such as Eclipse's \acrshort{swt}, Java
+\acrshort{awt} sans Swing, and Apache Pivot. There is also a JavaFX
 \acrshort{ui} for ImageJ2 developed by Cyril Mongis at the University of
 Heidelberg \cite{imagejfx}, as well as integrations of ImageJ into other
 powerful end-user applications such as \acrshort{knime} and CellProfiler. See
@@ -1525,7 +1522,7 @@ expose SciJava modules in interesting ways: for example, automated conversion
 to nodes in a \acrshort{knime} workflow. Continuing efforts are underway to
 foster further interoperability with several other projects, including
 \acrshort{itk}, \acrshort{omero}, CellProfiler, \acrshort{matlab},
-\acrshort{alida} and \acrshort{mitobo} \cite{mitobo}.
+\acrfull{alida} and \acrfull{mitobo} \cite{mitobo}.
 
 \subsection*{Reproducibility}
 
@@ -1586,7 +1583,7 @@ facilitate their image analysis, and many developers also use ImageJ as an
 application. ImageJ2 includes a powerful Script Editor with many tools to aid
 users as they transition into the realm of development. This tool removes much
 of the complexity of traditional software development, allowing users to focus
-on coding without the added burden of applying compilers, \acrshortpl{ide}, or
+on coding without the added burden of applying compilers, \acrfullpl{ide}, or
 the command line.
 
 In addition, the SciJava parameterized scripting mechanism makes it easier for
@@ -1627,7 +1624,7 @@ easy-to-read syntax for calling ops in script-driven workflows (see Figure 7 in
 ``Compatibility'' below).
 
 \textbf{Automatic updates.} In ImageJ 1.x, plugin installation requires users
-to download a \acrshort{jar} or Java class file and place it within the ImageJ
+to download a \acrfull{jar} or Java class file and place it within the ImageJ
 plugins folder. Updating an installed plugin essentially requires repeating the
 manual installation steps, which is both tedious and error-prone. Developers
 have to manually manage their plugin's dependencies, which in practice leads to
@@ -1668,7 +1665,7 @@ Updater together with the ImageJ Legacy layer, all of the plugins served from
 those sites are easily accessible within ImageJ2. This has helped to focus the
 \acrshort{fiji} project on its original goal of being a curated collection of
 plugins facilitating scientific image analysis. In addition to \acrshort{fiji},
-hundreds of third-party update sites are available, such as \acrshort{loci},
+hundreds of third-party update sites are available, such as \acrfull{loci},
 \acrfull{bar}, BioVoxxel, the Stowers Institute, and the BioImaging and Optics
 platform of the \acrfull{epfl}, most of which are served from the centrally
 managed Personal Update Sites server \cite{imagej_sites}.
@@ -1840,8 +1837,8 @@ explore:
     all \acrshort{roi} types supported by \acrshort{omero}, and any additional
     \acrshort{roi} types available in other image-oriented software packages
     for which integration with ImageJ is pursued.
-  \item Update the core SciJava I/O mechanism to be plugin-driven for improved
-    extensibility of data source location.
+  \item Update the core SciJava \acrshort{io} mechanism to be plugin-driven
+    for improved extensibility of data source location.
   \item Generalize \acrshort{scifio}'s planar model to operate on arbitrary
     ``blocks'' at a fundamental level.
   \item Retire the custom C-based ImageJ desktop application launcher,
@@ -1849,7 +1846,7 @@ explore:
   \item Complete our ongoing effort to automate the documentation regarding
     development and maintenance responsibility for every core component of the
     ImageJ ecosystem, including \acrshort{fiji} components \cite{imagej_team}.
-  \item Develop our ImageJ-based \acrshort{rest} image server prototype toward
+  \item Develop our ImageJ-based \acrfull{rest} image server prototype toward
     production use, providing a common language- and implementation-independent
     \acrshort{api}.
   \item Implement a web \acrshort{ui} built on the \acrshort{rest} image
@@ -1862,7 +1859,7 @@ explore:
     \cite{deep_learning} and novel algorithms from computer vision and
     statistics.
   \item Continue building bridges between ImageJ and other image processing
-    frameworks such as \acrshort{opencv} \cite{opencv} and scikit-image
+    frameworks such as \acrfull{opencv} \cite{opencv} and scikit-image
     \cite{scikit_image}.
   \item Integrate support for cloud computing frameworks such as Apache Spark
     \cite{apache_spark} running on platforms such as Amazon Web Services
@@ -1871,7 +1868,7 @@ explore:
     image analysis advice.
   \item Continue migrating ImageJ resources into the main ImageJ wiki website,
     including the ImageJ User Guide \cite{imagej_user_guide}, ImageJ 1.x
-    documentation \cite{imagej1_docs} and \acrshort{list}'s ImageJ Information
+    documentation \cite{imagej1_docs} and \acrfull{list}'s ImageJ Information
     and Documentation Portal \cite{imagej_docu}.
   \item Redesign ImageJ's bug submission system such that users can
     automatically submit an issue report to the correct location online
@@ -1937,7 +1934,7 @@ Not applicable.
 \textbf{Operating system(s):} Platform independent\\
 \textbf{Programming language:} Java\\
 \textbf{Other requirements:} Java 8 or higher\\
-\textbf{License:} Simplified (2-clause) BSD\\
+\textbf{License:} Simplified (2-clause) \acrfull{bsd}\\
 \textbf{Any restrictions to use by non-academics:} None
 
 All data generated or analyzed during this study are included in this
@@ -2317,63 +2314,65 @@ published article.
     \caption{Image types supported by ImageJ}
     \begin{tabular}{| l | l | l | p{0.4in} | p{0.8in} | p{0.8in} | l | l |}
       \hline
-      \textbf{Name}        & \textbf{Bit depth} & \textbf{Signedness} & \textbf{Values} & \textbf{Min. Value}     & \textbf{Max. Value}    & \textbf{ImageJ 1.x} & \textbf{ImageJ2} \\ \hline
-      \texttt{bool}        & 1-bit              & N/A                 & boolean         & $false$                 & $true$                 & no                  & yes              \\ \hline
-      \texttt{bit}         & 1-bit              & unsigned            & binary          & $0$                     & $1$                    & no                  & yes              \\ \hline
-      \texttt{uint2}       & 2-bit              & unsigned            & integer         & $0$                     & $3$                    & no                  & yes              \\ \hline
-      \texttt{uint4}       & 4-bit              & unsigned            & integer         & $0$                     & $15$                   & no                  & yes              \\ \hline
-      \texttt{uint8}       & 8-bit              & unsigned            & integer         & $0$                     & $255$                  & yes                 & yes              \\ \hline
-      \texttt{uint12}      & 12-bit             & unsigned            & integer         & $0$                     & $4,095$                & no                  & yes              \\ \hline
-      \texttt{uint16}      & 16-bit             & unsigned            & integer         & $0$                     & $65,535$               & yes                 & yes              \\ \hline
-      \texttt{uint32}      & 32-bit             & unsigned            & integer         & $0$                     & $2^{32} - 1$           & no                  & yes              \\ \hline
-      \texttt{uint64}      & 64-bit             & unsigned            & integer         & $0$                     & $2^{64} - 1$           & no                  & yes              \\ \hline
-      \texttt{uint128}     & 128-bit            & unsigned            & integer         & $0$                     & $2^{128} - 1$          & no                  & yes              \\ \hline
-      \texttt{int8}        & 8-bit              & signed              & integer         & $-128$                  & $127$                  & partial*            & yes              \\ \hline
-      \texttt{int16}       & 16-bit             & signed              & integer         & $-32,768$               & $32,767$               & partial*            & yes              \\ \hline
-      \texttt{int32}       & 32-bit             & signed              & integer         & $-2^{31}$               & $2^{31} - 1$           & no                  & yes              \\ \hline
-      \texttt{float32}     & 32-bit             & signed              & floating point  & \parbox[t]{0.8in}{
-                                                                                          approx.\\
-                                                                                          $-3.4 \times 10^{38}$
-                                                                                          }                       & \parbox[t]{0.8in}{
-                                                                                                                    approx.\\
-                                                                                                                    $3.4 \times 10^{38}$
-                                                                                                                    }                      & yes                 & yes              \\ \hline
-      \texttt{float64}     & 64-bit             & signed              & floating point  & \parbox[t]{0.8in}{
-                                                                                          approx.\\
-                                                                                          $-1.8 \times 10^{308}$
-                                                                                          }                       & \parbox[t]{0.8in}{
-                                                                                                                    approx.\\
-                                                                                                                    $1.8 \times 10^{308}$
-                                                                                                                    }                      & no                  & yes              \\ \hline
-      \texttt{cfloat32}    & 2 $\times$ 32-bit  & signed              & floating point  & \parbox[t]{0.8in}{
-                                                                                          approx.\\
-                                                                                          $(-3.4 \times 10^{38},\\
-                                                                                          -3.4 \times 10^{38})$
-                                                                                          }                       & \parbox[t]{0.8in}{
-                                                                                                                    approx.\\
-                                                                                                                    $(3.4 \times 10^{38},\\
-                                                                                                                    3.4 \times 10^{38})$
-                                                                                                                    }                      & no                  & yes              \\ \hline
-      \texttt{cfloat64}    & 2 $\times$ 64-bit  & signed              & floating point  & \parbox[t]{0.8in}{
-                                                                                          approx.\\
-                                                                                          $(-1.8 \times 10^{308},\\
-                                                                                          -1.8 \times 10^{308})$
-                                                                                          }                       & \parbox[t]{0.8in}{
-                                                                                                                    approx.\\
-                                                                                                                    $(1.8 \times 10^{308},\\
-                                                                                                                    1.8 \times 10^{308})$
-                                                                                                                    }                      & no                  & yes              \\ \hline
-      \texttt{bigint}      & unlimited          & signed              & integer         & none                    & none                   & no                  & yes              \\ \hline
-      \texttt{bigdec}      & arbitrary          & signed              & decimal         & none                    & none                   & no                  & yes              \\ \hline
-      \acrshort{rgb}       & 3 $\times$ 8-bit   & unsigned            & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\dagger$ \\ \hline
-      8-bit color          & 8-bit              & indexed             & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\dagger$ \\ \hline
-      custom               & any                & any                 & any             & any                     & any                    & no                  & yes              \\ \hline
+      \textbf{Name}            & \textbf{Bit depth} & \textbf{Signedness} & \textbf{Values} & \textbf{Min. Value}     & \textbf{Max. Value}    & \textbf{ImageJ 1.x} & \textbf{ImageJ2}  \\ \hline
+      \texttt{bool}            & 1-bit              & N/A                 & boolean         & $false$                 & $true$                 & no                  & yes               \\ \hline
+      \texttt{bit}             & 1-bit              & unsigned            & binary          & $0$                     & $1$                    & no                  & yes               \\ \hline
+      \texttt{uint2}           & 2-bit              & unsigned            & integer         & $0$                     & $3$                    & no                  & yes               \\ \hline
+      \texttt{uint4}           & 4-bit              & unsigned            & integer         & $0$                     & $15$                   & no                  & yes               \\ \hline
+      \texttt{uint8}           & 8-bit              & unsigned            & integer         & $0$                     & $255$                  & yes                 & yes               \\ \hline
+      \texttt{uint12}          & 12-bit             & unsigned            & integer         & $0$                     & $4,095$                & no                  & yes               \\ \hline
+      \texttt{uint16}          & 16-bit             & unsigned            & integer         & $0$                     & $65,535$               & yes                 & yes               \\ \hline
+      \texttt{uint32}          & 32-bit             & unsigned            & integer         & $0$                     & $2^{32} - 1$           & no                  & yes               \\ \hline
+      \texttt{uint64}          & 64-bit             & unsigned            & integer         & $0$                     & $2^{64} - 1$           & no                  & yes               \\ \hline
+      \texttt{uint128}         & 128-bit            & unsigned            & integer         & $0$                     & $2^{128} - 1$          & no                  & yes               \\ \hline
+      \texttt{int8}            & 8-bit              & signed              & integer         & $-128$                  & $127$                  & partial*            & yes               \\ \hline
+      \texttt{int16}           & 16-bit             & signed              & integer         & $-32,768$               & $32,767$               & partial*            & yes               \\ \hline
+      \texttt{int32}           & 32-bit             & signed              & integer         & $-2^{31}$               & $2^{31} - 1$           & no                  & yes               \\ \hline
+      \texttt{float32}         & 32-bit             & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                              approx.\\
+                                                                                              $-3.4 \times 10^{38}$
+                                                                                              }                       & \parbox[t]{0.8in}{
+                                                                                                                        approx.\\
+                                                                                                                        $3.4 \times 10^{38}$
+                                                                                                                        }                      & yes                 & yes               \\ \hline
+      \texttt{float64}         & 64-bit             & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                              approx.\\
+                                                                                              $-1.8 \times 10^{308}$
+                                                                                              }                       & \parbox[t]{0.8in}{
+                                                                                                                        approx.\\
+                                                                                                                        $1.8 \times 10^{308}$
+                                                                                                                        }                      & no                  & yes               \\ \hline
+      \texttt{cfloat32}        & 2 $\times$ 32-bit  & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                              approx.\\
+                                                                                              $(-3.4 \times 10^{38},\\
+                                                                                              -3.4 \times 10^{38})$
+                                                                                              }                       & \parbox[t]{0.8in}{
+                                                                                                                        approx.\\
+                                                                                                                        $(3.4 \times 10^{38},\\
+                                                                                                                        3.4 \times 10^{38})$
+                                                                                                                        }                      & no                  & yes               \\ \hline
+      \texttt{cfloat64}        & 2 $\times$ 64-bit  & signed              & floating point  & \parbox[t]{0.8in}{
+                                                                                              approx.\\
+                                                                                              $(-1.8 \times 10^{308},\\
+                                                                                              -1.8 \times 10^{308})$
+                                                                                              }                       & \parbox[t]{0.8in}{
+                                                                                                                        approx.\\
+                                                                                                                        $(1.8 \times 10^{308},\\
+                                                                                                                        1.8 \times 10^{308})$
+                                                                                                                        }                      & no                  & yes               \\ \hline
+      \texttt{bigint}          & unlimited          & signed              & integer         & none                    & none                   & no                  & yes               \\ \hline
+      \texttt{bigdec}          & arbitrary          & signed              & decimal         & none                    & none                   & no                  & yes               \\ \hline
+      \acrshort{rgb}$^\dagger$ & 3 $\times$ 8-bit   & unsigned            & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\ddagger$ \\ \hline
+      8-bit color              & 8-bit              & indexed             & integer         & $(0, 0, 0)$             & $(255, 255, 255)$      & yes                 & legacy$^\ddagger$ \\ \hline
+      custom                   & any                & any                 & any             & any                     & any                    & no                  & yes               \\ \hline
     \end{tabular}
     \begin{flushleft}
       * ImageJ 1.x partially supports \texttt{int8} and \texttt{int16} types
       via an ``image calibration'' feature.
 
-      $^\dagger$ ImageJ2 supports these image types only for backwards
+      $^\dagger$ \acrfull{rgb}.
+
+      $^\ddagger$ ImageJ2 supports these image types only for backwards
       compatibility with ImageJ 1.x, since composite color mode with one
       \acrshort{lut} per channel achieves the same results in a more flexible
       way.
