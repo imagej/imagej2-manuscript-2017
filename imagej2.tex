@@ -529,7 +529,9 @@ accessible, and development discussions taking place in public, archived
 communication channels so that interested parties can remain informed of and
 contribute to the project's future directions. Such transparency also
 facilitates sensible, defensible software development processes and fosters
-responsibility amongst those involved in the ImageJ project.
+responsibility amongst those involved in the ImageJ project. In particular,
+the project must be well covered by automated tests, to validate that it
+produces consistent results on reference data sets.
 
 \subsubsection*{Usability}
 Modular systems composed of many components often have a corresponding increase
@@ -1544,15 +1546,19 @@ Git has evolved revision control to a new level of documentation, clearly
 communicating why changes are made and encouraging atomic, easily understood
 changes. Furthermore, ImageJ2 minimizes the barrier to community contributions
 via an open issue tracking system \cite{imagej_issues} and open patch
-submission process \cite{imagej_contributing}. We also maintain a \acrfull{ci}
-server \cite{imagej_jenkins} which runs automated regression tests whenever
-modifications to ImageJ's source code are published; such tests help to avoid
-and detect regression bugs so that core functionality and behavior will
-continue to work reliably as the program evolves. This same CI server manages
-release and deployment, javadoc generation, website validation, and more. On
-the application side, the ImageJ Updater functions in a way similar to version
-control, with all prior binaries retained and metadata in \acrshort{xml}
-format.
+submission process \cite{imagej_contributing}.
+
+Finally, it is critical for reproducibility that algorithms produce consistent
+results over time. We utilize the public Travis \acrfull{ci} infrastructure
+\cite{travis_ci} to run automated regression tests whenever modifications to
+ImageJ's source code are published. Such tests help to avoid and detect
+regression bugs so that core functionality and behavior will continue to work
+reliably as the program evolves. We especially prioritize test coverage for
+the crucial base levels of ImageJ: as of this writing, there are approximately
+500 tests for SciJava Common, 1200 tests for ImageJ Ops, and 1200 tests for
+ImageJ 1.x. We also plan to integrate automated test coverage analysis, to
+measure the percentage of code which is exercised by the tests, which should be
+straightforward thanks to the project's use of Maven.
 
 \subsection*{Usability}
 
