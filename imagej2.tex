@@ -63,6 +63,7 @@
 \newacronym{api}{API}{Application Programming Interface}
 \newacronym{awt}{AWT}{Abstract Windowing Toolkit}
 \newacronym{bar}{BAR}{Broadly Applicable Routines}
+\newacronym{beakerx}{BeakerX}{Beaker Extensions for Jupyter}
 \newacronym{bmc}{BMC}{BioMed Central}
 \newacronym{bsd}{BSD}{Berkeley Software Distribution}
 \newacronym{ci}{CI}{continuous integration}
@@ -100,7 +101,7 @@
 \newacronym{opencl}{OpenCL}{Open Computing Language}
 \newacronym{opencv}{OpenCV}{Open source Computer Vision library}
 \newacronym{ram}{RAM}{Random-Access Memory}
-\newacronym{rest}{RESTful}{REpresentational State Transfer}
+\newacronym{rest}{REST}{REpresentational State Transfer}
 \newacronym{rgb}{RGB}{Red+Green+Blue color model}
 \newacronym[longplural={regions of interest}]{roi}{ROI}{region of interest}
 \newacronym{scifio}{SCIFIO}{SCientific Image Format Input and Output}
@@ -526,8 +527,8 @@ silver bullet in image processing. No matter how powerful ImageJ becomes or how
 many extensions exist, there will always be powerful and useful alternative
 tools available. Users benefit most when information can easily be exchanged
 between such tools. One of ImageJ2's primary motivations is to enable usage of
-ImageJ code from other applications and toolkits, and to support open standards
-for data storage and exchange.
+ImageJ code from other applications and toolkits, and vice versa, and to
+support open standards for data storage and exchange.
 
 \subsubsection*{Reproducibility}
 For ImageJ to be truly useful to the scientific community, it must be not only
@@ -1517,13 +1518,15 @@ singleton pattern and hence many of ImageJ 1.x's limitations. Multiple
 instances of ImageJ2 can run in the same \acrshort{jvm}, each with multiple (or
 no) user interfaces and multiple concurrent operations. Our primary goal is to
 make each encapsulated component of ImageJ2 usable in other software projects.
-
-There are several examples of external developers leaning on this generality to
+There are several examples of other projects leaning on this generality to
 expose SciJava modules in interesting ways: for example, automated conversion
-to nodes in a \acrshort{knime} workflow. Continuing efforts are underway to
-foster further interoperability with several other projects, including
-\acrshort{itk}, \acrshort{omero}, CellProfiler, \acrshort{matlab},
-\acrfull{alida} and \acrfull{mitobo} \cite{mitobo}.
+to nodes in a \acrshort{knime} workflow. Continuing efforts are underway at
+the \acrfull{loci} and elsewhere to integrate ImageJ with many other software
+projects, script languages and paradigms (Table 1).
+
+\begin{quote}
+[Table 1: ImageJ software integrations.]
+\end{quote}
 
 \subsection*{Reproducibility}
 
@@ -1666,7 +1669,7 @@ Updater together with the ImageJ Legacy layer, all of the plugins served from
 those sites are easily accessible within ImageJ2. This has helped to focus the
 \acrshort{fiji} project on its original goal of being a curated collection of
 plugins facilitating scientific image analysis. In addition to \acrshort{fiji},
-hundreds of third-party update sites are available, such as \acrfull{loci},
+hundreds of third-party update sites are available, such as \acrshort{loci},
 \acrfull{bar}, BioVoxxel, the Stowers Institute, and the BioImaging and Optics
 platform of the \acrfull{epfl}, most of which are served from the centrally
 managed Personal Update Sites server \cite{imagej_sites}.
@@ -1847,7 +1850,7 @@ explore:
   \item Complete our ongoing effort to automate the documentation regarding
     development and maintenance responsibility for every core component of the
     ImageJ ecosystem, including \acrshort{fiji} components \cite{imagej_team}.
-  \item Develop our ImageJ-based \acrfull{rest} image server prototype toward
+  \item Develop our ImageJ-based \acrshort{rest} image server prototype toward
     production use, providing a common language- and implementation-independent
     \acrshort{api}.
   \item Implement a web \acrshort{ui} built on the \acrshort{rest} image
@@ -1860,7 +1863,7 @@ explore:
     \cite{deep_learning} and novel algorithms from computer vision and
     statistics.
   \item Continue building bridges between ImageJ and other image processing
-    frameworks such as \acrfull{opencv} \cite{opencv} and scikit-image
+    frameworks such as \acrshort{opencv} \cite{opencv} and scikit-image
     \cite{scikit_image}.
   \item Integrate support for cloud computing frameworks such as Apache Spark
     \cite{apache_spark} running on platforms such as Amazon Web Services
@@ -2171,7 +2174,58 @@ published article.
 %% Use of \listoftables is discouraged.
 %%
 \section*{Tables and captions}
-  None.
+  \setcounter{table}{0}
+
+  %% Table 1
+  \begin{table}[h!]
+    \caption{ImageJ software integrations}
+    \begin{tabular}{| l | l | l |}
+      \hline
+      \textbf{Software}                                                  & \textbf{Integration project}                                         & \textbf{Supporting technologies}                                           \\ \hline
+      Apache Groovy                               \cite{groovy}          & SciJava Scripting: Groovy             \cite{scripting_groovy}        & -                                                                          \\ \hline
+      BeanShell                                   \cite{beanshell}       & SciJava Scripting: BeanShell          \cite{scripting_beanshell}     & -                                                                          \\ \hline
+      Bio-Formats                                 \cite{bio_formats}     & \acrshort{scifio}-Bio-Formats         \cite{scifio_bf_compat}        & \acrshort{scifio}-\acrshort{ome}-\acrshort{xml}     \cite{scifio_ome_xml}  \\ \hline
+      Bio7 (R + ImageJ 1.x)                       \cite{bio7}            & -                                                                    & Eclipse                                             \cite{eclipse}         \\ \hline
+      CellProfiler                                \cite{cellprofiler}    & ImageJ Server*                        \cite{imagej_server}           & -                                                                          \\ \hline
+      ImageJ 1.x                                  \cite{imagej_history}  & ImageJ Legacy                         \cite{imagej_legacy}           & ImageJ 1.x Patcher \cite{ij1_patcher}, Javassist    \cite{javassist}       \\ \hline
+      \acrshort{itk}                              \cite{itk}             & ImageJ-\acrshort{itk}                 \cite{imagej_itk}              & SimpleITK                                           \cite{simpleitk}       \\ \hline
+      JavaScript                                  \cite{javascript}      & SciJava Scripting: JavaScript         \cite{scripting_javascript}    & Nashorn \cite{nashorn}, Rhino                       \cite{rhino}           \\ \hline
+      Jupyter Notebook                            \cite{jupyter}         & SciJava Jupyter Kernel                \cite{scijava_jupyter_kernel}  & \acrshort{beakerx}$^\ddagger$                       \cite{beakerx}         \\ \hline
+      \acrshort{knime}                            \cite{knime}           & \acrshort{knime} Image Processing     \cite{knip}                    & -                                                                          \\ \hline
+      Kotlin                                      \cite{kotlin}          & SciJava Scripting: Kotlin             \cite{scripting_kotlin}        & -                                                                          \\ \hline
+      Lisp (\acrshort{jvm})                       \cite{lisp}            & SciJava Scripting: Clojure            \cite{scripting_clojure}       & Clojure                                             \cite{clojure}         \\ \hline
+      \acrshort{matlab}                           \cite{matlab}          & SciJava Scripting: \acrshort{matlab}  \cite{scripting_matlab}        & matlabcontrol                                       \cite{matlabcontrol}   \\ \hline
+      \acrshort{matlab}                                                  & ImageJ-\acrshort{matlab}              \cite{imagej_matlab}           & SciJava Scripting: \acrshort{matlab}                \cite{matlabcontrol}   \\ \hline
+      \acrshort{mitobo}$^\mathsection$            \cite{mitobo}          & -                                                                    & \acrshort{alida}$^\dagger$                          \cite{alida}           \\ \hline
+      \acrshort{omero}                            \cite{omero}           & ImageJ-\acrshort{omero}               \cite{imagej_omero}            & -                                                                          \\ \hline
+      \acrshort{opencv}$^\mathparagraph$          \cite{opencv}          & IJ-OpenCV                             \cite{ij_opencv}               & JavaCV                                              \cite{javacv}          \\ \hline
+      Python (CPython or \acrshort{jvm})          \cite{python}          & imglib2-imglyb                        \cite{imglib2_imglyb}          & pyJNIus \cite{pyjnius}, Jython \cite{jython}, JyNI  \cite{jyni}            \\ \hline
+      Python (CPython)                                                   & imagey                                \cite{imagey}                  & imglib2-imglyb                                                             \\ \hline
+      Python (CPython)                                                   & SciJava Scripting: CPython            \cite{scripting_cpython}       & javabridge                                          \cite{javabridge}      \\ \hline
+      Python (\acrshort{jvm})                                            & SciJava Scripting: Jython             \cite{scripting_jython}        & Jython, JyNI                                                               \\ \hline
+      R (\acrshort{jvm})                          \cite{r}               & SciJava Scripting: Renjin             \cite{scripting_renjin}        & Renjin                                              \cite{renjin}          \\ \hline
+      \acrshort{rest}$^\|$                        \cite{rest}            & ImageJ Server*                        \cite{imagej_server}           & Dropwizard                                          \cite{dropwizard}      \\ \hline
+      Ruby (\acrshort{jvm})                       \cite{ruby}            & SciJava Scripting: JRuby              \cite{scripting_jruby}         & Ruby                                                \cite{ruby}            \\ \hline
+      Scala                                       \cite{scala}           & SciJava Scripting: Scala              \cite{scripting_scala}         & -                                                                          \\ \hline
+      TensorFlow                                  \cite{tensorflow}      & ImageJ-TensorFlow                     \cite{imagej_tensorflow}       & -                                                                          \\ \hline
+    \end{tabular}
+    \begin{flushleft}
+      * Provides cross-language interprocess integration with JavaScript, Python and others.
+
+      $^\dagger$ \acrfull{alida}.
+
+      $^\ddagger$ \acrfull{beakerx}.
+
+      $^\mathsection$ \acrfull{mitobo}.
+
+      $^\mathparagraph$ \acrfull{opencv}.
+
+      $^\|$ \acrfull{rest}.
+    \end{flushleft}
+  \end{table}
+
+%% HACK: Without this, some tables end up floating in subsequent sections.
+\FloatBarrier
 
 \section*{Supplemental material}
 
