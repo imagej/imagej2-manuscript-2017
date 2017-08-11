@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <style>
+      body {
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 12px;
+      }
+      .tickLabel {
+        font-family: Verdana, Arial, sans-serif; 
+        font-size: 16px;
+        color: #000;
+      }
+      .flot-y-axis  > .tickLabel{
+        transform: rotate(-90deg);
+        left: 113px !important;
+      }
+      .axis-arrow {
+        font-size: 5.8em; 
+        padding: 0 0 5px 0;
+        text-align: center; 
+        display: table-cell;
+      }
+      .axis-dash {
+        font-size: 4em;
+        vertical-align: middle;
+        padding: 0 0 8px 0;
+        text-align: center;
+        display: table-cell;
+      }
+      .axis-custom-label {
+        font-size: 2em;
+        text-align: center;
+        vertical-align: middle;
+        display: table-cell;
+        padding: 0 20px 0 20px;
+      }
+      #xaxisLabel {
+        left: 25.5% !important;
+        width: 100%;
+      }
+      .legend {
+        display: none;
+      }
+      #square {
+        width: 10px;
+        height: 10px;
+        background: red;
+      }
+      #circle {
+        width: 10px;
+        height: 10px;
+        background: red;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+      }
+      #triangle {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 10px solid red;
+      }
+      #diamond {
+        width: 8px;
+        height: 8px;
+        background: #1eff00;
+        /* Rotate */
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        /* Rotate Origin */
+        -webkit-transform-origin: 0 100%;
+        -moz-transform-origin: 0 100%;
+        -ms-transform-origin: 0 100%;
+        -o-transform-origin: 0 100%;
+        transform-origin: 0 100%;
+        margin: 0 0 0 6px;
+      }
+    </style>
+
+    <!--[if lte IE 8]><script type="text/javascript" language="javascript" src="excanvas.min.js"></script>&<[endif]-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" language="javascript" src="jquery.flot.js"></script>
+    <script type="text/javascript" language="javascript" src="jquery.flot.symbol.js"></script>
+    <script type="text/javascript" language="javascript" src="jquery.flot.axislabels.js"></script>
+
+    <script type="text/javascript">
+      var d1 = [[.7620817843, .9576271186]];
+      var d2 = [[.8370370370, .7142857142]];
+      var d3 = [[.7924107142, .0370370370]];
+      var d4 = [[.9009900990, .5625000000]];
+      var d5 = [[.1844660194, .8225806451]];
+      var d6 = [[.6857142857, .8750000000]];
+      var d7 = [[.9266862170, .3333333333]];
+      var d8 = [[.0809248554, .2352941176]];
+      var d9 = [[.8000000000, 1.0000000000]];
+      var d10 = [[1.0000000000, 1.0000000000]];
+      var d11 = [[.9349930843, .7804878048]];
+      var d12 = [[.3750000000, 0]];
+      var d13 = [[.7664233576, 0]];
+      var d14 = [[0, .0116279069]];
+
+      var data1 = [ 
+        { label: "TrackMate",
+          data: d1,
+          points: { 
+            symbol: "circle", 
+            fillColor: "#277bab"
+          },
+          color: "#277bab" },
+        { label: "MaMuT",
+          data: d2,
+          points: { 
+            symbol: "square", 
+            fillColor: "#6bbf20"
+          },
+          color: "#6bbf20" },
+        { label: "SPIM Registration/ Multiview-Reconstruction",
+          data: d3,
+          points: 
+            { symbol: "diamond",
+              fillColor: "#cc0000"
+            },
+          color: "#cc0000" },
+        { label: "MoMA",
+          data: d4, 
+          points: {
+            symbol: "triangle",
+            fillColor: "#ffc000"
+          },
+          color: "#ffc000" },
+        { label: "ASA",
+          data: d5,
+          points: { 
+            symbol: "circle",
+            fillColor: "#de34f7"
+          },
+          color: "#de34f7" },
+        { label: "KymographBuilder",
+          data: d6,
+          points: { 
+            symbol: "square",
+            fillColor: "#277bab"
+          },
+          color: "#277bab" },
+        { label: "Z-Spacing Correction",
+          data: d7,
+          points: { 
+            symbol: "diamond",
+            fillColor: "#6bbf20"
+          },
+          color: "#6bbf20" },
+        { label: "Trainable Weka Segmentation",
+          data: d8,
+          points: { 
+            symbol: "triangle",
+            fillColor: "#cc0000"
+          },
+          color: "#cc0000" },
+        { label: "Pendent Drop",
+          data: d9,
+          points: { 
+            symbol: "circle",
+            fillColor: "#ffc000"
+          },
+          color: "#ffc000" },
+        { label: "SciView",
+          data: d10,
+          points: { 
+            symbol: "square",
+            fillColor: "#de34f7"
+          },
+          color: "#de34f7" },
+        { label: "BigDataViewer",
+          data: d11,
+          points: { 
+            symbol: "diamond",
+            fillColor: "#277bab"
+          },
+          color: "#277bab" },
+        { label: "Image Stitching",
+          data: d12,
+          points: { 
+            symbol: "triangle",
+            fillColor: "#6bbf20"
+          },
+          color: "#6bbf20" },
+        { label: "Coloc 2",
+          data: d13,
+          points: { 
+            symbol: "circle",
+            fillColor: "#cc0000"
+          },
+          color: "#cc0000" },
+        { label: "MorphoLibJ",
+          data: d14,
+          points: { 
+            symbol: "square",
+            fillColor: "#ffc000"
+          },
+          color: "#ffc000" },
+      ];
+
+      $(document).ready(function() {
+        $.plot($("#placeholder"), data1, {
+          axisLabels: {show: true},
+          yaxis: {
+            axisLabelUseHtml: false,
+            axisLabelUseCanvas: true,
+            axisLabel: " ",
+            axisLabelFontSizePixels: 100,
+            tickLength: 0,
+            ticks: [[0.025, "100/0"], [0.5, "50/50"], [0.97, "0/100"]],
+            max: 1,
+            min: 0
+          },
+          xaxis: {
+            axisLabelUseHtml: true,
+            axisLabelUseCanvas: false,
+            axisLabel: "<div class=\"axis-arrow\">&larr;</div><div class=\"axis-custom-label\">ImageJ 1.x data structures</div><div class=\"axis-dash\">&mdash;</div><div class=\"axis-custom-label\">ImageJ2 data structures</div><div class=\"axis-arrow\">&rarr;</div>",
+            tickLength: 0,
+            ticks: [[0.01, "100/0"], [0.5, "50/50"], [0.985, "0/100"]],
+            max: 1,
+            min: 0
+          },
+          series: {
+            points: {
+              radius: 8,
+              show: true,
+              fill: true
+            },
+          },
+          grid: {
+            aboveData: true,
+            markings: [
+              { xaxis:{from: 0.5, to: 0.5}, color: "#545454"},
+              { yaxis: {from: 0.5, to: 0.5}, color: "#545454"}
+            ]
+          },
+          legend: {
+            labelBoxBorderColor: "none",
+            position: "right"
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Y-Axis Label -->
+    <div style="width: 1610px; height: 825px;">
+      <div style="transform: rotate(-90deg); display: inline-block; right: 50%; top: 20%; left: -43%; bottom: 0; width: 50%; height:10%; margin: 0 auto; position: absolute;">
+        <div class="axis-arrow">&larr;</div>
+        <div class="axis-custom-label">ImageJ 1.x plugins</div>
+        <div class="axis-dash">&mdash;</div>
+        <div class="axis-custom-label">SciJava framework</div>
+        <div class="axis-arrow">&rarr;</div>
+      </div>
+    <div id="placeholder" style="width: 90%; height: 100%; display: inline-block;"></div>
+    <div style="display: inline-block; width: 15%; position: absolute; left: 80%; top: 2.5%; border: #545454 2px solid; padding: 8px;">
+      <table>
+        <tbody>
+          <tr>
+            <td><div id="circle" style="background: #277bab;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">TrackMate</td>
+          </tr>
+          <tr>
+            <td><div id="square" style="background: #6bbf20;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">MaMuT</td>
+          </tr>
+          <tr>
+            <td><div id="diamond" style="background: #cc0000;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">SPIM Registration / Multiview-Reconstruction</td>
+          </tr>
+          <tr>
+            <td><div id="triangle" style="border-bottom-color: #ffc000;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">MoMA</td>
+          </tr>
+          <tr>
+            <td><div id="circle" style="background: #de34f7;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">ASA</td>
+          </tr>
+          <tr>
+            <td><div id="square" style="background: #277bab;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">KymographBuilder</td>
+          </tr>
+          <tr>
+            <td><div id="diamond" style="background: #6bbf20;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">Z-Spacing Correction</td>
+          </tr>
+          <tr>
+            <td><div id="triangle" style="border-bottom-color: #cc0000;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">Trainable Weka Segmentation</td>
+          </tr>
+          <tr>
+            <td><div id="circle" style="background: #ffc000;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">Pendent Drop</td>
+          </tr>
+          <tr>
+            <td><div id="square" style="background: #de34f7;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">SciView</td>
+          </tr>
+          <tr>
+            <td><div id="diamond" style="background: #277bab;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">BigDataViewer</td>
+          </tr>
+          <tr>
+            <td><div id="triangle" style="border-bottom-color: #6bbf20;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">Image Stitching</td>
+          </tr>
+          <tr>
+            <td><div id="circle" style="background: #cc0000;">&nbsp;</div></td>
+            <td style="padding-left: 10px;">Coloc 2</td>
+          </tr>
+          <tr>
+           <td><div id="square" style="background: #ffc000;">&nbsp;</div></td>
+           <td style="padding-left: 10px;">MorphoLibJ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </body>
+</html>
