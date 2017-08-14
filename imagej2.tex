@@ -1768,12 +1768,10 @@ and explore such massive datasets.
 
 \subsection*{Compatibility}
 The ImageJ2 project, by design, enables software developers to use a
-combination of new and old features, migrating from ImageJ 1.x to ImageJ2
-incrementally over time. Many ImageJ-based tools and plugins continue to rely
-on ImageJ 1.x data structures, with varying levels of dependence on ImageJ2 and
-the SciJava framework (Supplemental Figure 3), incorporating elements of
-ImageJ2 to facilitate coevolution along with the growing demands of science. A
-few examples include:
+combination of ImageJ 1.x and ImageJ2 features. Many ImageJ-based tools and
+plugins continue to rely on ImageJ 1.x data structures, with varying levels of
+dependence on ImageJ2 and the SciJava framework (Supplemental Figure 3). A few
+examples include:
 
 \begin{itemize}
   \item \textbf{TrackMate} \cite{trackmate}, a plugin for object
@@ -1807,6 +1805,18 @@ few examples include:
     regulator of Rac1-dependent signaling \cite{science_sholl_3}.
 \end{itemize}
 
+It is thanks to the ImageJ Legacy and IJ1-patcher components that the community
+can blend the usage of ImageJ 1.x and ImageJ2 functionality, cherry-picking the
+best from each world to accomplish their image analysis tasks. Parameterized
+ImageJ commands and scripts may also continue to use ImageJ 1.x data structures
+and plugins as needed, while taking advantage of ImageJ2 functionality as
+appropriate (Figure 7), and declaring and populating input values with less
+boilerplate code (see Figure 5 in ``Usability'' above).
+
+\begin{quote}
+[Figure 7: A mixed-world ImageJ 1.x + ImageJ2 script.]
+\end{quote}
+
 As ImageJ2 continues to mature, usage of ImageJ 1.x functionality will be
 increasingly replaced with more powerful ImageJ2 equivalents: image processing
 algorithms built on ImageJ Ops, data format plugins built on
@@ -1819,18 +1829,6 @@ the new \acrshortpl{api}. Meanwhile, development of ImageJ 1.x also
 progresses, with users continuing to request bug fixes and new features within
 its intended scope. As such, the importance of a robust transitional strategy
 for migrating from ImageJ 1.x to ImageJ2 cannot be overstated.
-
-Fortunately, thanks to the ImageJ Legacy and IJ1-patcher components, the
-community can blend usage of ImageJ 1.x and ImageJ2 functionality,
-cherry-picking the best from each world to accomplish their image analysis
-tasks. Parameterized ImageJ commands and scripts may continue to use ImageJ 1.x
-data structures and plugins as needed, while also taking advantage of ImageJ2
-functionality as appropriate (Figure 7), and declaring and populating input
-values with less boilerplate code (see Figure 5 in ``Usability'' above).
-
-\begin{quote}
-[Figure 7: A mixed-world ImageJ 1.x + ImageJ2 script.]
-\end{quote}
 
 Although the development of ImageJ2 has necessitated re-implementation of
 ImageJ 1.x functionality, maintaining backwards compatibility with ImageJ 1.x
