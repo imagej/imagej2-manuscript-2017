@@ -2317,6 +2317,21 @@ published article.
     \end{flushleft}
   \end{figure}
 
+  %% Figure S.3
+  \begin{figure}[h!]
+    \caption{Sample ImageJ plugin usage of ImageJ 1.x and ImageJ2.}
+    \begin{flushleft}
+      This plot displays a select few ImageJ plugins in varying stages of
+      transition, from ImageJ 1.x to ImageJ2, as of 11 Aug 2017 2:35 PM CDT.
+      The ratio of ImageJ 1.x to ImageJ2 usage was computed by counting the
+      number of imports each plugin uses from relevant Java packages:
+      "ImageJ 1.x plugins" is \texttt{ij.plugin.*}, "ImageJ 1.x data
+      structures" is \texttt{ij.*} excluding the \texttt{plugin} subpackage,
+      "SciJava framework" is \texttt{org.scijava.*}, and "ImageJ2 data
+      structures" is \texttt{net.imagej.*} and \texttt{net.imglib2.*}.
+    \end{flushleft}
+  \end{figure}
+
 \subsection*{Tables and captions}
   %% Use "Table S.#" naming scheme for supplemental tables
   \renewcommand\thetable{S.\arabic{table}}
