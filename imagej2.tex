@@ -59,6 +59,7 @@
 \usepackage[nonumberlist]{glossaries}
 \renewcommand{\glossarypreamble}{\footnotesize}
 \makeglossaries
+\newacronym{3d}{3D}{three-dimensional}
 \newacronym{alida}{Alida}{Advanced Library for Integrated Development of data analysis Applications}
 \newacronym{api}{API}{Application Programming Interface}
 \newacronym{awt}{AWT}{Abstract Windowing Toolkit}
@@ -439,8 +440,8 @@ informatics, ranging from image acquisition tools such as $\mu$Manager
 suites such as Icy \cite{icy} and BioImageXD \cite{bioimagexd}; scientific
 workflow and pipeline tools such as CellProfiler \cite{cellprofiler,
 cellprofiler_2011}, \acrfull{knime} \cite{knime, knip} and Pipeline Pilot
-\cite{workflow_systems}; and 3D rendering applications such as FluoRender
-\cite{fluorender} and Vaa3D \cite{vaa3d}. There are many other open,
+\cite{workflow_systems}; and \acrfull{3d} rendering applications such as
+FluoRender \cite{fluorender} and Vaa3D \cite{vaa3d}. There are many other open,
 bioimaging-oriented software packages besides these, including solutions
 written in powerful scripting platforms such as R, Python and MATLAB. With such
 an extensive array of tools, does it make sense to invest in an updated ImageJ
@@ -1029,9 +1030,10 @@ than 20 namespaces, covering functionality such as: image arithmetic,
 trigonometry, Fourier transformations, deconvolution, global and local
 thresholding, image statistics, image filtering, binary morphological
 operations, type conversion, image transformations (scaling, rotation,
-etc.)---even 2D and 3D geometric operations such as marching cubes 3D mesh
-generation (see Figure 1 for examples). A thorough treatment of available ops
-can be found in the ImageJ Ops tutorial notebook \cite{imagej_notebooks}.
+etc.)---even 2- and 3-dimensional geometric operations such as marching cubes
+\acrshort{3d} mesh generation (see Figure 1 for examples). A thorough
+treatment of available ops can be found in the ImageJ Ops tutorial notebook
+\cite{imagej_notebooks}.
 
 \begin{quote}
 [Figure 1: Examples of image processing algorithms available in ImageJ Ops.]
@@ -2052,8 +2054,8 @@ published article.
   \begin{figure}[h!]
     \caption{Examples of image processing algorithms available in ImageJ Ops.}
     \begin{flushleft}
-      Panel A (top left): 3D wireframe mesh of ImageJ's Bat Cochlea Volume
-      sample dataset \cite{bat_cochlea_volume}, computed by the
+      Panel A (top left): \acrshort{3d} wireframe mesh of ImageJ's Bat Cochlea
+      Volume sample dataset \cite{bat_cochlea_volume}, computed by the
       \texttt{geom.marchingCubes} op, an implementation of the marching cubes
       algorithm \cite{marching_cubes}, visualized using MeshLab \cite{meshlab}.
       Credit to Kyle Harrington for the figure, Tim-Oliver Buchholz for
