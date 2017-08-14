@@ -8,7 +8,8 @@ process () {
 
   for var in "$@"
   do
-    cd "$var"
+    git clone --depth 1 "git://github.com/$var" t 2> /dev/null
+    cd t
     #echo " ======== $1 ======== "
     ijds=$(($ijds+$(git grep 'import ij'|grep -v 'import ij.plugin'|wc -l)))
     ijp=$(($ijp+$(git grep 'import ij.plugin'|wc -l)))
@@ -19,6 +20,8 @@ process () {
     #echo "ImageJ 1.x plugin framework: $ijp"
     #echo "ImageJ2 data structures: $ij2ds"
     #echo "SciJava framework: $ij2p"
+    cd ..
+    rm -rf t
   done
 
   dsr=$(echo "scale=10;$ij2ds/( $ij2ds+$ijds )" | bc)
@@ -83,20 +86,20 @@ legend=""
 echo "======== Data Points ========"
 echo
 
-process ~/code/fiji/TrackMate
-process ~/code/fiji/MaMuT
-process ~/code/fiji/SPIM_Registration
-process ~/code/fjug/MoMA
-process ~/code/tferr/ASA
-process ~/code/fiji/KymographBuilder
-process ~/code/saalfeldlab/z-spacing
-process ~/code/fiji/Trainable_Segmentation
-process ~/code/adaerr/pendent-drop
-process ~/code/scenerygraphics/SciView
-process ~/code/bigdataviewer/bigdataviewer-core ~/code/bigdataviewer/bigdataviewer_fiji
-process ~/code/fiji/Stitching
-process ~/code/fiji/Colocalisation_Analysis
-process ~/code/ijpb/MorphoLibJ
+process fiji/TrackMate
+process fiji/MaMuT
+process fiji/SPIM_Registration
+process fjug/MoMA
+process tferr/ASA
+process fiji/KymographBuilder
+process saalfeldlab/z-spacing
+process fiji/Trainable_Segmentation
+process adaerr/pendent-drop
+process scenerygraphics/SciView
+process bigdataviewer/bigdataviewer-core bigdataviewer/bigdataviewer_fiji
+process fiji/Stitching
+process fiji/Colocalisation_Analysis
+process ijpb/MorphoLibJ
 
 data="$data ];"
 echo "======== Data Array ========"
