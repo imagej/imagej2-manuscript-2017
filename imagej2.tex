@@ -1807,11 +1807,11 @@ examples include:
 
 It is thanks to the ImageJ Legacy and IJ1-patcher components that the community
 can blend the usage of ImageJ 1.x and ImageJ2 functionality, cherry-picking the
-best from each world to accomplish their image analysis tasks. Parameterized
-ImageJ commands and scripts may also continue to use ImageJ 1.x data structures
-and plugins as needed, while taking advantage of ImageJ2 functionality as
-appropriate (Figure 7), and declaring and populating input values with less
-boilerplate code (see Figure 5 in ``Usability'' above).
+best from each world to accomplish their image analysis tasks. For example,
+parameterized ImageJ commands and scripts may continue to use ImageJ 1.x data
+structures and plugins as needed, while taking advantage of ImageJ2
+functionality as appropriate (Figure 7), and declaring and populating input
+values with less boilerplate code (see Figure 5 in ``Usability'' above).
 
 \begin{quote}
 [Figure 7: A mixed-world ImageJ 1.x + ImageJ2 script.]
@@ -1819,31 +1819,25 @@ boilerplate code (see Figure 5 in ``Usability'' above).
 
 As ImageJ2 continues to mature, usage of ImageJ 1.x functionality will be
 increasingly replaced with more powerful ImageJ2 equivalents: image processing
-algorithms built on ImageJ Ops, data format plugins built on
-\acrshort{scifio}, block-based cell images using ImgLib2, etc. However, this
-process is both lengthy and necessarily incomplete: migrating ImageJ 1.x core
-functionality alone is a years-long process as the ImageJ2 \acrshortpl{api}
-continue to evolve, mature and stabilize---and there are countless other
-useful plugins and scripts in the wild, some of which will never be updated to
-the new \acrshortpl{api}. Meanwhile, development of ImageJ 1.x also
-progresses, with users continuing to request bug fixes and new features within
-its intended scope. As such, the importance of a robust transitional strategy
-for migrating from ImageJ 1.x to ImageJ2 cannot be overstated.
+algorithms built on ImageJ Ops, data format plugins built on \acrshort{scifio},
+block-based cell images using ImgLib2, N-dimensional ROIs, metadata-rich
+images, nonlinear registration transforms, etc. However, this process is both
+lengthy and necessarily incomplete: migrating ImageJ 1.x core functionality
+alone is a years-long process as the ImageJ2 \acrshortpl{api} continue to
+evolve, mature and stabilize---and there are countless other useful plugins and
+scripts in the wild, some of which will never be updated to the new
+\acrshortpl{api}. Meanwhile, development of ImageJ 1.x also progresses, with
+users continuing to request bug fixes and new features within its intended
+scope. As such, the importance of a robust transitional strategy for migrating
+from ImageJ 1.x to ImageJ2 cannot be overstated.
 
-Although the development of ImageJ2 has necessitated re-implementation of
+Although the development of ImageJ2 has necessitated reimplementation of
 ImageJ 1.x functionality, maintaining backwards compatibility with ImageJ 1.x
 will remain a fundamental goal. Abandoning or ignoring ImageJ 1.x would have
 been a significant disservice to the community, causing a rift to the detriment
 of all parties. Our efforts to enable incremental migration from ImageJ 1.x to
 ImageJ2 allow the two projects to continue developing in tandem, with new
 features in each reaching a unified ImageJ community.
-Powerful N-dimensional ROIs, more metadata-rich images, easy nonlinear
-transforms, etc., are all in the process of being refined and made more
-usable, but as they mature, can be easily integrated and applied within
-existing frameworks. All of these pieces are at varying levels of maturity,
-and users can migrate towards them as necessary for their unique use cases.
-This fluidity in development and backwards compatibility is purposeful, as
-the ImageJ2 project continues to focus on the evolving needs of science.
 
 \subsection*{Community}
 
