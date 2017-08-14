@@ -72,6 +72,7 @@
 \newacronym{cpu}{CPU}{Central Processing Unit}
 \newacronym{cuda}{CUDA}{Compute Unified Device Architecture}
 \newacronym{di}{DI}{dependency injection}
+\newacronym{dna}{DNA}{deoxyribonucleic acid}
 \newacronym{dry}{DRY}{Don't Repeat Yourself}
 \newacronym{epfl}{EPFL}{École Polytechnique Fédérale de Lausanne}
 \newacronym{fiji}{Fiji}{Fiji Is Just ImageJ}
@@ -82,6 +83,7 @@
 \newacronym{http}{HTTP}{Hypertext Transfer Protocol}
 \newacronym{io}{I/O}{Input/Output}
 \newacronym{ide}{IDE}{Integrated Development Environment}
+\newacronym{il1}{IL-1}{Interleukin-1}
 \newacronym{ioc}{IoC}{inversion of control}
 \newacronym{itk}{ITK}{Insight ToolKit}
 \newacronym{jar}{JAR}{Java ARchive}
@@ -94,14 +96,17 @@
 \newacronym{loci}{LOCI}{Laboratory for Optical and Computational Instrumentation}
 \newacronym{lut}{LUT}{color lookup table}
 \newacronym{macos}{macOS}{Macintosh Operating System}
+\newacronym{mamut}{MaMuT}{Massive Multi-view Tracker}
 \newacronym{matlab}{MATLAB}{MATrix LABoratory}
 \newacronym{mitobo}{MiToBo}{Microscopy image analysis ToolBox}
+\newacronym{nemo}{NEMO}{NF-$\kappa$B essential modulator}
 \newacronym{nigms}{NIGMS}{National Institute of General Medical Sciences}
 \newacronym{nih}{NIH}{National Institutes of Health}
 \newacronym{ome}{OME}{Open Microscopy Environment}
 \newacronym{omero}{OMERO}{OME Remote Objects}
 \newacronym{opencl}{OpenCL}{Open Computing Language}
 \newacronym{opencv}{OpenCV}{Open source Computer Vision library}
+\newacronym{plga}{PLGA}{poly (lactic-co-glycolic acid)}
 \newacronym{ram}{RAM}{Random-Access Memory}
 \newacronym{rest}{REST}{REpresentational State Transfer}
 \newacronym{rgb}{RGB}{Red+Green+Blue color model}
@@ -110,6 +115,7 @@
 \newacronym{scp}{SCP}{Secure CoPy}
 \newacronym{sftp}{SFTP}{Secure File Transfer Protocol}
 \newacronym{ssh}{SSH}{Secure SHell}
+\newacronym{snt}{SNT}{Simple Neurite Tracer}
 \newacronym{swt}{SWT}{Standard Widget Toolkit}
 \newacronym{ui}{UI}{user interface}
 \newacronym{uri}{URI}{Uniform Resource Identifier}
@@ -1760,18 +1766,58 @@ is also built on ImgLib2 cell images, it is now realistic to quickly visualize
 and explore such massive datasets.
 
 \subsection*{Compatibility}
-As ImageJ2 continues to mature, ImageJ 1.x functionality will be increasingly
-replaced with more powerful ImageJ2 equivalents: image processing algorithms
-built on ImageJ Ops, data format plugins built on \acrshort{scifio}, etc. But
-this process is both lengthy and necessarily incomplete: migrating ImageJ 1.x
-core functionality alone is a years-long process as the ImageJ2
-\acrshortpl{api} continue to evolve, mature and stabilize---and there are
-countless other useful plugins and scripts in the wild, some of which will
-never be updated to the new \acrshortpl{api}. Meanwhile, development of ImageJ
-1.x also progresses, with users continuing to request bug fixes and new
-features within its intended scope. As such, the importance of a robust
-transitional strategy for migrating from ImageJ 1.x to ImageJ2 cannot be
-overstated.
+The ImageJ2 project, by design, enables software developers to use a
+combination of new and old features, migrating from ImageJ 1.x to ImageJ2
+incrementally over time. Many ImageJ-based tools and plugins continue to rely
+on ImageJ 1.x data structures, with varying levels of dependence on ImageJ2 and
+the SciJava framework (Supplemental Figure 3), incorporating elements of
+ImageJ2 to facilitate coevolution along with the growing demands of science. A
+few examples include:
+
+\begin{itemize}
+  \item \textbf{TrackMate} \cite{trackmate}, a plugin for object
+    identification and tracking, has been used to achieve a semi-automated
+    workflow for \acrfull{dna} double-strand break-induced telomere mobility
+    quantitative analysis \cite{science_trackmate}, as well as for
+    \textit{Caenorhabditis-elegans} lineage analysis during light-induced
+    damage, recruitment of \acrfull{nemo} clusters in fibroblasts after
+    \acrfull{il1} stimulation, and clathrin-mediated endocytosis analysis in
+    plant cells \cite{trackmate}.
+  \item \textbf{\acrfull{mamut}}, a tool for the annotation of massive,
+    multi-view data, has been used for reconstruction of the complete cell
+    lineage of an outgrowing thoracic limb of the crustacean, \textit{Parhyale
+    hawaiensis}, with single-cell resolution \cite{science_mamut}.
+  \item \textbf{Multiview Reconstruction} \cite{multiview_2010,
+    multiview_2014}, a pipeline for registering multi-angle \acrshort{3d}
+    volumes and visualizing them using the BigDataViewer \cite{bigdataviewer},
+    is commonly part of experimental protocols for light sheet fluorescence
+    microscopy, and has been used to analyze zebrafish embryo eye development
+    \cite{science_multiview_1}, as well as directional movement of
+    cerebrospinal fluid in zebrafish larvae during developmental neurogenesis
+    \cite{science_multiview_2}.
+  \item \textbf{Sholl Analysis} \cite{sholl_analysis} and
+    \textbf{\acrfull{snt}} \cite{simple_neurite_tracer}, plugins for
+    quantifying traced structures such as neurites, have been used to analyze
+    dendritic morphology of the amygdala and hippocampus in
+    conventionally-colonized versus germ-free mice \cite{science_sholl_1},
+    morphologies of retinal ganglion cells from neural retina on
+    \acrfull{plga} scaffold \cite{science_sholl_2}, as well as dendritic
+    complexity and arborization in absence of $\alpha$2-chimaerin, a key
+    regulator of Rac1-dependent signaling \cite{science_sholl_3}.
+\end{itemize}
+
+As ImageJ2 continues to mature, usage of ImageJ 1.x functionality will be
+increasingly replaced with more powerful ImageJ2 equivalents: image processing
+algorithms built on ImageJ Ops, data format plugins built on
+\acrshort{scifio}, block-based cell images using ImgLib2, etc. However, this
+process is both lengthy and necessarily incomplete: migrating ImageJ 1.x core
+functionality alone is a years-long process as the ImageJ2 \acrshortpl{api}
+continue to evolve, mature and stabilize---and there are countless other
+useful plugins and scripts in the wild, some of which will never be updated to
+the new \acrshortpl{api}. Meanwhile, development of ImageJ 1.x also
+progresses, with users continuing to request bug fixes and new features within
+its intended scope. As such, the importance of a robust transitional strategy
+for migrating from ImageJ 1.x to ImageJ2 cannot be overstated.
 
 Fortunately, thanks to the ImageJ Legacy and IJ1-patcher components, the
 community can blend usage of ImageJ 1.x and ImageJ2 functionality,
@@ -1792,6 +1838,13 @@ been a significant disservice to the community, causing a rift to the detriment
 of all parties. Our efforts to enable incremental migration from ImageJ 1.x to
 ImageJ2 allow the two projects to continue developing in tandem, with new
 features in each reaching a unified ImageJ community.
+Powerful N-dimensional ROIs, more metadata-rich images, easy nonlinear
+transforms, etc., are all in the process of being refined and made more
+usable, but as they mature, can be easily integrated and applied within
+existing frameworks. All of these pieces are at varying levels of maturity,
+and users can migrate towards them as necessary for their unique use cases.
+This fluidity in development and backwards compatibility is purposeful, as
+the ImageJ2 project continues to focus on the evolving needs of science.
 
 \subsection*{Community}
 
