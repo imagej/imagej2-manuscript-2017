@@ -11,7 +11,8 @@ figure-5/figure-labeled.png \
 figure-6/figure.png \
 figure-7/figure-labeled.png \
 figure-s.1/module-execution-labeled.png \
-figure-s.2/figure-labeled.png
+figure-s.2/figure-labeled.png \
+figure-s.3/ij-imagej-plugins-figure.png
 do
   ext="${fig##*.}"
   dest="$dir/$(dirname "$fig").$ext"
