@@ -78,7 +78,7 @@ s=0
 colors=("#277bab" "#6bbf20" "#cc0000" "#ffc000" "#de34f7")
 shapes=("circle" "square" "diamond" "triangle")
 shapeColor=("background: " "background: " "background: " "border-bottom-color: ")
-labels=("TrackMate" "MaMuT" "SPIM Registration / Multiview-Reconstruction" "MoMA" "ASA" "KymographBuilder" "Z-Spacing Correction" "Trainable Weka Segmentation" "Pendent Drop" "SciView" "BigDataViewer" "Image Stitching" "Coloc 2" "MorphoLibJ")
+labels=("TrackMate" "MaMuT" "Multiview Reconstruction" "MoMA" "Sholl Analysis" "Kymograph Builder" "Z-Spacing Correction" "Trainable Weka Segmentation" "Pendent Drop" "SciView" "BigDataViewer" "Image Stitching" "Coloc 2" "MorphoLibJ")
 
 data="var data1 = [ "
 legend=""
